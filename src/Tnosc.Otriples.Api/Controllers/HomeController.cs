@@ -10,7 +10,7 @@ namespace Tnosc.Otriples.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class HomeController : ControllerBase
+internal class HomeController : ControllerBase
 {
     [HttpGet]
     public ActionResult<string> Get() =>

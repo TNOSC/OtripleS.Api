@@ -1,0 +1,20 @@
+﻿/// ----------------------------------------------------------------------------------
+// Copyright (c) Tunisian .NET Open Source Community (TNOSC). All rights reserved.
+// 
+// This code is provided by TNOSC and is freely available under the MIT License.
+// 
+// Author: Ahmed HEDFI
+// -----------------------------------------------------------------------------------
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace Tnosc.Otriples.Api.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class HomeController : ControllerBase
+{
+    [HttpGet]
+    public ActionResult<string> Get() =>
+        Ok("Hello Mario, the princess is in another castle");
+}

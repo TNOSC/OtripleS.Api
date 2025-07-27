@@ -40,7 +40,8 @@
 This project is heavily inspired by:
 
 - [OtripleS](https://github.com/hassanhabib/OtripleS)
-- [Hassan Habib’s Coding Standards](https://github.com/hassanhabib/Standards)
+- [Hassan Habib’s Standards](https://github.com/hassanhabib/The-Standard)
+- [Hassan Habib’s Coding Standards](https://github.com/hassanhabib/CSharpCodingStandard)
 
 
 ---

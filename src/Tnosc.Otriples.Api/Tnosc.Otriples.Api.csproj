@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Tnosc.OtripleS.Application\Tnosc.OtripleS.Application.csproj" />
+    <ProjectReference Include="..\Tnosc.OtripleS.Infrastructure\Tnosc.OtripleS.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

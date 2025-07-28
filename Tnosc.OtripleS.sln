@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36025.13
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tnosc.Otriples.Api", "src\Tnosc.Otriples.Api\Tnosc.Otriples.Api.csproj", "{5273D296-F9A5-D67E-C2EC-CB2D84D351F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tnosc.OtripleS.Api", "src\Tnosc.OtripleS.Api\Tnosc.OtripleS.Api.csproj", "{5273D296-F9A5-D67E-C2EC-CB2D84D351F4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
@@ -19,14 +19,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tnosc.OtripleS.Domain", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tnosc.OtripleS.Application", "src\Tnosc.OtripleS.Application\Tnosc.OtripleS.Application.csproj", "{A409D08B-EF90-4825-B0D1-7DA8D0B3979D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tnosc.OtripleS.Infrastructre", "src\Tnosc.OtripleS.Infrastructre\Tnosc.OtripleS.Infrastructre.csproj", "{FFD30A37-FEEC-44C1-8E94-8D0C5ADEC768}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tnosc.OtripleS.Infrastructure", "src\Tnosc.OtripleS.Infrastructure\Tnosc.OtripleS.Infrastructure.csproj", "{FFD30A37-FEEC-44C1-8E94-8D0C5ADEC768}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2A144676-68EA-46ED-B8D3-D381EE174D87}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-		Directory.Build.props = Directory.Build.props
-		Directory.Packages.props = Directory.Packages.props
-	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tnosc.OtripleS.Tests.Architecture", "tests\Tnosc.OtripleS.Tests.Architecture\Tnosc.OtripleS.Tests.Architecture.csproj", "{C6160590-9816-488E-8514-DB77741DCCD9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,6 +47,10 @@ Global
 		{FFD30A37-FEEC-44C1-8E94-8D0C5ADEC768}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFD30A37-FEEC-44C1-8E94-8D0C5ADEC768}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFD30A37-FEEC-44C1-8E94-8D0C5ADEC768}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6160590-9816-488E-8514-DB77741DCCD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6160590-9816-488E-8514-DB77741DCCD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6160590-9816-488E-8514-DB77741DCCD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6160590-9816-488E-8514-DB77741DCCD9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +62,7 @@ Global
 		{ADCD3D36-D68E-4F6D-9D04-DEC229BF7749} = {D0864FA8-91CF-44CE-8A17-FBCBE8E46193}
 		{A409D08B-EF90-4825-B0D1-7DA8D0B3979D} = {D0864FA8-91CF-44CE-8A17-FBCBE8E46193}
 		{FFD30A37-FEEC-44C1-8E94-8D0C5ADEC768} = {67352B16-FC8E-4151-9D9D-7E8F5580B9A8}
+		{C6160590-9816-488E-8514-DB77741DCCD9} = {BCF07AD7-6F4E-4DC7-ACA4-29BC0701CCAC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5607264D-7851-4749-A9E9-2D5B22F210CA}

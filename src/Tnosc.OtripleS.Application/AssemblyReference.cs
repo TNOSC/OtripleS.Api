@@ -4,15 +4,11 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // -----------------------------------------------------------------------------------
 
-using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
 
-namespace Tnosc.OtripleS.Api.Controllers;
+namespace Tnosc.OtripleS.Application;
 
-[Route("api/[controller]")]
-[ApiController]
-public class HomeController : ControllerBase
+public static class AssemblyReference
 {
-    [HttpGet]
-    public ActionResult<string> Get() =>
-        Ok("Hello Mario, the princess is in another castle.");
+    public static readonly Assembly Assembly = typeof(AssemblyReference).Assembly;
 }

@@ -1,0 +1,6 @@
+@Tnosc.Otriples.Api_HostAddress = http://localhost:5278
+
+GET {{Tnosc.Otriples.Api_HostAddress}}/api/home/
+Accept: application/json
+
+###

@@ -1,0 +1,7 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tnosc.OtripleS.Server.Application\Tnosc.OtripleS.Server.Application.csproj" />
+  </ItemGroup>
+
+</Project>

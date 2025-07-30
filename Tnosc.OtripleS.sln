@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tnosc.OtripleS.Tests.Archit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tnosc.OtripleS.Tests.Unit", "tests\Tnosc.OtripleS.Tests.Unit\Tnosc.OtripleS.Tests.Unit.csproj", "{FC76FB40-85B4-4878-9988-B36CE3502DA5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tnosc.OtripleS.Api.Tests.Acceptance", "Tnosc.OtripleS.Api.Tests.Acceptance\Tnosc.OtripleS.Api.Tests.Acceptance.csproj", "{961937DA-804F-4FF0-89CF-DB6A23223C17}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{FC76FB40-85B4-4878-9988-B36CE3502DA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC76FB40-85B4-4878-9988-B36CE3502DA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC76FB40-85B4-4878-9988-B36CE3502DA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{961937DA-804F-4FF0-89CF-DB6A23223C17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{961937DA-804F-4FF0-89CF-DB6A23223C17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{961937DA-804F-4FF0-89CF-DB6A23223C17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{961937DA-804F-4FF0-89CF-DB6A23223C17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +76,7 @@ Global
 		{FFD30A37-FEEC-44C1-8E94-8D0C5ADEC768} = {67352B16-FC8E-4151-9D9D-7E8F5580B9A8}
 		{C6160590-9816-488E-8514-DB77741DCCD9} = {BCF07AD7-6F4E-4DC7-ACA4-29BC0701CCAC}
 		{FC76FB40-85B4-4878-9988-B36CE3502DA5} = {BCF07AD7-6F4E-4DC7-ACA4-29BC0701CCAC}
+		{961937DA-804F-4FF0-89CF-DB6A23223C17} = {BCF07AD7-6F4E-4DC7-ACA4-29BC0701CCAC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5607264D-7851-4749-A9E9-2D5B22F210CA}

@@ -1,6 +1,6 @@
-# Otriples.Api
+# Otriples.Server
 
-🚀 **Otriples.Api** is a modern reimplementation of the [OtripleS](https://github.com/hassanhabib/OtripleS) open-source school management system. This version introduces new architectural practices, including the **REPR Design Pattern (Request-Endpoint-Response)** and **CQRS (Command Query Responsibility Segregation)**, while staying aligned with the clean architecture and coding standards established by **Hassan Habib**.
+🚀 **Otriples.Server** is a modern reimplementation of the [OtripleS](https://github.com/hassanhabib/OtripleS) open-source school management system. This version introduces new architectural practices, including the **REPR Design Pattern (Request-Endpoint-Response)** and **CQRS (Command Query Responsibility Segregation)**, while staying aligned with the clean architecture and coding standards established by **Hassan Habib**.
 
 ## 🎯 Project Goals
 
@@ -31,8 +31,8 @@
 - **ASP.NET Core Web API**
 - **Swagger**
 - **xUnit / NSubstitute**
-- **FluentAssertions**
-
+- **Shouldly**
+- ...
 ---
 
 ## 📖 Inspiration

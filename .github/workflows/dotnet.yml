@@ -1,26 +1,24 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
-name: .NET
-
+name: OtripleS Server Build
 on:
   push:
-    branches: [ "main" ]
+    branches:
+    - main
   pull_request:
-    branches: [ "main" ]
-
+    branches:
+    - main
 jobs:
   build:
-
+    name: Build
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+    - name: Check out
+      uses: actions/checkout@v2
+    - name: Setup Dot Net Version
+      uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 9.0.x
-    - name: Restore dependencies
+        dotnet-version: 9.0.303
+        include-prerelease: false
+    - name: Restore
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore

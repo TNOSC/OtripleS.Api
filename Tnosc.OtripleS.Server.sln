@@ -17,17 +17,26 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tnosc.OtripleS.Server.Domain", "src\Tnosc.OtripleS.Server.Domain\Tnosc.OtripleS.Server.Domain.csproj", "{ADCD3D36-D68E-4F6D-9D04-DEC229BF7749}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TTnosc.OtripleS.Server.Application", "src\Tnosc.OtripleS.Server.Application\Tnosc.OtripleS.Server.Application.csproj", "{A409D08B-EF90-4825-B0D1-7DA8D0B3979D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tnosc.OtripleS.Server.Application", "src\Tnosc.OtripleS.Server.Application\Tnosc.OtripleS.Server.Application.csproj", "{A409D08B-EF90-4825-B0D1-7DA8D0B3979D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TTnosc.OtripleS.Server.Infrastructure", "src\Tnosc.OtripleS.Server.Infrastructure\Tnosc.OtripleS.Server.Infrastructure.csproj", "{FFD30A37-FEEC-44C1-8E94-8D0C5ADEC768}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tnosc.OtripleS.Server.Infrastructure", "src\Tnosc.OtripleS.Server.Infrastructure\Tnosc.OtripleS.Server.Infrastructure.csproj", "{FFD30A37-FEEC-44C1-8E94-8D0C5ADEC768}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2A144676-68EA-46ED-B8D3-D381EE174D87}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tnosc.OtripleS.Server.Tests.Architecture", "tests\Tnosc.OtripleS.Server.Tests.Architecture\Tnosc.OtripleS.Server.Tests.Architecture.csproj", "{C6160590-9816-488E-8514-DB77741DCCD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TTnosc.OtripleS.Server.Tests.Unit", "tests\Tnosc.OtripleS.Server.Tests.Unit\Tnosc.OtripleS.Server.Tests.Unit.csproj", "{FC76FB40-85B4-4878-9988-B36CE3502DA5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tnosc.OtripleS.Server.Tests.Unit", "tests\Tnosc.OtripleS.Server.Tests.Unit\Tnosc.OtripleS.Server.Tests.Unit.csproj", "{FC76FB40-85B4-4878-9988-B36CE3502DA5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tnosc.OtripleS.Server.Tests.Acceptance", "tests\Tnosc.OtripleS.Server.Tests.Acceptance\Tnosc.OtripleS.Server.Tests.Acceptance.csproj", "{961937DA-804F-4FF0-89CF-DB6A23223C17}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "devops", "devops", "{6FA33AFE-6551-4230-A4F2-6E6CE6864C2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OtripleS.Server.Build", "devops\OtripleS.Server.Build\OtripleS.Server.Build.csproj", "{3856543F-DDD4-4D03-AAFD-3818BF1C7C52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +72,10 @@ Global
 		{961937DA-804F-4FF0-89CF-DB6A23223C17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{961937DA-804F-4FF0-89CF-DB6A23223C17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{961937DA-804F-4FF0-89CF-DB6A23223C17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3856543F-DDD4-4D03-AAFD-3818BF1C7C52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3856543F-DDD4-4D03-AAFD-3818BF1C7C52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3856543F-DDD4-4D03-AAFD-3818BF1C7C52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3856543F-DDD4-4D03-AAFD-3818BF1C7C52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -77,6 +90,7 @@ Global
 		{C6160590-9816-488E-8514-DB77741DCCD9} = {BCF07AD7-6F4E-4DC7-ACA4-29BC0701CCAC}
 		{FC76FB40-85B4-4878-9988-B36CE3502DA5} = {BCF07AD7-6F4E-4DC7-ACA4-29BC0701CCAC}
 		{961937DA-804F-4FF0-89CF-DB6A23223C17} = {BCF07AD7-6F4E-4DC7-ACA4-29BC0701CCAC}
+		{3856543F-DDD4-4D03-AAFD-3818BF1C7C52} = {6FA33AFE-6551-4230-A4F2-6E6CE6864C2D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5607264D-7851-4749-A9E9-2D5B22F210CA}

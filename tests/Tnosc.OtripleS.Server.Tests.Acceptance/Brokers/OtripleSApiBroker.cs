@@ -20,6 +20,6 @@ public partial class OtripleSApiBroker
     {
         _webApplicationFactory = new WebApplicationFactory<Program>();
         _httpClient = _webApplicationFactory.CreateClient();
-        _apiFactoryClient = new RESTFulApiFactoryClient(_httpClient);
+        _apiFactoryClient = new RESTFulApiFactoryClient(httpClient: _httpClient);
     }
 }

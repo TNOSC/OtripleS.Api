@@ -4,7 +4,6 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using System;
 using System.Threading.Tasks;
 using Azure;
 using Azure.Core;
@@ -23,13 +22,13 @@ public partial class CloudBroker
     {
         AppServicePlanCollection planCollection = resourceGroup.GetAppServicePlans();
 
-        Response<bool> exists = await planCollection.ExistsAsync(planName);
+        Response<bool> exists = await planCollection.ExistsAsync(name: planName);
         if (exists.Value)
         {
-            return await planCollection.GetAsync(planName);
+            return await planCollection.GetAsync(name: planName);
         }
 
-        var planData = new AppServicePlanData(AzureLocation.WestEurope)
+        var planData = new AppServicePlanData(location: AzureLocation.WestEurope)
         {
             Sku = new AppServiceSkuDescription
             {
@@ -41,9 +40,9 @@ public partial class CloudBroker
         };
 
         ArmOperation<AppServicePlanResource> operation = await planCollection.CreateOrUpdateAsync(
-            WaitUntil.Completed,
-            planName,
-            planData);
+            waitUntil: WaitUntil.Completed,
+            name: planName,
+            data: planData);
 
         return operation.Value;
     }

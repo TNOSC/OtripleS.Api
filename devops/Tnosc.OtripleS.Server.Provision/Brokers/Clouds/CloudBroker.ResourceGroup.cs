@@ -20,7 +20,7 @@ public partial class CloudBroker
 
         ResourceGroupCollection resourceGroups = subscription.GetResourceGroups();
 
-        bool exists = await resourceGroups.ExistsAsync(resourceGroupName);
+        bool exists = await resourceGroups.ExistsAsync(resourceGroupName: resourceGroupName);
 
         return exists;
     }
@@ -31,12 +31,12 @@ public partial class CloudBroker
 
         ResourceGroupCollection resourceGroups = subscription.GetResourceGroups();
 
-        var resourceGroupData = new ResourceGroupData(AzureLocation.WestEurope);
+        var resourceGroupData = new ResourceGroupData(location: AzureLocation.WestEurope);
 
         ArmOperation<ResourceGroupResource> result = await resourceGroups.CreateOrUpdateAsync(
-                WaitUntil.Completed,
-                resourceGroupName,
-                resourceGroupData
+                waitUntil: WaitUntil.Completed,
+                resourceGroupName: resourceGroupName,
+                data: resourceGroupData
         );
 
        return result.Value;
@@ -47,15 +47,15 @@ public partial class CloudBroker
         SubscriptionResource subscription = await _armClient.GetDefaultSubscriptionAsync();
         ResourceGroupCollection resourceGroups = subscription.GetResourceGroups();
 
-        bool exists = (await resourceGroups.ExistsAsync(resourceGroupName)).Value;
+        bool exists = (await resourceGroups.ExistsAsync(resourceGroupName: resourceGroupName)).Value;
         if (!exists)
         {
             return;
         }
 
-        ResourceGroupResource resourceGroup = await resourceGroups.GetAsync(resourceGroupName);
+        ResourceGroupResource resourceGroup = await resourceGroups.GetAsync(resourceGroupName: resourceGroupName);
 
-        await resourceGroup.DeleteAsync(WaitUntil.Completed);
+        await resourceGroup.DeleteAsync(waitUntil: WaitUntil.Completed);
     }
 }
 

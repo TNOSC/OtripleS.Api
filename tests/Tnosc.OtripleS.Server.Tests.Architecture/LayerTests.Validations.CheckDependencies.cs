@@ -14,9 +14,9 @@ public partial class LayerTests
     [Fact]
     public void DomainShouldNotHaveDependencyOnApplication()
     {
-        TestResult result = Types.InAssembly(_domainAssembly)
+        TestResult result = Types.InAssembly(assembly: _domainAssembly)
             .Should()
-            .NotHaveDependencyOn(_applicationAssembly.GetName().Name)
+            .NotHaveDependencyOn(dependency: _applicationAssembly.GetName().Name)
             .GetResult();
 
         result.IsSuccessful.ShouldBeTrue();
@@ -25,9 +25,9 @@ public partial class LayerTests
     [Fact]
     public void DomainLayerShouldNotHaveDependencyOnInfrastructureLayer()
     {
-        TestResult result = Types.InAssembly(_domainAssembly)
+        TestResult result = Types.InAssembly(assembly: _domainAssembly)
             .Should()
-            .NotHaveDependencyOn(_infrastructureAssembly.GetName().Name)
+            .NotHaveDependencyOn(dependency: _infrastructureAssembly.GetName().Name)
             .GetResult();
 
         result.IsSuccessful.ShouldBeTrue();
@@ -36,9 +36,9 @@ public partial class LayerTests
     [Fact]
     public void DomainLayerShouldNotHaveDependencyOnPresentationLayer()
     {
-        TestResult result = Types.InAssembly(_domainAssembly)
+        TestResult result = Types.InAssembly(assembly: _domainAssembly)
             .Should()
-            .NotHaveDependencyOn(_presentationAssembly.GetName().Name)
+            .NotHaveDependencyOn(dependency: _presentationAssembly.GetName().Name)
             .GetResult();
 
         result.IsSuccessful.ShouldBeTrue();
@@ -47,9 +47,9 @@ public partial class LayerTests
     [Fact]
     public void ApplicationLayerShouldNotHaveDependencyOnInfrastructureLayer()
     {
-        TestResult result = Types.InAssembly(_applicationAssembly)
+        TestResult result = Types.InAssembly(assembly: _applicationAssembly)
             .Should()
-            .NotHaveDependencyOn(_infrastructureAssembly.GetName().Name)
+            .NotHaveDependencyOn(dependency: _infrastructureAssembly.GetName().Name)
             .GetResult();
 
         result.IsSuccessful.ShouldBeTrue();
@@ -58,9 +58,9 @@ public partial class LayerTests
     [Fact]
     public void ApplicationLayerShouldNotHaveDependencyOnPresentationLayer()
     {
-        TestResult result = Types.InAssembly(_applicationAssembly)
+        TestResult result = Types.InAssembly(assembly: _applicationAssembly)
             .Should()
-            .NotHaveDependencyOn(_presentationAssembly.GetName().Name)
+            .NotHaveDependencyOn(dependency: _presentationAssembly.GetName().Name)
             .GetResult();
 
         result.IsSuccessful.ShouldBeTrue();
@@ -69,9 +69,9 @@ public partial class LayerTests
     [Fact]
     public void InfrastructureLayerShouldNotHaveDependencyOnPresentationLayer()
     {
-        TestResult result = Types.InAssembly(_infrastructureAssembly)
+        TestResult result = Types.InAssembly(assembly: _infrastructureAssembly)
             .Should()
-            .NotHaveDependencyOn(_presentationAssembly.GetName().Name)
+            .NotHaveDependencyOn(dependency: _presentationAssembly.GetName().Name)
             .GetResult();
 
         result.IsSuccessful.ShouldBeTrue();

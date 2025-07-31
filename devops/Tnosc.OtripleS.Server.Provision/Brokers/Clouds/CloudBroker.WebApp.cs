@@ -24,29 +24,29 @@ public partial class CloudBroker
     {
         WebSiteCollection webAppCollection = resourceGroup.GetWebSites();
 
-        var siteData = new WebSiteData(resourceGroup.Data.Location)
+        var siteData = new WebSiteData(location: resourceGroup.Data.Location)
         {
             AppServicePlanId = plan.Id,
             SiteConfig = new SiteConfigProperties()
             {
                 NetFrameworkVersion = "v9.0" ,
-                ConnectionStrings = new List<ConnStringInfo>()
-                {
-                    new ConnStringInfo()
+                ConnectionStrings =
+                [
+                    new()
                     {
                         Name = "DefaultConnection",
                         ConnectionString = databaseConnectionString,
                         ConnectionStringType = ConnectionStringType.SqlAzure
                     }
-                },
+                ],
             },
         };
 
         // Create or update the web app
         ArmOperation<WebSiteResource> operation = await webAppCollection.CreateOrUpdateAsync(
-            WaitUntil.Completed,
-            webAppName,
-            siteData);
+            waitUntil: WaitUntil.Completed,
+            name: webAppName,
+            data: siteData);
 
         return operation.Value;
     }

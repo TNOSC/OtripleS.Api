@@ -12,7 +12,7 @@ namespace Tnosc.OtripleS.Server.Provision.Brokers.Clouds;
 
 internal partial class CloudBroker : ICloudBroker
 {
-    private readonly ArmClient _azureClient;
+    private readonly ArmClient _armClient;
 
     public CloudBroker()
     {
@@ -28,6 +28,6 @@ internal partial class CloudBroker : ICloudBroker
         {
             throw new InvalidOperationException("AZURE_CLIENT_SECRET does not exist in environment variables");
         }
-        _azureClient = new ArmClient(new DefaultAzureCredential());
+        _armClient = new ArmClient(new DefaultAzureCredential());
     }
 }

@@ -14,3 +14,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Maintainability", "CA1515:Consider making public types internal", Justification = "<Pending>", Scope = "type", Target = "~T:Tnosc.OtripleS.Server.Provision.Brokers.Clouds.CloudBroker")]
 [assembly: SuppressMessage("Maintainability", "CA1515:Consider making public types internal", Justification = "<Pending>", Scope = "type", Target = "~T:Tnosc.OtripleS.Server.Provision.Brokers.Clouds.ICloudBroker")]
 [assembly: SuppressMessage("Maintainability", "CA1515:Consider making public types internal", Justification = "<Pending>", Scope = "type", Target = "~T:Tnosc.OtripleS.Server.Provision.Models.SqlDatabaseAccess")]
+[assembly: SuppressMessage("Maintainability", "CA1515:Consider making public types internal", Justification = "<Pending>", Scope = "type", Target = "~T:Tnosc.OtripleS.Server.Provision.Brokers.Loggings.ILoggingBroker")]

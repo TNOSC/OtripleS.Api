@@ -28,7 +28,7 @@ public partial class CloudBroker
             AdministratorLoginPassword = _adminAccess,
         };
 
-        ArmOperation<SqlServerResource> operation = 
+        ArmOperation<SqlServerResource> operation =
             await sqlServerCollection.CreateOrUpdateAsync(
             waitUntil: WaitUntil.Completed,
             serverName: sqlServerName,
@@ -45,7 +45,7 @@ public partial class CloudBroker
 
         var dbData = new SqlDatabaseData(location: sqlServer.Data.Location)
         {
-            Sku = new SqlSku(name: "Basic") 
+            Sku = new SqlSku(name: "Basic")
         };
 
         ArmOperation<SqlDatabaseResource> operation = await databaseCollection.CreateOrUpdateAsync(

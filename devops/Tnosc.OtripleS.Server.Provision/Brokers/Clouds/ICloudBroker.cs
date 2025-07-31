@@ -6,6 +6,6 @@
 
 namespace Tnosc.OtripleS.Server.Provision.Brokers.Clouds;
 
-internal partial interface ICloudBroker
+public partial interface ICloudBroker
 {
 }

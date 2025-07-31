@@ -36,7 +36,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tnosc.OtripleS.Server.Tests
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "devops", "devops", "{6FA33AFE-6551-4230-A4F2-6E6CE6864C2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OtripleS.Server.Build", "devops\OtripleS.Server.Build\OtripleS.Server.Build.csproj", "{3856543F-DDD4-4D03-AAFD-3818BF1C7C52}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tnosc.OtripleS.Server.Build", "devops\Tnosc.OtripleS.Server.Build\Tnosc.OtripleS.Server.Build.csproj", "{3856543F-DDD4-4D03-AAFD-3818BF1C7C52}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tnosc.OtripleS.Server.Provision", "devops\Tnosc.OtripleS.Server.Provision\Tnosc.OtripleS.Server.Provision.csproj", "{BA85B3C6-E98F-4316-B0E0-F3810A8C2E8D}"
 EndProject

@@ -31,8 +31,11 @@ internal sealed partial class CloudBroker : ICloudBroker
             throw new InvalidOperationException("AZURE_CLIENT_SECRET does not exist in environment variables");
         }
 
-        _adminName = Environment.GetEnvironmentVariable("AzureAdminName") ?? throw new InvalidOperationException("AzureAdminName does not exist in environment variables");
-        _adminAccess = Environment.GetEnvironmentVariable("AzureAdminAccess") ?? throw new InvalidOperationException("AzureAdminAccess does not exist in environment variables");
+        _adminName = Environment.GetEnvironmentVariable("AzureAdminName") 
+            ?? throw new InvalidOperationException("AzureAdminName does not exist in environment variables");
+        _adminAccess = Environment.GetEnvironmentVariable("AzureAdminAccess") 
+            ?? throw new InvalidOperationException("AzureAdminAccess does not exist in environment variables");
+
         _armClient = new ArmClient(new DefaultAzureCredential());
     }
 }

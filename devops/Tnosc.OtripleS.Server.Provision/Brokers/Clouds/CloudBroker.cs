@@ -10,7 +10,7 @@ using Azure.ResourceManager;
 
 namespace Tnosc.OtripleS.Server.Provision.Brokers.Clouds;
 
-public partial class CloudBroker : ICloudBroker
+internal sealed partial class CloudBroker : ICloudBroker
 {
     private readonly ArmClient _armClient;
     private readonly string _adminName;

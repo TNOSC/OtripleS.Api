@@ -12,7 +12,7 @@ using Azure.ResourceManager.Resources;
 
 namespace Tnosc.OtripleS.Server.Provision.Brokers.Clouds;
 
-public partial class CloudBroker
+internal partial class CloudBroker
 {
     public async ValueTask<bool> CheckResourceGroupExistAsync(string resourceGroupName) 
     {

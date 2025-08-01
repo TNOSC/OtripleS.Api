@@ -9,7 +9,7 @@ using Azure.ResourceManager.Resources;
 
 namespace Tnosc.OtripleS.Server.Provision.Brokers.Clouds;
 
-public partial interface ICloudBroker
+internal partial interface ICloudBroker
 {
     ValueTask<ResourceGroupResource> CreateResourceGroupAsync(string resourceGroupName);
     ValueTask DeleteResourceGroupAsync(string resourceGroupName);

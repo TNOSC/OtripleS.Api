@@ -8,7 +8,7 @@ using System;
 
 namespace Tnosc.OtripleS.Server.Provision.Brokers.Loggings;
 
-internal class LoggingBroker : ILoggingBroker
+internal sealed class LoggingBroker : ILoggingBroker
 {
     public void LogActivity(string message) =>
         Console.WriteLine(message);

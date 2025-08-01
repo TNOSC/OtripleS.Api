@@ -12,7 +12,7 @@ using Tnosc.OtripleS.Server.Provision.Models;
 
 namespace Tnosc.OtripleS.Server.Provision.Brokers.Clouds;
 
-public partial interface ICloudBroker
+internal partial interface ICloudBroker
 {
     ValueTask<SqlServerResource> CreateSqlServerAsync(
             string sqlServerName,

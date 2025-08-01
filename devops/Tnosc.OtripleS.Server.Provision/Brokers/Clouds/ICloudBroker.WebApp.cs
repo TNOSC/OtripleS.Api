@@ -11,7 +11,7 @@ using Azure.ResourceManager.Resources;
 
 namespace Tnosc.OtripleS.Server.Provision.Brokers.Clouds;
 
-public partial interface ICloudBroker
+internal partial interface ICloudBroker
 {
     ValueTask<WebSiteResource> CreateWebAppAsync(
         string webAppName,

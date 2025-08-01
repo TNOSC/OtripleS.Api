@@ -10,7 +10,7 @@ using Azure.ResourceManager.Resources;
 
 namespace Tnosc.OtripleS.Server.Provision.Brokers.Clouds;
 
-public partial interface ICloudBroker
+internal partial interface ICloudBroker
 {
     ValueTask<AppServicePlanResource> CreatePlanAsync(
         string planName,

@@ -6,7 +6,7 @@
 
 namespace Tnosc.OtripleS.Server.Provision.Models;
 
-public class SqlDatabaseAccess
+internal sealed class SqlDatabaseAccess
 {
     public string AdminName { get; set; } = string.Empty;
     public string AdminAccess { get; set; } = string.Empty;

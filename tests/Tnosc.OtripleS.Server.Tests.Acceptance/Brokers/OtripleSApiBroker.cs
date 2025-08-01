@@ -14,7 +14,7 @@ public partial class OtripleSApiBroker
 {
     private readonly WebApplicationFactory<Program> _webApplicationFactory;
     private readonly HttpClient _httpClient;
-    private readonly RESTFulApiFactoryClient _apiFactoryClient;
+    private readonly IRESTFulApiFactoryClient _apiFactoryClient;
 
     public OtripleSApiBroker()
     {

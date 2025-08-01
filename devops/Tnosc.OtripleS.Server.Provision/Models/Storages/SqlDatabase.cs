@@ -4,10 +4,12 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-namespace Tnosc.OtripleS.Server.Provision.Models;
+using Azure.ResourceManager.Sql;
 
-internal sealed class SqlDatabaseAccess
+namespace Tnosc.OtripleS.Server.Provision.Models.Storages;
+
+internal class SqlDatabase
 {
-    public string AdminName { get; set; } = string.Empty;
-    public string AdminAccess { get; set; } = string.Empty;
+    public string ConnectionString { get; set; } = null!;
+    public SqlDatabaseResource Database { get; set; } = null!;
 }

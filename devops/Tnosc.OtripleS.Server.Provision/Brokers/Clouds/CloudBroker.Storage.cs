@@ -10,7 +10,7 @@ using Azure.ResourceManager;
 using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Sql;
 using Azure.ResourceManager.Sql.Models;
-using Tnosc.OtripleS.Server.Provision.Models;
+using Tnosc.OtripleS.Server.Provision.Models.Storages;
 
 namespace Tnosc.OtripleS.Server.Provision.Brokers.Clouds;
 

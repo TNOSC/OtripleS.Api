@@ -10,6 +10,7 @@ using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Sql;
 using Tnosc.OtripleS.Server.Provision.Brokers.Clouds;
 using Tnosc.OtripleS.Server.Provision.Brokers.Loggings;
+using Tnosc.OtripleS.Server.Provision.Models.Storages;
 
 namespace Tnosc.OtripleS.Server.Provision.Services;
 
@@ -74,5 +75,37 @@ internal sealed class CloudManagementService : ICloudManagementService
 
         return sqlServer;
     }
-}
+
+    public async ValueTask<SqlDatabase> ProvisionSqlDatabaseAsync(
+           string projectName,
+           string environment,
+           SqlServerResource sqlServer)
+    {
+        string sqlDatabaseName = $"{projectName}-db-{environment}".ToLowerInvariant();
+        _loggingBroker.LogActivity(message: $"Provisioning {sqlDatabaseName}...");
+
+        SqlDatabaseResource sqlDatabase =
+            await _cloudBroker.CreateSqlDatabaseAsync(
+                sqlDatabaseName: sqlDatabaseName,
+                sqlServer: sqlServer);
+
+        _loggingBroker.LogActivity(message: $"{sqlDatabaseName} Provisioned");
+
+        return new SqlDatabase
+        {
+            Database = sqlDatabase,
+            ConnectionString = GenerateConnectionString(sqlDatabase: sqlDatabase)
+        };
+    }
+
+    private string GenerateConnectionString(SqlDatabaseResource sqlDatabase)
+    {
+        SqlDatabaseAccess sqlDatabaseAccess =
+            _cloudBroker.GetAdminAccess();
+
+        return $"Server=tcp:{sqlDatabase.Data.Id.Parent!.Name}.database.windows.net,1433;" +
+            $"Initial Catalog={sqlDatabase.Data.Name};" +
+            $"User ID={sqlDatabaseAccess.AdminName};" +
+            $"Password={sqlDatabaseAccess.AdminAccess};";
+    }
 }

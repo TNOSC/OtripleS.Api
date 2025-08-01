@@ -21,7 +21,7 @@ internal sealed class ConfigurationBroker : IConfigurationBroker
             .Build();
 
         return configurationRoot.Get<CloudManagementConfiguration>() 
-            ?? throw new InvalidOperationException($"{nameof(CloudManagementConfiguration)} does not exist.");
+            ?? throw new InvalidOperationException(message: $"{nameof(CloudManagementConfiguration)} does not exist.");
     }
 }
 

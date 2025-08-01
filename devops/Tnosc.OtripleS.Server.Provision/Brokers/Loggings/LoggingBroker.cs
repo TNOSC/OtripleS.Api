@@ -11,5 +11,5 @@ namespace Tnosc.OtripleS.Server.Provision.Brokers.Loggings;
 internal sealed class LoggingBroker : ILoggingBroker
 {
     public void LogActivity(string message) =>
-        Console.WriteLine(message);
+        Console.WriteLine(value: message);
 }

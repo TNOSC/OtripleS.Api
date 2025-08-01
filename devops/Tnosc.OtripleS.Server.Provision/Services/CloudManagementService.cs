@@ -5,6 +5,7 @@
 // ----------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
+using Azure.ResourceManager.AppService;
 using Azure.ResourceManager.Resources;
 using Tnosc.OtripleS.Server.Provision.Brokers.Clouds;
 using Tnosc.OtripleS.Server.Provision.Brokers.Loggings;
@@ -30,11 +31,29 @@ internal sealed class CloudManagementService : ICloudManagementService
         _loggingBroker.LogActivity(message: $"Provisioning {resourceGroupName}...");
 
         ResourceGroupResource resourceGroup =
-            await _cloudBroker.CreateResourceGroupAsync(
-                resourceGroupName);
+            await _cloudBroker.CreateResourceGroupAsync(resourceGroupName: resourceGroupName);
 
         _loggingBroker.LogActivity(message: $"{resourceGroupName} Provisioned.");
 
         return resourceGroup;
     }
+
+    public async ValueTask<AppServicePlanResource> ProvisionPlanAsync(
+        string projectName,
+        string environment,
+        ResourceGroupResource resourceGroup)
+    {
+        string planName = $"{projectName}-PLAN-{environment}".ToUpperInvariant();
+        _loggingBroker.LogActivity(message: $"Provisioning {planName}...");
+
+        AppServicePlanResource plan =
+            await _cloudBroker.CreatePlanAsync(
+                planName: planName,
+                resourceGroup: resourceGroup);
+
+        _loggingBroker.LogActivity(message: $"{plan} Provisioned");
+
+        return plan;
+    }
+
 }

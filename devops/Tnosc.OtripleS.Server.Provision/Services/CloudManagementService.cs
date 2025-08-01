@@ -7,6 +7,7 @@
 using System.Threading.Tasks;
 using Azure.ResourceManager.AppService;
 using Azure.ResourceManager.Resources;
+using Azure.ResourceManager.Sql;
 using Tnosc.OtripleS.Server.Provision.Brokers.Clouds;
 using Tnosc.OtripleS.Server.Provision.Brokers.Loggings;
 
@@ -56,4 +57,22 @@ internal sealed class CloudManagementService : ICloudManagementService
         return plan;
     }
 
+    public async ValueTask<SqlServerResource> ProvisionSqlServerAsync(
+            string projectName,
+            string environment,
+            ResourceGroupResource resourceGroup)
+    {
+        string sqlServerName = $"{projectName}-DBSERVER-{environment}".ToUpperInvariant();
+        _loggingBroker.LogActivity(message: $"Provisioning {sqlServerName}...");
+
+        SqlServerResource sqlServer =
+            await _cloudBroker.CreateSqlServerAsync(
+                sqlServerName: sqlServerName,
+                resourceGroup: resourceGroup);
+
+        _loggingBroker.LogActivity(message: $"{sqlServer} Provisioned");
+
+        return sqlServer;
+    }
+}
 }

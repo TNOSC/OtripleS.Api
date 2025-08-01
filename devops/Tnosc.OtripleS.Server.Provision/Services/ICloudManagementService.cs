@@ -7,6 +7,7 @@
 using System.Threading.Tasks;
 using Azure.ResourceManager.AppService;
 using Azure.ResourceManager.Resources;
+using Azure.ResourceManager.Sql;
 
 namespace Tnosc.OtripleS.Server.Provision.Services;
 
@@ -20,4 +21,9 @@ internal interface ICloudManagementService
             string projectName,
             string environment,
             ResourceGroupResource resourceGroup);
+
+    ValueTask<SqlServerResource> ProvisionSqlServerAsync(
+           string projectName,
+           string environment,
+           ResourceGroupResource resourceGroup);
 }

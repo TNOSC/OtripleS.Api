@@ -57,7 +57,7 @@ internal static class ScriptGenerationService
                 .OnPush(branches: "main")
                 .OnPullRequest(branches: "main")
                     .AddJob(jobIdentifier: "build", configureJob: job => job
-                    .WithName(name: "Build")
+                    .WithName(name: "Provision")
                     .AddEnvironmentVariable("AZURE_CLIENT_ID", "${{ secrets.AZURECLIENTID }}")
                     .AddEnvironmentVariable("AZURE_TENANT_ID", "${{ secrets.AZURETENANTID }}")
                     .AddEnvironmentVariable("AZURE_CLIENT_SECRET", "${{ secrets.AZURECLIENTSECRET }}")
@@ -70,7 +70,7 @@ internal static class ScriptGenerationService
                         .AddBuildStep()
                         .AddGenericStep(
                             name: "Provision",
-                            runCommand: @"dotnet run --project .\Tnosc.OtripleS.Server.Provision\Tnosc.OtripleS.Server.Provision.csproj"))
+                            runCommand: "dotnet run --project .\\Tnosc.OtripleS.Server.Provision\\Tnosc.OtripleS.Server.Provision.csproj"))
 
         .SaveToFile(path: buildScriptPath);
     }

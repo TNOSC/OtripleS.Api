@@ -23,7 +23,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Provision
-      run: dotnet run --project .\devops\Tnosc.OtripleS.Server.Provision\Tnosc.OtripleS.Server.Provision.csproj
+      run: dotnet run --project ./devops/Tnosc.OtripleS.Server.Provision/Tnosc.OtripleS.Server.Provision.csproj
     env:
       AZURE_CLIENT_ID: ${{ secrets.AZURECLIENTID }}
       AZURE_TENANT_ID: ${{ secrets.AZURETENANTID }}

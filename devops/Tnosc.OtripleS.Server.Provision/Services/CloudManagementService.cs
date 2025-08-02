@@ -108,4 +108,26 @@ internal sealed class CloudManagementService : ICloudManagementService
             $"User ID={sqlDatabaseAccess.AdminName};" +
             $"Password={sqlDatabaseAccess.AdminAccess};";
     }
+
+    public async ValueTask<WebSiteResource> ProvisionWebAppAsync(
+            string projectName,
+            string environment,
+            string databaseConnectionString,
+            ResourceGroupResource resourceGroup,
+            AppServicePlanResource appServicePlan)
+    {
+        string webAppName = $"{projectName}-{environment}".ToUpperInvariant();
+        _loggingBroker.LogActivity(message: $"Provisioning {webAppName}");
+
+        WebSiteResource webApp =
+            await _cloudBroker.CreateWebAppAsync(
+                webAppName: webAppName,
+                databaseConnectionString: databaseConnectionString,
+                plan: appServicePlan,
+                resourceGroup: resourceGroup);
+
+       _loggingBroker.LogActivity(message: $"{webAppName} Provisioned");
+
+        return webApp;
+    }
 }

@@ -8,7 +8,7 @@ using Azure.ResourceManager.Sql;
 
 namespace Tnosc.OtripleS.Server.Provision.Models.Storages;
 
-internal class SqlDatabase
+internal sealed class SqlDatabase
 {
     public string ConnectionString { get; set; } = null!;
     public SqlDatabaseResource Database { get; set; } = null!;

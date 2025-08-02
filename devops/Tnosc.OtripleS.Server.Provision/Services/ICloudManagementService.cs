@@ -32,4 +32,11 @@ internal interface ICloudManagementService
         string projectName,
         string environment,
         SqlServerResource sqlServer);
+
+    ValueTask<WebSiteResource> ProvisionWebAppAsync(
+           string projectName,
+           string environment,
+           string databaseConnectionString,
+           ResourceGroupResource resourceGroup,
+           AppServicePlanResource appServicePlan);
 }

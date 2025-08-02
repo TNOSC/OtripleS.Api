@@ -14,12 +14,12 @@ public partial class OtripleSApiBroker
 {
     private readonly WebApplicationFactory<Program> _webApplicationFactory;
     private readonly HttpClient _httpClient;
-    private readonly RESTFulApiFactoryClient _apiFactoryClient;
+    private readonly IRESTFulApiFactoryClient _apiFactoryClient;
 
     public OtripleSApiBroker()
     {
         _webApplicationFactory = new WebApplicationFactory<Program>();
         _httpClient = _webApplicationFactory.CreateClient();
-        _apiFactoryClient = new RESTFulApiFactoryClient(_httpClient);
+        _apiFactoryClient = new RESTFulApiFactoryClient(httpClient: _httpClient);
     }
 }

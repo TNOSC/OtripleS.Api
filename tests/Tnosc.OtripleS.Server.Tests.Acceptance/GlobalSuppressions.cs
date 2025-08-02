@@ -14,3 +14,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "<Pending>", Scope = "type", Target = "~T:Tnosc.OtripleS.Server.Tests.Acceptance.Brokers.OtripleSApiBroker")]
 [assembly: SuppressMessage("Maintainability", "CA1515:Consider making public types internal", Justification = "<Pending>", Scope = "type", Target = "~T:Tnosc.OtripleS.Server.Tests.Acceptance.Brokers.OtripleSApiBroker")]
 [assembly: SuppressMessage("Maintainability", "CA1515:Consider making public types internal", Justification = "<Pending>", Scope = "type", Target = "~T:Tnosc.OtripleS.Server.Tests.Acceptance.Brokers.ApiTestCollection")]
+[assembly: SuppressMessage("Performance", "CA1859:Use concrete types when possible for improved performance", Justification = "<Pending>", Scope = "member", Target = "~F:Tnosc.OtripleS.Server.Tests.Acceptance.Brokers.OtripleSApiBroker._apiFactoryClient")]

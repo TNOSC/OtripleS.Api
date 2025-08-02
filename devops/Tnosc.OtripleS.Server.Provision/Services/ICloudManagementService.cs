@@ -39,4 +39,8 @@ internal interface ICloudManagementService
            string databaseConnectionString,
            ResourceGroupResource resourceGroup,
            AppServicePlanResource appServicePlan);
+
+    ValueTask DeprovisionResouceGroupAsync(
+            string projectName,
+            string environment);
 }

@@ -126,8 +126,30 @@ internal sealed class CloudManagementService : ICloudManagementService
                 plan: appServicePlan,
                 resourceGroup: resourceGroup);
 
-       _loggingBroker.LogActivity(message: $"{webAppName} Provisioned");
+        _loggingBroker.LogActivity(message: $"{webAppName} Provisioned");
 
         return webApp;
+    }
+
+    public async ValueTask DeprovisionResouceGroupAsync(
+        string projectName,
+        string environment)
+    {
+        string resourceGroupName = $"{projectName}-RESOURCES-{environment}".ToUpperInvariant();
+
+        bool isResourceGroupExist =
+            await _cloudBroker.CheckResourceGroupExistAsync(resourceGroupName: resourceGroupName);
+
+        if (isResourceGroupExist)
+        {
+           _loggingBroker.LogActivity(message: $"Deprovisioning {resourceGroupName}...");
+            await _cloudBroker.DeleteResourceGroupAsync(resourceGroupName: resourceGroupName);
+           _loggingBroker.LogActivity(message: $"{resourceGroupName} Deprovisioned");
+        }
+        else
+        {
+            _loggingBroker.LogActivity(
+                message: $"Resource group {resourceGroupName} doesn't exist. No action taken.");
+        }
     }
 }

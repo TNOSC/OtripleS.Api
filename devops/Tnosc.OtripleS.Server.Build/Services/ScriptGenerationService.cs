@@ -70,7 +70,7 @@ internal static class ScriptGenerationService
                         .AddBuildStep()
                         .AddGenericStep(
                             name: "Provision",
-                            runCommand: "dotnet run --project .\\Tnosc.OtripleS.Server.Provision\\Tnosc.OtripleS.Server.Provision.csproj"))
+                            runCommand: "dotnet run --project .\\devops\\Tnosc.OtripleS.Server.Provision\\Tnosc.OtripleS.Server.Provision.csproj"))
 
         .SaveToFile(path: buildScriptPath);
     }

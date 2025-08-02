@@ -4,6 +4,9 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using System;
+using Tnosc.OtripleS.Server.Provision.Processings;
 
-Console.WriteLine();
+ICloudManagementProcessingService cloudManagementProcessingService =
+                new CloudManagementProcessingService();
+
+await cloudManagementProcessingService.ProcessAsync();

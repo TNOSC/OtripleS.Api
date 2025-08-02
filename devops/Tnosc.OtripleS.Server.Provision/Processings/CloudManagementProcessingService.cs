@@ -16,7 +16,7 @@ using Tnosc.OtripleS.Server.Provision.Services;
 
 namespace Tnosc.OtripleS.Server.Provision.Processings;
 
-internal class CloudManagementProcessingService : ICloudManagementProcessingService
+internal sealed class CloudManagementProcessingService : ICloudManagementProcessingService
 {
     private readonly ICloudManagementService _cloudManagementService;
     private readonly IConfigurationBroker _configurationBroker;
@@ -35,6 +35,10 @@ internal class CloudManagementProcessingService : ICloudManagementProcessingServ
         await ProvisionAsync(
             projectName: cloudManagementConfiguration.ProjectName,
             cloudAction: cloudManagementConfiguration.Up);
+
+        await DeprovisionAsync(
+                projectName: cloudManagementConfiguration.ProjectName,
+                cloudAction: cloudManagementConfiguration.Down);
     }
 
     private async ValueTask ProvisionAsync(
@@ -80,6 +84,25 @@ internal class CloudManagementProcessingService : ICloudManagementProcessingServ
                     databaseConnectionString: sqlDatabase.ConnectionString,
                     resourceGroup: resourceGroup,
                     appServicePlan: appServicePlan);
+        }
+    }
+
+    private async ValueTask DeprovisionAsync(
+            string projectName,
+            CloudAction? cloudAction)
+    {
+        if (cloudAction is null || string.IsNullOrWhiteSpace(value: projectName))
+        {
+            return;
+        }
+
+        IEnumerable<string> environments = RetrieveEnvironments(cloudAction);
+
+        foreach (string environmentName in environments)
+        {
+            await _cloudManagementService.DeprovisionResouceGroupAsync(
+                projectName: projectName,
+                environment: environmentName);
         }
     }
 

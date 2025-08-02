@@ -17,7 +17,7 @@ internal sealed class ConfigurationBroker : IConfigurationBroker
     {
         IConfigurationRoot configurationRoot = new ConfigurationBuilder()
             .SetBasePath(basePath: Directory.GetCurrentDirectory())
-            .AddJsonFile(path: "Tnosc.OtripleS.Server.Provision/appSettings.json", optional: false)
+            .AddJsonFile(path: "devops/Tnosc.OtripleS.Server.Provision/appSettings.json", optional: false)
             .Build();
 
         return configurationRoot.Get<CloudManagementConfiguration>() 

@@ -68,6 +68,6 @@ internal sealed partial class StorageBroker : EFxceptionsContext, IStorageBroker
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder: modelBuilder);
-        modelBuilder.ApplyConfigurationsFromAssembly(assembly: GetType().Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(assembly: typeof(StorageBroker).Assembly);
     }
 }

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Tnosc.OtripleS.Server.Application.Brokers.Storages;
 
-namespace Tnosc.OtripleS.Server.Infrastructure.Storages;
+namespace Tnosc.OtripleS.Server.Infrastructure.Brokers.Storages;
 
 internal sealed partial class StorageBroker : EFxceptionsContext, IStorageBroker
 {

@@ -116,7 +116,7 @@ internal sealed class CloudManagementService : ICloudManagementService
             ResourceGroupResource resourceGroup,
             AppServicePlanResource appServicePlan)
     {
-        string webAppName = $"{projectName}-{environment}".ToUpperInvariant();
+        string webAppName = $"{projectName}-WEBAPP-{environment}".ToUpperInvariant();
         _loggingBroker.LogActivity(message: $"Provisioning {webAppName}");
 
         WebSiteResource webApp =

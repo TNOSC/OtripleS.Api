@@ -1,0 +1,32 @@
+name: OtripleS Server Provision
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+jobs:
+  build:
+    name: Provision
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out
+      uses: actions/checkout@v2
+    - name: Setup Dot Net Version
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 9.0.303
+        include-prerelease: false
+    - name: Restore
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Provision
+      run: dotnet run --project ./devops/Tnosc.OtripleS.Server.Provision/Tnosc.OtripleS.Server.Provision.csproj
+    env:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AzureAdminName: ${{ secrets.AzureAdminName }}
+      AzureAdminAccess: ${{ secrets.AzureAdminAccess }}

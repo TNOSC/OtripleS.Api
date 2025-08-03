@@ -7,6 +7,7 @@
 using System;
 using Azure.Identity;
 using Azure.ResourceManager;
+using Tnosc.OtripleS.Server.Provision.Brokers.Loggings;
 
 namespace Tnosc.OtripleS.Server.Provision.Brokers.Clouds;
 
@@ -16,8 +17,10 @@ internal sealed partial class CloudBroker : ICloudBroker
     private readonly string _adminName;
     private readonly string _adminAccess;
 
+
     public CloudBroker()
     {
+        
         if ( Environment.GetEnvironmentVariable("AZURE_CLIENT_ID") is null)
         {
             throw new InvalidOperationException("AZURE_CLIENT_ID does not exist in environment variables");

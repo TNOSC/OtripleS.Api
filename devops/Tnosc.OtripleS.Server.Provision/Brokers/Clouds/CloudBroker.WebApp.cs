@@ -40,9 +40,9 @@ internal partial class CloudBroker
                     }
                 ],
             },
+            
         };
 
-        // Create or update the web app
         ArmOperation<WebSiteResource> operation = await webAppCollection.CreateOrUpdateAsync(
             waitUntil: WaitUntil.Completed,
             name: webAppName,

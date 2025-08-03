@@ -77,7 +77,7 @@ internal sealed class CloudManagementProcessingService : ICloudManagementProcess
                     environment: environmentName,
                     sqlServer: sqlServer);
 
-            _ = await _cloudManagementService
+            await _cloudManagementService
                 .ProvisionWebAppAsync(
                     projectName: projectName,
                     environment: environmentName,

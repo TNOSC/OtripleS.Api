@@ -25,8 +25,8 @@ jobs:
     - name: Provision
       run: dotnet run --project ./devops/Tnosc.OtripleS.Server.Provision/Tnosc.OtripleS.Server.Provision.csproj
     env:
-      AZURE_CLIENT_ID: ${{ secrets.AZURECLIENTID }}
-      AZURE_TENANT_ID: ${{ secrets.AZURETENANTID }}
-      AZURE_CLIENT_SECRET: ${{ secrets.AZURECLIENTSECRET }}
-      AzureAdminName: ${{ secrets.AZUREADMINNAME }}
-      AzureAdminAccess: ${{ secrets.AZUREADMINACCESS }}
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AzureAdminName: ${{ secrets.AzureAdminName }}
+      AzureAdminAccess: ${{ secrets.AzureAdminAccess }}

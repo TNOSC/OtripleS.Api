@@ -6,7 +6,9 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Tnosc.OtripleS.Server.Application.Brokers.DateTimes;
+using Tnosc.OtripleS.Server.Application.Brokers.Loggings;
 using Tnosc.OtripleS.Server.Infrastructure.Brokers.DateTimes;
+using Tnosc.OtripleS.Server.Infrastructure.Brokers.Loggings;
 
 namespace Tnosc.OtripleS.Server.Infrastructure;
 public static class Extensions
@@ -14,5 +16,6 @@ public static class Extensions
     public static void AddBrokers(this IServiceCollection services)
     {
         services.AddTransient<IDateTimeBroker, DateTimeBroker>();
+        services.AddTransient<ILoggingBroker, LoggingBroker>();
     }
 }

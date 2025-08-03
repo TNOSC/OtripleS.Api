@@ -5,12 +5,15 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using Tnosc.OtripleS.Server.Application.Brokers.DateTimes;
 
-namespace Tnosc.OtripleS.Server.Infrastructure.Brokers.DateTimes;
+namespace Tnosc.OtripleS.Server.Application.Brokers.Loggings;
 
-internal sealed class DateTimeBroker : IDateTimeBroker
+public interface ILoggingBroker
 {
-    public DateTimeOffset GetCurrentDateTime() =>
-        DateTimeOffset.UtcNow;
+    void LogTrace(string message);
+    void LogDebug(string message);
+    void LogInformation(string message);
+    void LogWarning(string message);
+    void LogError(Exception exception);
+    void LogCritical(Exception exception);
 }

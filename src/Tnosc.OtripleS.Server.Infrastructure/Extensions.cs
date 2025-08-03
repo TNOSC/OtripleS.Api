@@ -10,7 +10,7 @@ using Tnosc.OtripleS.Server.Application.Brokers.Loggings;
 using Tnosc.OtripleS.Server.Application.Brokers.Storages;
 using Tnosc.OtripleS.Server.Infrastructure.Brokers.DateTimes;
 using Tnosc.OtripleS.Server.Infrastructure.Brokers.Loggings;
-using Tnosc.OtripleS.Server.Infrastructure.Storages;
+using Tnosc.OtripleS.Server.Infrastructure.Brokers.Storages;
 
 namespace Tnosc.OtripleS.Server.Infrastructure;
 public static class Extensions

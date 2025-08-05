@@ -29,23 +29,28 @@ public partial class StudentServiceTests
         Student storageStudent = randomStudent;
         Student expectedStudent = storageStudent.DeepClone();
 
-        _dateTimeBrokerMock.GetCurrentDateTime().Returns(dateTime);
+        _dateTimeBrokerMock.GetCurrentDateTime()
+            .Returns(dateTime);
 
         _storageBrokerMock.InsertStudentAsync(inputStudent)
-                     .Returns(storageStudent);
+            .Returns(storageStudent);
 
         // when
         Student actualStudent =
             await _studentService.RegisterStudentAsync(inputStudent);
 
         // then
-        actualStudent.ShouldBe(expectedStudent);
+        actualStudent.ShouldBeEquivalentTo(expectedStudent);
 
-        _dateTimeBrokerMock.Received(1).GetCurrentDateTime();
-        await _storageBrokerMock.Received(1).InsertStudentAsync(inputStudent);
+        await _storageBrokerMock
+            .Received(1)
+            .InsertStudentAsync(inputStudent);
 
-        _storageBrokerMock.ReceivedCalls().Count().ShouldBe(1);
-        _dateTimeBrokerMock.ReceivedCalls().Count().ShouldBe(1);
-        _loggingBrokerMock.ReceivedCalls().ShouldBeEmpty();
+        _storageBrokerMock.ReceivedCalls().Count()
+            .ShouldBe(1);
+        _dateTimeBrokerMock.ReceivedCalls()
+            .ShouldBeEmpty();
+        _loggingBrokerMock.ReceivedCalls().
+            ShouldBeEmpty();
     }
 }

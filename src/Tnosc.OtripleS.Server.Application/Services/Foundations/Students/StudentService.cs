@@ -32,9 +32,9 @@ public sealed class StudentService : IStudentService
     public ValueTask<Student> ModifyStudentAsync(Student student) => 
         throw new NotImplementedException();
     
-    public ValueTask<Student> RegisterStudentAsync(Student student) => 
-        throw new NotImplementedException();
-    
+    public async ValueTask<Student> RegisterStudentAsync(Student student) =>
+       await _storageBroker.InsertStudentAsync(student);
+
     public ValueTask<Student> RemoveStudentByIdAsync(Guid studentId) => 
         throw new NotImplementedException();
     

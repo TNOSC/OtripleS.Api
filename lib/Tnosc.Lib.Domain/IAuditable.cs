@@ -4,8 +4,6 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using System.Security.Principal;
-
 namespace Tnosc.Lib.Domain;
 
 public interface IAuditable

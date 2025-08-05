@@ -5,6 +5,9 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using EFxceptions;
 using Microsoft.EntityFrameworkCore;
@@ -33,10 +36,13 @@ internal sealed partial class StorageBroker : EFxceptionsContext, IStorageBroker
         return @object;
     }
 #pragma warning disable CS8603 // Possible null reference return.
-    private async ValueTask<T> SelectAsync<T>(params object[] @objectIds) where T : class =>
+    private async ValueTask<T> SelectAsync<T>(params object[] @objectIds) 
+        where T : class =>
         await FindAsync<T>(objectIds);
 #pragma warning restore CS8603 // Possible null reference return.
 
+    private async ValueTask<IEnumerable<T>> SelectAllAsync<T>() where T : class => 
+        await Set<T>().ToListAsync();
     private async ValueTask<T> UpdateAsync<T>(T @object)
     {
 #pragma warning disable CS8604 // Possible null reference argument.

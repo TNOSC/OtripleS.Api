@@ -4,13 +4,13 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using Xunit;
+using Microsoft.Extensions.DependencyInjection;
+using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 
-namespace Tnosc.OtripleS.Server.Tests.Unit;
+namespace Tnosc.OtripleS.Server.Application;
 
-public class DeleteMe
+public static class Extensions
 {
-    [Fact]
-    public void ShouldBeTrue() => Assert.True(true);
-    
+    public static void AddApplicationServices(this IServiceCollection services) => 
+        services.AddTransient<IStudentService, StudentService>();
 }

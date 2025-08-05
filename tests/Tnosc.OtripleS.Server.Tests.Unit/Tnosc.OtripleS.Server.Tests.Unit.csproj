@@ -6,14 +6,17 @@
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="DeepCloner" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="NSubstitute" />
+    <PackageReference Include="Tynamix.ObjectFiller" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="Shouldly" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\Foundations\" />
-    <Folder Include="Services\" />
+    <ProjectReference Include="..\..\src\Tnosc.OtripleS.Server.Application\Tnosc.OtripleS.Server.Application.csproj" />
   </ItemGroup>
 
 </Project>

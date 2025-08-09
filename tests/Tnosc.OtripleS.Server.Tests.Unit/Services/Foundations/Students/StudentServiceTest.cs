@@ -17,14 +17,14 @@ using Xeptions;
 
 namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.Students;
 
-public partial class StudentServiceTests
+public partial class StudentServiceTest
 {
     private readonly IStorageBroker _storageBrokerMock;
     private readonly IDateTimeBroker _dateTimeBrokerMock;
     private readonly ILoggingBroker _loggingBrokerMock;
     private readonly StudentService _studentService;
 
-    public StudentServiceTests()
+    public StudentServiceTest()
     {
         _storageBrokerMock = Substitute.For<IStorageBroker>();
         _dateTimeBrokerMock = Substitute.For<IDateTimeBroker>();

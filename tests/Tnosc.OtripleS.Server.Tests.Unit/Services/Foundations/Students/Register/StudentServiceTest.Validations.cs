@@ -14,7 +14,7 @@ using Xunit;
 
 namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.Students;
 
-public partial class StudentServiceTests
+public partial class StudentServiceTest
 {
     [Fact]
     public async Task ShouldThrowValidationExceptionOnRegisterWhenStudentIsNullAndLogItAsync()

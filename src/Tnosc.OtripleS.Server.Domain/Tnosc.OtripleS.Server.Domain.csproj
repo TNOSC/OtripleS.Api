@@ -1,5 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <PackageReference Include="Xeption" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\lib\Tnosc.Lib.Domain\Tnosc.Lib.Domain.csproj" />
   </ItemGroup>
 </Project>

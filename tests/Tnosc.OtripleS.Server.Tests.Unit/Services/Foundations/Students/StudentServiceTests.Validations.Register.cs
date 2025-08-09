@@ -23,10 +23,12 @@ public partial class StudentServiceTests
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
         Student invalidStudent = null;
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
-        var nullStudentException = new NullStudentException();
+        var nullStudentException = new NullStudentException( message: "The student is null.");
 
         var expectedStudentValidationException =
-            new StudentValidationException(nullStudentException);
+            new StudentValidationException(
+                message: "Invalid input, fix the errors and try again.",
+                innerException: nullStudentException);
 
         // when
 #pragma warning disable CS8604 // Possible null reference argument.
@@ -41,10 +43,6 @@ public partial class StudentServiceTests
         _loggingBrokerMock.Received(1)
             .LogError(Arg.Is<Xeption>(actualException =>
                 actualException.SameExceptionAs(expectedStudentValidationException)));
-
-        _loggingBrokerMock
-            .Received(1)
-            .LogError(expectedStudentValidationException);
 
         _storageBrokerMock.ReceivedCalls().
             ShouldBeEmpty();

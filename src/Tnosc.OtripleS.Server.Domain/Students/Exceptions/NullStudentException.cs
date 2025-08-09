@@ -7,6 +7,7 @@
 using Xeptions;
 
 namespace Tnosc.OtripleS.Server.Domain.Students.Exceptions;
+
 public sealed class NullStudentException : Xeption
 {
     public NullStudentException()

@@ -12,7 +12,15 @@ public sealed class StudentValidationException : Xeption
 {
     public StudentValidationException(Xeption exception)
         : base(
-            message: "Invalid input, fix the errors and try again..",
+            message: "Invalid input, fix the errors and try again.",
             innerException: exception)
+    { }
+
+    public StudentValidationException(
+        string message, 
+        Xeption innerException)
+       : base(
+           message: message,
+           innerException: innerException)
     { }
 }

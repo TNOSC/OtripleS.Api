@@ -14,7 +14,7 @@ using Tnosc.OtripleS.Server.Domain.Students;
 
 namespace Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 
-public sealed class StudentService : IStudentService
+public sealed partial class StudentService : IStudentService
 {
     private readonly IStorageBroker _storageBroker;
     private readonly IDateTimeBroker _dateTimeBroker;
@@ -31,9 +31,14 @@ public sealed class StudentService : IStudentService
     }
     public ValueTask<Student> ModifyStudentAsync(Student student) => 
         throw new NotImplementedException();
-    
+
     public async ValueTask<Student> RegisterStudentAsync(Student student) =>
-       await _storageBroker.InsertStudentAsync(student);
+    await TryCatch(async () =>
+    {
+        ValidateStudentOnRegister(student);
+        return await _storageBroker.InsertStudentAsync(student);
+    });
+    
 
     public ValueTask<Student> RemoveStudentByIdAsync(Guid studentId) => 
         throw new NotImplementedException();

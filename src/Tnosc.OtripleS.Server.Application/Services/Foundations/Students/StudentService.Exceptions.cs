@@ -24,6 +24,10 @@ public sealed partial class StudentService
         {
             throw CreateAndLogValidationException(nullStudentException);
         }
+        catch (InvalidStudentException invalidStudentException)
+        {
+            throw CreateAndLogValidationException(invalidStudentException);
+        }
     }
 
     private StudentValidationException CreateAndLogValidationException(Xeption exception)

@@ -11,6 +11,12 @@ namespace Tnosc.OtripleS.Server.Domain.Students;
 
 public sealed class Student : Entity<StudentId>, IAuditable
 {
+    public Student()
+    { }
+    public Student(StudentId id)
+        :base(id)
+    { }
+
     public string UserId { get; set; } = null!;
     public string IdentityNumber { get; set; } = null!;
     public string FirstName { get; set; } = null!;

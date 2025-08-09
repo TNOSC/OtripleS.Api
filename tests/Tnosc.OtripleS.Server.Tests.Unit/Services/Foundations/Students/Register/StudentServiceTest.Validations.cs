@@ -4,6 +4,7 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
@@ -59,7 +60,7 @@ public partial class StudentServiceTest
     {
         // given
 #pragma warning disable CS8601 // Possible null reference assignment.
-        var invalidStuent = new Student
+        var invalidStudent = new Student(new StudentId(Guid.Empty))
         {
             UserId = invalidText,
             IdentityNumber = invalidText,
@@ -112,7 +113,7 @@ public partial class StudentServiceTest
 
         // when
         ValueTask<Student> registerStudentTask =
-            _studentService.RegisterStudentAsync(invalidStuent);
+            _studentService.RegisterStudentAsync(invalidStudent);
 
         // then
         await Assert.ThrowsAsync<StudentValidationException>(() =>

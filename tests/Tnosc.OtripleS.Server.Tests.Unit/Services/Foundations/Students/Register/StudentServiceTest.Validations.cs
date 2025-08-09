@@ -188,6 +188,7 @@ public partial class StudentServiceTest
         Student randomStudent = CreateRandomStudent(dateTime);
         Student invalidStudent = randomStudent;
         invalidStudent.UpdatedDate = GetRandomDateTime();
+        
         var invalidStudentException = new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
 
         invalidStudentException.AddData(
@@ -201,6 +202,55 @@ public partial class StudentServiceTest
 
         _dateTimeBrokerMock.GetCurrentDateTime()
            .Returns(dateTime);
+
+        // when
+        ValueTask<Student> registerStudentTask =
+            _studentService.RegisterStudentAsync(invalidStudent);
+
+        // then
+        await Assert.ThrowsAsync<StudentValidationException>(() =>
+            registerStudentTask.AsTask());
+
+        _dateTimeBrokerMock
+            .Received(1)
+            .GetCurrentDateTime();
+
+        _loggingBrokerMock.Received(1)
+            .LogError(Arg.Is<Xeption>(actualException =>
+              actualException.SameExceptionAs(expectedStudentValidationException)));
+
+        _storageBrokerMock
+            .ReceivedCalls()
+            .ShouldBeEmpty();
+    }
+
+    [Theory]
+#pragma warning disable xUnit1037 // There are fewer theory data type arguments than required by the parameters of the test method
+    [MemberData(nameof(InvalidMinuteCases))]
+#pragma warning restore xUnit1037 // There are fewer theory data type arguments than required by the parameters of the test method
+    public async Task ShouldThrowValidationExceptionOnRegisterWhenCreatedDateIsNotRecentAndLogItAsync(
+            int minutes)
+    {
+        // given
+        DateTimeOffset randomDate = GetRandomDateTime();
+        Student randomStudent = CreateRandomStudent(randomDate);
+        Student invalidStudent = randomStudent;
+        invalidStudent.CreatedDate = randomDate.AddMinutes(minutes);
+        invalidStudent.UpdatedDate = invalidStudent.CreatedDate;
+
+        var invalidStudentException = new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
+
+        invalidStudentException.AddData(
+            key: nameof(Student.CreatedDate),
+            values: $"Date is not recent");
+
+        var expectedStudentValidationException =
+            new StudentValidationException(
+                message: "Invalid input, fix the errors and try again.",
+                innerException: invalidStudentException);
+
+        _dateTimeBrokerMock.GetCurrentDateTime()
+           .Returns(randomDate);
 
         // when
         ValueTask<Student> registerStudentTask =

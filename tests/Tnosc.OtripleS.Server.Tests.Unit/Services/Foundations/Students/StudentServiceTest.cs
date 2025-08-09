@@ -14,6 +14,7 @@ using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Tynamix.ObjectFiller;
 using Xeptions;
+using Xunit;
 
 namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.Students;
 
@@ -54,5 +55,20 @@ public partial class StudentServiceTest
             .OnProperty(student => student.UpdatedBy).Use(createdById);
 
         return filler;
+    }
+
+    private static int GetRandomNumber() => new IntRange(min: 2, max: 10).GetValue();
+    private static int GetNegativeRandomNumber() => -1 * GetRandomNumber();
+    
+    public static TheoryData InvalidMinuteCases()
+    {
+        int randomMoreThanMinuteFromNow = GetRandomNumber();
+        int randomMoreThanMinuteBeforeNow = GetNegativeRandomNumber();
+
+        return new TheoryData<int>
+        {
+            randomMoreThanMinuteFromNow ,
+            randomMoreThanMinuteBeforeNow
+        };
     }
 }

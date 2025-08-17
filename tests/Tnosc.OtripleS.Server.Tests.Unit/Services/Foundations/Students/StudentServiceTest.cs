@@ -5,7 +5,10 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
 using Microsoft.Data.SqlClient;
 using NSubstitute;
 using Tnosc.OtripleS.Server.Application.Brokers.DateTimes;
@@ -40,20 +43,18 @@ public partial class StudentServiceTest
     private static DateTimeOffset GetRandomDateTime() =>
            new DateTimeRange(earliestDate: DateTime.UtcNow).GetValue();
     
-    private static Student CreateRandomStudent(DateTimeOffset dates) =>
-           CreateStudentFiller(dates).Create();
-    private static Student CreateRandomStudent() =>
-                CreateStudentFiller(dates: DateTimeOffset.UtcNow).Create();
+    private static Student CreateRandomStudent(DateTimeOffset date) =>
+           CreateStudentFiller(date).Create();
 
-    private static Filler<Student> CreateStudentFiller(DateTimeOffset dates)
+    private static Filler<Student> CreateStudentFiller(DateTimeOffset date)
     {
         var filler = new Filler<Student>();
         var createdById = Guid.NewGuid();
 
         filler.Setup()
             .OnProperty(student => student.BirthDate).Use(GetRandomDateTime())
-            .OnProperty(student => student.CreatedDate).Use(dates)
-            .OnProperty(student => student.UpdatedDate).Use(dates)
+            .OnProperty(student => student.CreatedDate).Use(date)
+            .OnProperty(student => student.UpdatedDate).Use(date)
             .OnProperty(student => student.CreatedBy).Use(createdById)
             .OnProperty(student => student.UpdatedBy).Use(createdById);
 
@@ -75,11 +76,19 @@ public partial class StudentServiceTest
         };
     }
 
-    private static SqlException GetSqlException()
-    {
-        System.Reflection.ConstructorInfo ctor = typeof(SqlException)
-            .GetConstructors(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)[0];
 
-        return (SqlException)ctor.Invoke(["Mock SQL error", null]);
+    private static SqlException CreateSqlException(int errorCode)
+    {
+        Exception? innerEx = null;
+        ConstructorInfo[] constructorInfo = typeof(SqlErrorCollection).GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance);
+        SqlErrorCollection errors = (constructorInfo[0].Invoke(null) as SqlErrorCollection)!;
+        List<object> errorList = (errors.GetType().GetField("_errors", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(errors) as List<object>)!;
+        constructorInfo = typeof(SqlError).GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance);
+        ConstructorInfo nineC = constructorInfo.FirstOrDefault(f => f.GetParameters().Length == 9)!;
+        SqlError sqlError = (nineC.Invoke(new object?[] { errorCode, (byte)0, (byte)0, "", "", "", 0, (uint)0, innerEx }) as SqlError)!;
+        errorList.Add(sqlError);
+        SqlException ex = (Activator.CreateInstance(typeof(SqlException), BindingFlags.NonPublic | BindingFlags.Instance, null, new object?[] { "test", errors,
+            innerEx, Guid.NewGuid() }, null) as SqlException)!;
+        return ex;
     }
 }

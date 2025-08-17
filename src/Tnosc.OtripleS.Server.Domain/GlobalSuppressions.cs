@@ -14,3 +14,5 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification = "<Pending>", Scope = "type", Target = "~T:Tnosc.OtripleS.Server.Domain.Students.Exceptions.NullStudentException")]
 [assembly: SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification = "<Pending>", Scope = "type", Target = "~T:Tnosc.OtripleS.Server.Domain.Students.Exceptions.StudentValidationException")]
 [assembly: SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification = "<Pending>", Scope = "type", Target = "~T:Tnosc.OtripleS.Server.Domain.Students.Exceptions.InvalidStudentException")]
+[assembly: SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification = "<Pending>", Scope = "type", Target = "~T:Tnosc.OtripleS.Server.Domain.Students.Exceptions.FailedStudentStorageException")]
+[assembly: SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification = "<Pending>", Scope = "type", Target = "~T:Tnosc.OtripleS.Server.Domain.Students.Exceptions.StudentDependencyException")]

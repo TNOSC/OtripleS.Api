@@ -32,7 +32,9 @@ public sealed partial class StudentService
 
     private StudentValidationException CreateAndLogValidationException(Xeption exception)
     {
-        var studentValidationException = new StudentValidationException(exception);
+        var studentValidationException = new StudentValidationException(
+            message: "Invalid input, fix the errors and try again.",
+            innerException: exception);
         _loggingBroker.LogError(studentValidationException);
 
         return studentValidationException;

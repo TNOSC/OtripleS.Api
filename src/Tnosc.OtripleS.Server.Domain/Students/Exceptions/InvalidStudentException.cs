@@ -10,10 +10,6 @@ namespace Tnosc.OtripleS.Server.Domain.Students.Exceptions;
 
 public sealed class InvalidStudentException : Xeption
 {
-    public InvalidStudentException()
-        : base(message: "Invalid student. Please fix the errors and try again.") 
-    { }
-
     public InvalidStudentException(string message)
        : base(message: message)
     { }

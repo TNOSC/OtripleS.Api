@@ -5,7 +5,8 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using System.Linq.Expressions;
+using System.Linq;
+using Microsoft.Data.SqlClient;
 using NSubstitute;
 using Tnosc.OtripleS.Server.Application.Brokers.DateTimes;
 using Tnosc.OtripleS.Server.Application.Brokers.Loggings;
@@ -13,7 +14,6 @@ using Tnosc.OtripleS.Server.Application.Brokers.Storages;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Tynamix.ObjectFiller;
-using Xeptions;
 using Xunit;
 
 namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.Students;
@@ -39,8 +39,11 @@ public partial class StudentServiceTest
 
     private static DateTimeOffset GetRandomDateTime() =>
            new DateTimeRange(earliestDate: DateTime.UtcNow).GetValue();
+    
     private static Student CreateRandomStudent(DateTimeOffset dates) =>
            CreateStudentFiller(dates).Create();
+    private static Student CreateRandomStudent() =>
+                CreateStudentFiller(dates: DateTimeOffset.UtcNow).Create();
 
     private static Filler<Student> CreateStudentFiller(DateTimeOffset dates)
     {
@@ -59,7 +62,7 @@ public partial class StudentServiceTest
 
     private static int GetRandomNumber() => new IntRange(min: 2, max: 10).GetValue();
     private static int GetNegativeRandomNumber() => -1 * GetRandomNumber();
-    
+
     public static TheoryData InvalidMinuteCases()
     {
         int randomMoreThanMinuteFromNow = GetRandomNumber();
@@ -70,5 +73,13 @@ public partial class StudentServiceTest
             randomMoreThanMinuteFromNow ,
             randomMoreThanMinuteBeforeNow
         };
+    }
+
+    private static SqlException GetSqlException()
+    {
+        System.Reflection.ConstructorInfo ctor = typeof(SqlException)
+            .GetConstructors(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)[0];
+
+        return (SqlException)ctor.Invoke(["Mock SQL error", null]);
     }
 }

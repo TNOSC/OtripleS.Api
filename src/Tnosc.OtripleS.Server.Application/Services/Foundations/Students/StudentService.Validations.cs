@@ -27,14 +27,13 @@ public sealed partial class StudentService
             (Rule: IsInvalid(student.UpdatedBy), Parameter: nameof(Student.UpdatedBy)),
             (Rule: IsInvalid(student.CreatedDate), Parameter: nameof(Student.CreatedDate)),
             (Rule: IsInvalid(student.UpdatedDate), Parameter: nameof(Student.UpdatedDate)),
+            
             (Rule: IsNotRecent(student.CreatedDate), Parameter: nameof(Student.CreatedDate)),
-
             (Rule: IsNotSame(
                 firstId: student.UpdatedBy,
                 secondId: student.CreatedBy,
                 secondIdName: nameof(Student.CreatedBy)),
                 Parameter: nameof(Student.UpdatedBy)),
-
             (Rule: IsNotSame(
                 firstDate: student.UpdatedDate,
                 secondDate: student.CreatedDate,
@@ -47,7 +46,7 @@ public sealed partial class StudentService
     {
         if (student is null)
         {
-            throw new NullStudentException();
+            throw new NullStudentException(message: "The student is null.");
         }
     }
 
@@ -106,7 +105,7 @@ public sealed partial class StudentService
 
     private static void Validate(params (dynamic Rule, string Parameter)[] validations)
     {
-        var invalidStudentException = new InvalidStudentException();
+        var invalidStudentException = new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
 
         foreach ((dynamic rule, string parameter) in validations)
         {

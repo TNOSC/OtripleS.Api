@@ -44,7 +44,7 @@ public partial class StudentServiceTest
             .Returns(dateTime);
 
         _storageBrokerMock.InsertStudentAsync(inputStudent)
-               .ThrowsAsync(sqlException);
+               .ThrowsAsync(failedStudentStorageException);
 
         // when
         ValueTask<Student> registerStudentTask =
@@ -59,7 +59,7 @@ public partial class StudentServiceTest
             .GetCurrentDateTime();
 
         _loggingBrokerMock.Received(1)
-            .LogError(Arg.Is<Xeption>(actualException =>
+            .LogCritical(Arg.Is<Xeption>(actualException =>
               actualException.SameExceptionAs(expectedStudentDependencyException)));
 
         await _storageBrokerMock

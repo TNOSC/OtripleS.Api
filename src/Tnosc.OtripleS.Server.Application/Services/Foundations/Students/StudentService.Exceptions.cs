@@ -28,6 +28,20 @@ public sealed partial class StudentService
         {
             throw CreateAndLogValidationException(invalidStudentException);
         }
+        catch (FailedStudentStorageException failedStudentStorageException)
+        {
+            throw CreateAndLogCriticalDependencyException(failedStudentStorageException);
+        }
+    }
+
+    private StudentDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
+    {
+        var studentDependencyException = new StudentDependencyException(
+            message: "Student dependency error occurred, contact support.",
+            innerException: exception);
+        _loggingBroker.LogCritical(exception: studentDependencyException);
+
+        return studentDependencyException;
     }
 
     private StudentValidationException CreateAndLogValidationException(Xeption exception)
@@ -35,7 +49,7 @@ public sealed partial class StudentService
         var studentValidationException = new StudentValidationException(
             message: "Invalid input, fix the errors and try again.",
             innerException: exception);
-        _loggingBroker.LogError(studentValidationException);
+        _loggingBroker.LogError(exception: studentValidationException);
 
         return studentValidationException;
     }

@@ -34,14 +34,14 @@ public partial class StudentServiceTest
         // when
 #pragma warning disable CS8604 // Possible null reference argument.
         ValueTask<Student> registerStudentTask =
-            _studentService.RegisterStudentAsync(invalidStudent);
+            _studentService.RegisterStudentAsync(student: invalidStudent);
 #pragma warning restore CS8604 // Possible null reference argument.
 
         // then
         await Assert.ThrowsAsync<StudentValidationException>(() =>
             registerStudentTask.AsTask());
 
-        _loggingBrokerMock.Received(1)
+        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
             .LogError(Arg.Is<Xeption>(actualException =>
                 actualException.SameExceptionAs(expectedStudentValidationException)));
 
@@ -63,11 +63,11 @@ public partial class StudentServiceTest
     {
         // given
 #pragma warning disable CS8601 // Possible null reference assignment.
-        var invalidStudent = new Student(new StudentId(Guid.Empty))
+        var invalidStudent = new Student(id: new StudentId(Guid.Empty))
         {
             UserId = invalidText,
             IdentityNumber = invalidText,
-            FirstName = invalidText
+            FirstName = invalidText,
         };
 #pragma warning restore CS8601 // Possible null reference assignment.
 
@@ -75,8 +75,8 @@ public partial class StudentServiceTest
             new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
 
         invalidStudentException.AddData(
-               key: nameof(Student.Id),
-               values: "Id is required");
+            key: nameof(Student.Id),
+            values: "Id is required");
 
         invalidStudentException.AddData(
             key: nameof(Student.UserId),
@@ -88,6 +88,10 @@ public partial class StudentServiceTest
 
         invalidStudentException.AddData(
             key: nameof(Student.FirstName),
+            values: "Text is required");
+
+        invalidStudentException.AddData(
+            key: nameof(Student.LastName),
             values: "Text is required");
 
         invalidStudentException.AddData(
@@ -117,6 +121,73 @@ public partial class StudentServiceTest
 
         // when
         ValueTask<Student> registerStudentTask =
+            _studentService.RegisterStudentAsync(student: invalidStudent);
+
+        // then
+        await Assert.ThrowsAsync<StudentValidationException>(() =>
+            registerStudentTask.AsTask());
+
+        _dateTimeBrokerMock
+            .Received(requiredNumberOfCalls: 1)
+            .GetCurrentDateTime();
+
+        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
+            .LogError(Arg.Is<Xeption>(actualException =>
+                actualException.SameExceptionAs(expectedStudentValidationException)));
+
+        _storageBrokerMock
+            .ReceivedCalls()
+            .ShouldBeEmpty();
+    }
+
+    [Fact]
+    public async Task ShouldThrowValidationExceptionOnRegisterWhenStudentConstraintsAreInvalidAndLogItAsync()
+    {
+        // given
+        DateTimeOffset randomDateTime = GetRandomDateTime();
+        DateTimeOffset dateTime = randomDateTime;
+        Student invalidStudent = CreateRandomStudent(date: randomDateTime);
+        invalidStudent.UpdatedBy = invalidStudent.CreatedBy;
+
+        invalidStudent.UserId = GetRandomMessage(length: 255);
+        invalidStudent.IdentityNumber = GetRandomMessage(length: 255);
+        invalidStudent.FirstName = GetRandomMessage(length: 255);
+        invalidStudent.MiddleName = GetRandomMessage(length: 255);
+        invalidStudent.LastName = GetRandomMessage(length: 255);
+
+        var invalidStudentException =
+            new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
+
+        invalidStudentException.AddData(
+               key: nameof(Student.UserId),
+               values: "Text cannot be longer than 100 characters");
+
+        invalidStudentException.AddData(
+              key: nameof(Student.IdentityNumber),
+              values: "Text cannot be longer than 50 characters");
+
+        invalidStudentException.AddData(
+            key: nameof(Student.FirstName),
+            values: "Text cannot be longer than 100 characters");
+
+        invalidStudentException.AddData(
+            key: nameof(Student.MiddleName),
+            values: "Text cannot be longer than 100 characters");
+
+        invalidStudentException.AddData(
+           key: nameof(Student.LastName),
+           values: "Text cannot be longer than 100 characters");
+
+        var expectedStudentValidationException =
+            new StudentValidationException(
+                message: "Invalid input, fix the errors and try again.",
+                innerException: invalidStudentException);
+
+        _dateTimeBrokerMock.GetCurrentDateTime()
+           .Returns(returnThis: dateTime);
+
+        // when
+        ValueTask<Student> registerStudentTask =
             _studentService.RegisterStudentAsync(invalidStudent);
 
         // then
@@ -124,10 +195,10 @@ public partial class StudentServiceTest
             registerStudentTask.AsTask());
 
         _dateTimeBrokerMock
-            .Received(1)
+            .Received(requiredNumberOfCalls: 1)
             .GetCurrentDateTime();
 
-        _loggingBrokerMock.Received(1)
+        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
             .LogError(Arg.Is<Xeption>(actualException =>
                 actualException.SameExceptionAs(expectedStudentValidationException)));
 
@@ -141,7 +212,7 @@ public partial class StudentServiceTest
     {
         // given
         DateTimeOffset dateTime = GetRandomDateTime();
-        Student randomStudent = CreateRandomStudent(dateTime);
+        Student randomStudent = CreateRandomStudent(date: dateTime);
         Student invalidStudent = randomStudent;
         invalidStudent.UpdatedBy = Guid.NewGuid();
 
@@ -159,21 +230,21 @@ public partial class StudentServiceTest
 
         _dateTimeBrokerMock
             .GetCurrentDateTime()
-            .Returns(dateTime);
+            .Returns(returnThis: dateTime);
 
         // when
         ValueTask<Student> registerStudentTask =
-            _studentService.RegisterStudentAsync(invalidStudent);
+            _studentService.RegisterStudentAsync(student: invalidStudent);
 
         // then
         await Assert.ThrowsAsync<StudentValidationException>(() =>
             registerStudentTask.AsTask());
        
         _dateTimeBrokerMock
-            .Received(1)
+            .Received(requiredNumberOfCalls: 1)
             .GetCurrentDateTime();
 
-        _loggingBrokerMock.Received(1)
+        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
             .LogError(Arg.Is<Xeption>(actualException =>
                 actualException.SameExceptionAs(expectedStudentValidationException)));
 
@@ -187,7 +258,7 @@ public partial class StudentServiceTest
     {
         // given
         DateTimeOffset dateTime = GetRandomDateTime();
-        Student randomStudent = CreateRandomStudent(dateTime);
+        Student randomStudent = CreateRandomStudent(date: dateTime);
         Student invalidStudent = randomStudent;
         invalidStudent.UpdatedDate = GetRandomDateTime();
         
@@ -204,21 +275,21 @@ public partial class StudentServiceTest
                 innerException: invalidStudentException);
 
         _dateTimeBrokerMock.GetCurrentDateTime()
-           .Returns(dateTime);
+           .Returns(returnThis: dateTime);
 
         // when
         ValueTask<Student> registerStudentTask =
-            _studentService.RegisterStudentAsync(invalidStudent);
+            _studentService.RegisterStudentAsync(student: invalidStudent);
 
         // then
         await Assert.ThrowsAsync<StudentValidationException>(() =>
             registerStudentTask.AsTask());
 
         _dateTimeBrokerMock
-            .Received(1)
+            .Received(requiredNumberOfCalls: 1)
             .GetCurrentDateTime();
 
-        _loggingBrokerMock.Received(1)
+        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
             .LogError(Arg.Is<Xeption>(actualException =>
               actualException.SameExceptionAs(expectedStudentValidationException)));
 
@@ -236,9 +307,9 @@ public partial class StudentServiceTest
     {
         // given
         DateTimeOffset randomDate = GetRandomDateTime();
-        Student randomStudent = CreateRandomStudent(randomDate);
+        Student randomStudent = CreateRandomStudent(date: randomDate);
         Student invalidStudent = randomStudent;
-        invalidStudent.CreatedDate = randomDate.AddMinutes(minutes);
+        invalidStudent.CreatedDate = randomDate.AddMinutes(minutes: minutes);
         invalidStudent.UpdatedDate = invalidStudent.CreatedDate;
 
         var invalidStudentException = 
@@ -254,21 +325,21 @@ public partial class StudentServiceTest
                 innerException: invalidStudentException);
 
         _dateTimeBrokerMock.GetCurrentDateTime()
-           .Returns(randomDate);
+           .Returns(returnThis: randomDate);
 
         // when
         ValueTask<Student> registerStudentTask =
-            _studentService.RegisterStudentAsync(invalidStudent);
+            _studentService.RegisterStudentAsync(student: invalidStudent);
 
         // then
         await Assert.ThrowsAsync<StudentValidationException>(() =>
             registerStudentTask.AsTask());
 
         _dateTimeBrokerMock
-            .Received(1)
+            .Received(requiredNumberOfCalls: 1)
             .GetCurrentDateTime();
 
-        _loggingBrokerMock.Received(1)
+        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
             .LogError(Arg.Is<Xeption>(actualException =>
               actualException.SameExceptionAs(expectedStudentValidationException)));
 

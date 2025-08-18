@@ -42,21 +42,21 @@ public partial class StudentServiceTest
                 innerException: failedStudentStorageException);
 
         _dateTimeBrokerMock.GetCurrentDateTime()
-            .Returns(dateTime);
+            .Returns(returnThis: dateTime);
 
-        _storageBrokerMock.InsertStudentAsync(inputStudent)
-            .ThrowsAsync(failedStudentStorageException);
+        _storageBrokerMock.InsertStudentAsync(student: inputStudent)
+            .ThrowsAsync(ex: failedStudentStorageException);
 
         // when
         ValueTask<Student> registerStudentTask =
-            _studentService.RegisterStudentAsync(inputStudent);
+            _studentService.RegisterStudentAsync(student: inputStudent);
 
         // then
         await Assert.ThrowsAsync<StudentDependencyException>(() =>
             registerStudentTask.AsTask());
 
         _dateTimeBrokerMock
-            .Received(1)
+            .Received(requiredNumberOfCalls: 1)
             .GetCurrentDateTime();
 
         _loggingBrokerMock.Received(1)
@@ -64,8 +64,8 @@ public partial class StudentServiceTest
               actualException.SameExceptionAs(expectedStudentDependencyException)));
 
         await _storageBrokerMock
-            .Received(1)
-            .InsertStudentAsync(inputStudent);
+            .Received(requiredNumberOfCalls: 1)
+            .InsertStudentAsync(student: inputStudent);
     }
 
     [Fact]
@@ -77,7 +77,7 @@ public partial class StudentServiceTest
         Student randomStudent = CreateRandomStudent(date: randomDateTime);
         randomStudent.UpdatedBy = randomStudent.CreatedBy;
         Student inputStudent = randomStudent;
-        var databaseUpdateConcurrencyException  = new DbUpdateConcurrencyException();
+        var databaseUpdateConcurrencyException = new DbUpdateConcurrencyException();
 
         var failedStudentStorageException =
             new StudentConcurrencyStorageException(
@@ -90,30 +90,30 @@ public partial class StudentServiceTest
                 innerException: failedStudentStorageException);
 
         _dateTimeBrokerMock.GetCurrentDateTime()
-            .Returns(dateTime);
+            .Returns(returnThis: dateTime);
 
-        _storageBrokerMock.InsertStudentAsync(inputStudent)
-            .ThrowsAsync(failedStudentStorageException);
+        _storageBrokerMock.InsertStudentAsync(student: inputStudent)
+            .ThrowsAsync(ex: failedStudentStorageException);
 
         // when
         ValueTask<Student> registerStudentTask =
-            _studentService.RegisterStudentAsync(inputStudent);
+            _studentService.RegisterStudentAsync(student: inputStudent);
 
         // then
         await Assert.ThrowsAsync<StudentDependencyValidationException>(() =>
             registerStudentTask.AsTask());
 
         _dateTimeBrokerMock
-            .Received(1)
+            .Received(requiredNumberOfCalls: 1)
             .GetCurrentDateTime();
 
-        _loggingBrokerMock.Received(1)
+        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
             .LogError(Arg.Is<Xeption>(actualException =>
               actualException.SameExceptionAs(expectedStudentDependencyException)));
 
         await _storageBrokerMock
-            .Received(1)
-            .InsertStudentAsync(inputStudent);
+            .Received(requiredNumberOfCalls: 1)
+            .InsertStudentAsync(student: inputStudent);
     }
 
     [Fact]
@@ -141,30 +141,30 @@ public partial class StudentServiceTest
                 innerException: alreadyExistsStudentException);
 
         _dateTimeBrokerMock.GetCurrentDateTime()
-           .Returns(dateTime);
+           .Returns(returnThis: dateTime);
 
-        _storageBrokerMock.InsertStudentAsync(inputStudent)
-           .ThrowsAsync(alreadyExistsStudentException);
+        _storageBrokerMock.InsertStudentAsync(student: inputStudent)
+           .ThrowsAsync(ex: alreadyExistsStudentException);
 
         // when
         ValueTask<Student> registerStudentTask =
-            _studentService.RegisterStudentAsync(inputStudent);
+            _studentService.RegisterStudentAsync(student: inputStudent);
 
         // then
         await Assert.ThrowsAsync<StudentDependencyValidationException>(() =>
             registerStudentTask.AsTask());
 
         _dateTimeBrokerMock
-            .Received(1)
+            .Received(requiredNumberOfCalls: 1)
             .GetCurrentDateTime();
 
-        _loggingBrokerMock.Received(1)
+        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
             .LogError(Arg.Is<Xeption>(actualException =>
               actualException.SameExceptionAs(expectedStudentDependencyValidationException)));
 
         await _storageBrokerMock
-            .Received(1)
-            .InsertStudentAsync(inputStudent);
+            .Received(requiredNumberOfCalls: 1)
+            .InsertStudentAsync(student: inputStudent);
     }
 
     [Fact]
@@ -185,21 +185,21 @@ public partial class StudentServiceTest
                 innerException: failedStudentServiceException);
 
         _dateTimeBrokerMock.GetCurrentDateTime()
-            .Throws(serviceException);
+            .Throws(ex: serviceException);
 
         // when
         ValueTask<Student> registerStudentTask =
-             _studentService.RegisterStudentAsync(someStudent);
+             _studentService.RegisterStudentAsync(student: someStudent);
 
         // then
         await Assert.ThrowsAsync<StudentServiceException>(() =>
             registerStudentTask.AsTask());
 
         _dateTimeBrokerMock
-              .Received(1)
+              .Received(requiredNumberOfCalls: 1)
               .GetCurrentDateTime();
 
-        _loggingBrokerMock.Received(1)
+        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
             .LogError(Arg.Is<Xeption>(actualException =>
               actualException.SameExceptionAs(expectedStudentServiceException)));
 

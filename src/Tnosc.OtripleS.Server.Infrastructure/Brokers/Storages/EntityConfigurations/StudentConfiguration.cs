@@ -41,7 +41,6 @@ internal sealed class StudentConfiguration : IEntityTypeConfiguration<Student>
                .HasMaxLength(100);
 
         builder.Property(s => s.MiddleName)
-               .IsRequired()
                .HasMaxLength(100);
 
         builder.Property(s => s.LastName)

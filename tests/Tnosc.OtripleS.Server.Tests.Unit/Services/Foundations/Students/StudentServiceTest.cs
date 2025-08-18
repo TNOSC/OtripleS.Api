@@ -62,11 +62,11 @@ public partial class StudentServiceTest
         var createdById = Guid.NewGuid();
 
         filler.Setup()
-            .OnProperty(student => student.BirthDate).Use(GetRandomDateTime())
-            .OnProperty(student => student.CreatedDate).Use(date)
-            .OnProperty(student => student.UpdatedDate).Use(date)
-            .OnProperty(student => student.CreatedBy).Use(createdById)
-            .OnProperty(student => student.UpdatedBy).Use(createdById);
+            .OnProperty(student => student.BirthDate).Use(valueToUse: GetRandomDateTime())
+            .OnProperty(student => student.CreatedDate).Use(valueToUse: date)
+            .OnProperty(student => student.UpdatedDate).Use(valueToUse: date)
+            .OnProperty(student => student.CreatedBy).Use(valueToUse: createdById)
+            .OnProperty(student => student.UpdatedBy).Use(valueToUse: createdById);
 
         return filler;
     }
@@ -76,4 +76,6 @@ public partial class StudentServiceTest
     private static int GetNegativeRandomNumber() => -1 * GetRandomNumber();
 
     private static string GetRandomMessage() => new MnemonicString().GetValue();
+
+    private static string GetRandomMessage(int length) => new MnemonicString(wordCount: length).GetValue();
 }

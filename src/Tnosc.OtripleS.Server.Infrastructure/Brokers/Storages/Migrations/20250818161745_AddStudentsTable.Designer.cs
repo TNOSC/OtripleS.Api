@@ -12,7 +12,7 @@ using Tnosc.OtripleS.Server.Infrastructure.Brokers.Storages;
 namespace Tnosc.OtripleS.Server.Infrastructure.Brokers.Storages.Migrations
 {
     [DbContext(typeof(StorageBroker))]
-    [Migration("20250818144751_AddStudentsTable")]
+    [Migration("20250818161745_AddStudentsTable")]
     partial class AddStudentsTable
     {
         /// <inheritdoc />

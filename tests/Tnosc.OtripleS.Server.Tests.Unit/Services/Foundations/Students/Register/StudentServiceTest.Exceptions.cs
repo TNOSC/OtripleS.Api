@@ -103,7 +103,7 @@ public partial class StudentServiceTest
             _studentService.RegisterStudentAsync(inputStudent);
 
         // then
-        await Assert.ThrowsAsync<StudentDependencyException>(() =>
+        await Assert.ThrowsAsync<StudentDependencyValidationException>(() =>
             registerStudentTask.AsTask());
 
         _dateTimeBrokerMock
@@ -111,7 +111,7 @@ public partial class StudentServiceTest
             .GetCurrentDateTime();
 
         _loggingBrokerMock.Received(1)
-            .LogCritical(Arg.Is<Xeption>(actualException =>
+            .LogError(Arg.Is<Xeption>(actualException =>
               actualException.SameExceptionAs(expectedStudentDependencyValidationException)));
 
         await _storageBrokerMock

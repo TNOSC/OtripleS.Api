@@ -5,6 +5,7 @@
 // ----------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
+using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Tnosc.OtripleS.Server.Domain.Students.Exceptions;
@@ -29,6 +30,15 @@ internal partial class StorageBroker
                     innerException: sqlException);
 
             throw failedStudentStorageException;
+        }
+        catch (DuplicateKeyException duplicateKeyException)
+        {
+            var alreadyExistsStudentException =
+                new AlreadyExistsStudentException(
+                    message: "Student with the same id already exists.",
+                    innerException: duplicateKeyException);
+
+            throw alreadyExistsStudentException;
         }
     }
 }

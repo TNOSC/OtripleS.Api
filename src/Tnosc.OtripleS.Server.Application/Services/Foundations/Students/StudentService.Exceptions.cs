@@ -32,6 +32,22 @@ public sealed partial class StudentService
         {
             throw CreateAndLogCriticalDependencyException(failedStudentStorageException);
         }
+        catch (AlreadyExistsStudentException alreadyExistsStudentException)
+        {
+            throw CreateAndLogDependencyValidationException(alreadyExistsStudentException);
+        }
+    }
+
+    private StudentDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
+    {
+        var studentDependencyValidationException =
+            new StudentDependencyValidationException(
+                message: "Student dependency validation error occurred, fix the errors and try again.",
+                innerException: exception);
+
+        _loggingBroker.LogError(exception: studentDependencyValidationException);
+
+        return studentDependencyValidationException;
     }
 
     private StudentDependencyException CreateAndLogCriticalDependencyException(Xeption exception)

@@ -1,4 +1,10 @@
-﻿using System;
+﻿// ----------------------------------------------------------------------------------
+// Copyright (c) Tunisian .NET Open Source Community (TNOSC). All rights reserved.
+// This code is provided by TNOSC and is freely available under the MIT License.
+// Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
+// ----------------------------------------------------------------------------------
+
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -24,7 +30,8 @@ public partial class AddStudentsTable : Migration
                 CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                 UpdatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                 CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false)
             },
             constraints: table => table.PrimaryKey("PK_Students", x => x.Id));
 

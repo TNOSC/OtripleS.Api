@@ -12,7 +12,7 @@ using Tnosc.OtripleS.Server.Infrastructure.Brokers.Storages;
 namespace Tnosc.OtripleS.Server.Infrastructure.Brokers.Storages.Migrations
 {
     [DbContext(typeof(StorageBroker))]
-    [Migration("20250803224847_AddStudentsTable")]
+    [Migration("20250818144751_AddStudentsTable")]
     partial class AddStudentsTable
     {
         /// <inheritdoc />
@@ -63,6 +63,12 @@ namespace Tnosc.OtripleS.Server.Infrastructure.Brokers.Storages.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.Property<Guid>("UpdatedBy")
                         .HasColumnType("uniqueidentifier");

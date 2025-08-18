@@ -5,11 +5,6 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.Serialization;
-using Microsoft.Data.SqlClient;
 using NSubstitute;
 using Tnosc.OtripleS.Server.Application.Brokers.DateTimes;
 using Tnosc.OtripleS.Server.Application.Brokers.Loggings;
@@ -40,6 +35,18 @@ public partial class StudentServiceTest
             loggingBroker: _loggingBrokerMock);
     }
 
+    public static TheoryData InvalidMinuteCases()
+    {
+        int randomMoreThanMinuteFromNow = GetRandomNumber();
+        int randomMoreThanMinuteBeforeNow = GetNegativeRandomNumber();
+
+        return new TheoryData<int>
+        {
+            randomMoreThanMinuteFromNow ,
+            randomMoreThanMinuteBeforeNow
+        };
+    }
+
     private static DateTimeOffset GetRandomDateTime() =>
            new DateTimeRange(earliestDate: DateTime.UtcNow).GetValue();
 
@@ -65,18 +72,8 @@ public partial class StudentServiceTest
     }
 
     private static int GetRandomNumber() => new IntRange(min: 2, max: 10).GetValue();
+    
     private static int GetNegativeRandomNumber() => -1 * GetRandomNumber();
 
-    public static TheoryData InvalidMinuteCases()
-    {
-        int randomMoreThanMinuteFromNow = GetRandomNumber();
-        int randomMoreThanMinuteBeforeNow = GetNegativeRandomNumber();
-
-        return new TheoryData<int>
-        {
-            randomMoreThanMinuteFromNow ,
-            randomMoreThanMinuteBeforeNow
-        };
-    }
     private static string GetRandomMessage() => new MnemonicString().GetValue();
 }

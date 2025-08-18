@@ -24,6 +24,10 @@ internal sealed class StudentConfiguration : IEntityTypeConfiguration<Student>
                    value => new StudentId(value))
                .ValueGeneratedNever();
 
+        builder.Property(s => s.RowVersion)
+        .IsRowVersion()
+        .IsConcurrencyToken();
+
         builder.Property(s => s.UserId)
                .IsRequired()
                .HasMaxLength(100);

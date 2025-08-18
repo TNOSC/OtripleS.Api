@@ -61,6 +61,12 @@ namespace Tnosc.OtripleS.Server.Infrastructure.Brokers.Storages.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<Guid>("UpdatedBy")
                         .HasColumnType("uniqueidentifier");
 

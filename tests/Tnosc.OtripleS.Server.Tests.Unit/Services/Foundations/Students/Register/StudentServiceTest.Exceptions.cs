@@ -6,21 +6,22 @@
 
 using System;
 using System.Threading.Tasks;
+using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Tnosc.OtripleS.Server.Domain.Students.Exceptions;
 using Xeptions;
 using Xunit;
-using EFxceptions.Models.Exceptions;
 
 namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.Students;
 
 public partial class StudentServiceTest
 {
     [Fact]
-    public async Task ShouldThrowCriticalDependencyExceptionOnRegisterIfSqlErrorOccursAndLogItAsync()
+    public async Task ShouldThrowDependencyExceptionOnRegisterIfDatabaseUpdateErrorOccursAndLogItAsync()
     {
         // given
         DateTimeOffset randomDateTime = GetRandomDateTime();
@@ -28,12 +29,12 @@ public partial class StudentServiceTest
         Student randomStudent = CreateRandomStudent(date: randomDateTime);
         randomStudent.UpdatedBy = randomStudent.CreatedBy;
         Student inputStudent = randomStudent;
-        SqlException sqlException = CreateSqlException(errorCode: GetRandomNumber());
+        var databaseUpdateException = new DbUpdateException();
 
         var failedStudentStorageException =
             new FailedStudentStorageException(
                 message: "Failed student storage error occurred, contact support.",
-                innerException: sqlException);
+                innerException: databaseUpdateException);
 
         var expectedStudentDependencyException =
             new StudentDependencyException(

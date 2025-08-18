@@ -76,19 +76,4 @@ public partial class StudentServiceTest
         };
     }
     private static string GetRandomMessage() => new MnemonicString().GetValue();
-
-    private static SqlException CreateSqlException(int errorCode)
-    {
-        Exception? innerEx = null;
-        ConstructorInfo[] constructorInfo = typeof(SqlErrorCollection).GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance);
-        SqlErrorCollection errors = (constructorInfo[0].Invoke(null) as SqlErrorCollection)!;
-        List<object> errorList = (errors.GetType().GetField("_errors", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(errors) as List<object>)!;
-        constructorInfo = typeof(SqlError).GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance);
-        ConstructorInfo nineC = constructorInfo.FirstOrDefault(f => f.GetParameters().Length == 9)!;
-        SqlError sqlError = (nineC.Invoke(new object?[] { errorCode, (byte)0, (byte)0, "", "", "", 0, (uint)0, innerEx }) as SqlError)!;
-        errorList.Add(sqlError);
-        SqlException ex = (Activator.CreateInstance(typeof(SqlException), BindingFlags.NonPublic | BindingFlags.Instance, null, new object?[] { "test", errors,
-            innerEx, Guid.NewGuid() }, null) as SqlException)!;
-        return ex;
-    }
 }

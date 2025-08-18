@@ -15,7 +15,7 @@ using Xunit;
 
 namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.Students;
 
-public partial class StudentServiceTests
+public partial class StudentServiceTest
 {
     [Fact]
     public async Task ShouldRegisterStudentAsync()
@@ -46,11 +46,18 @@ public partial class StudentServiceTests
             .Received(1)
             .InsertStudentAsync(inputStudent);
 
-        _storageBrokerMock.ReceivedCalls().Count()
+        _storageBrokerMock
+            .ReceivedCalls()
+            .Count()
             .ShouldBe(1);
-        _dateTimeBrokerMock.ReceivedCalls()
+        
+        _dateTimeBrokerMock
+            .ReceivedCalls()
+            .Count()
+            .ShouldBe(1);
+        
+        _loggingBrokerMock
+            .ReceivedCalls()
             .ShouldBeEmpty();
-        _loggingBrokerMock.ReceivedCalls().
-            ShouldBeEmpty();
     }
 }

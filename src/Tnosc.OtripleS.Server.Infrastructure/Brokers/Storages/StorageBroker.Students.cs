@@ -16,8 +16,8 @@ internal partial class StorageBroker
 {
     public DbSet<Student> Students { get; set; }
 
-    public async ValueTask<Student> InsertStudentAsync(Student student) =>
-           await InsertAsync(@object: student);
+    public ValueTask<Student> InsertStudentAsync(Student student) =>
+         TryCatch(async () => await InsertAsync(@object: student));
 
     public async ValueTask<IEnumerable<Student>> SelectAllStudentsAsync() => 
         await SelectAllAsync<Student>();

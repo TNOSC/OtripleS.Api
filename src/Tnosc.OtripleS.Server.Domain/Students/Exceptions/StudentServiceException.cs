@@ -9,16 +9,13 @@ using Xeptions;
 
 namespace Tnosc.OtripleS.Server.Domain.Students.Exceptions;
 
-public sealed class FailedStudentStorageException : Xeption
+public class StudentServiceException : Xeption
 {
-    public FailedStudentStorageException(
-        string message, 
+    public StudentServiceException(
+        string message,
         Exception innerException)
         : base(
-            message: message, 
+            message: message,
             innerException: innerException)
     { }
 }
-
-
-

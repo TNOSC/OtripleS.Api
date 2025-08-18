@@ -42,7 +42,10 @@ public partial class StudentServiceTest
 
     private static DateTimeOffset GetRandomDateTime() =>
            new DateTimeRange(earliestDate: DateTime.UtcNow).GetValue();
-    
+
+    private static Student CreateRandomStudent() =>
+          CreateStudentFiller(date: DateTimeOffset.UtcNow).Create();
+
     private static Student CreateRandomStudent(DateTimeOffset date) =>
            CreateStudentFiller(date).Create();
 

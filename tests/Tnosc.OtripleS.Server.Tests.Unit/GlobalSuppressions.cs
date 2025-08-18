@@ -6,3 +6,4 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Maintainability", "CA1515:Consider making public types internal", Justification = "<Pending>", Scope = "type", Target = "~T:Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.Students.StudentServiceTest")]
+[assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>", Scope = "member", Target = "~M:Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.Students.StudentServiceTest.ShouldThrowServiceExceptionOnRegisterIfExceptionOccursAndLogItAsync~System.Threading.Tasks.Task")]

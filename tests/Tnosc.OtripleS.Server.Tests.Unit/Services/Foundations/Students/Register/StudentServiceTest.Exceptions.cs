@@ -11,6 +11,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
+using Shouldly;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Tnosc.OtripleS.Server.Domain.Students.Exceptions;
 using Xeptions;
@@ -46,7 +47,7 @@ public partial class StudentServiceTest
             .Returns(dateTime);
 
         _storageBrokerMock.InsertStudentAsync(inputStudent)
-               .ThrowsAsync(failedStudentStorageException);
+            .ThrowsAsync(failedStudentStorageException);
 
         // when
         ValueTask<Student> registerStudentTask =
@@ -97,7 +98,7 @@ public partial class StudentServiceTest
            .Returns(dateTime);
 
         _storageBrokerMock.InsertStudentAsync(inputStudent)
-               .ThrowsAsync(alreadyExistsStudentException);
+           .ThrowsAsync(alreadyExistsStudentException);
 
         // when
         ValueTask<Student> registerStudentTask =
@@ -118,5 +119,47 @@ public partial class StudentServiceTest
         await _storageBrokerMock
             .Received(1)
             .InsertStudentAsync(inputStudent);
+    }
+
+
+    [Fact]
+    public async Task ShouldThrowServiceExceptionOnRegisterIfExceptionOccursAndLogItAsync()
+    {
+        // given
+        Student someStudent = CreateRandomStudent();
+        var serviceException = new Exception();
+
+        var failedStudentServiceException =
+            new FailedStudentServiceException(
+                message: "Failed student service error occurred, contact support.",
+                innerException: serviceException);
+
+        var expectedStudentServiceException =
+            new StudentServiceException(
+                message: "Service error occurred, contact support.",
+                innerException: failedStudentServiceException);
+
+        _dateTimeBrokerMock.GetCurrentDateTime()
+            .Throws(serviceException);
+
+        // when
+        ValueTask<Student> registerStudentTask =
+             _studentService.RegisterStudentAsync(someStudent);
+
+        // then
+        await Assert.ThrowsAsync<StudentServiceException>(() =>
+            registerStudentTask.AsTask());
+
+        _dateTimeBrokerMock
+              .Received(1)
+              .GetCurrentDateTime();
+
+        _loggingBrokerMock.Received(1)
+            .LogError(Arg.Is<Xeption>(actualException =>
+              actualException.SameExceptionAs(expectedStudentServiceException)));
+
+        _storageBrokerMock
+           .ReceivedCalls()
+           .ShouldBeEmpty();
     }
 }

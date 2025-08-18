@@ -4,18 +4,13 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using System;
-using Xeptions;
+using Microsoft.Extensions.DependencyInjection;
+using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 
-namespace Tnosc.OtripleS.Server.Domain.Students.Exceptions;
+namespace Tnosc.OtripleS.Server.Application;
 
-public sealed class AlreadyExistsStudentException : Xeption
+public static class ServiceCollectionExtensions
 {
-    public AlreadyExistsStudentException(
-        string message,
-        Exception innerException)
-        : base(
-            message: message,
-            innerException: innerException)
-    { }
+    public static void AddApplicationServices(this IServiceCollection services) => 
+        services.AddTransient<IStudentService, StudentService>();
 }

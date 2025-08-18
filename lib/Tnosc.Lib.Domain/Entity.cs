@@ -21,6 +21,8 @@ public abstract class Entity<TEntityId> : IEquatable<Entity<TEntityId>>
 
     public TEntityId Id { get; private init; }
 
+    public byte[] RowVersion { get; set; }
+
     public static bool operator ==(Entity<TEntityId>? a, Entity<TEntityId>? b)
     {
         if (a is null && b is null)

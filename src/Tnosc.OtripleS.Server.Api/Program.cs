@@ -5,18 +5,17 @@
 // ----------------------------------------------------------------------------------
 
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Tnosc.OtripleS.Server.Api;
 using Tnosc.OtripleS.Server.Application;
 using Tnosc.OtripleS.Server.Infrastructure;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddEndpoints();
 builder.Services.AddApplicationServices();
 builder.Services.AddBrokers();
 
-builder.Services.AddControllers();
-builder.Services.AddOpenApi();
 
 WebApplication app = builder.Build();
 

@@ -9,13 +9,14 @@ using Xeptions;
 
 namespace Tnosc.OtripleS.Server.Domain.Students.Exceptions;
 
-public sealed class AlreadyExistsStudentException : Xeption
+public sealed class StudentConcurrencyStorageException : Xeption
 {
-    public AlreadyExistsStudentException(
-        string message,
+    public StudentConcurrencyStorageException(
+        string message, 
         Exception innerException)
         : base(
             message: message,
             innerException: innerException)
     { }
 }
+

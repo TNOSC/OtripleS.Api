@@ -23,38 +23,38 @@ public partial class StudentServiceTest
         // given
         DateTimeOffset randomDateTime = GetRandomDateTime();
         DateTimeOffset dateTime = randomDateTime;
-        Student randomStudent = CreateRandomStudent(randomDateTime);
+        Student randomStudent = CreateRandomStudent(date: randomDateTime);
         randomStudent.UpdatedBy = randomStudent.CreatedBy;
         Student inputStudent = randomStudent;
         Student storageStudent = randomStudent;
         Student expectedStudent = storageStudent.DeepClone();
 
         _dateTimeBrokerMock.GetCurrentDateTime()
-            .Returns(dateTime);
+            .Returns(returnThis: dateTime);
 
-        _storageBrokerMock.InsertStudentAsync(inputStudent)
-            .Returns(storageStudent);
+        _storageBrokerMock.InsertStudentAsync(student: inputStudent)
+            .Returns(returnThis: storageStudent);
 
         // when
         Student actualStudent =
-            await _studentService.RegisterStudentAsync(inputStudent);
+            await _studentService.RegisterStudentAsync(student: inputStudent);
 
         // then
-        actualStudent.ShouldBeEquivalentTo(expectedStudent);
+        actualStudent.ShouldBeEquivalentTo(expected: expectedStudent);
 
         await _storageBrokerMock
-            .Received(1)
-            .InsertStudentAsync(inputStudent);
+            .Received(requiredNumberOfCalls: 1)
+            .InsertStudentAsync(student: inputStudent);
 
         _storageBrokerMock
             .ReceivedCalls()
             .Count()
-            .ShouldBe(1);
-        
+            .ShouldBe(expected: 1);
+
         _dateTimeBrokerMock
             .ReceivedCalls()
             .Count()
-            .ShouldBe(1);
+            .ShouldBe(expected: 1);
         
         _loggingBrokerMock
             .ReceivedCalls()

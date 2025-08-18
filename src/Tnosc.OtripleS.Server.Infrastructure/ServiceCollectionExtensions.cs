@@ -13,7 +13,8 @@ using Tnosc.OtripleS.Server.Infrastructure.Brokers.Loggings;
 using Tnosc.OtripleS.Server.Infrastructure.Brokers.Storages;
 
 namespace Tnosc.OtripleS.Server.Infrastructure;
-public static class Extensions
+
+public static class ServiceCollectionExtensions
 {
     public static void AddBrokers(this IServiceCollection services)
     {

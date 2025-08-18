@@ -6,7 +6,6 @@
 
 using System.Threading.Tasks;
 using EFxceptions.Models.Exceptions;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Tnosc.OtripleS.Server.Domain.Students.Exceptions;
@@ -22,6 +21,15 @@ internal partial class StorageBroker
         try
         {
             return await returningStudentFunction();
+        }
+        catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+        {
+            var studentConcurrencyStorageException =
+                new StudentConcurrencyStorageException(
+                    message: "Failed student concurrency storage error occurred, try again.",
+                    innerException: dbUpdateConcurrencyException);
+
+            throw studentConcurrencyStorageException;
         }
         catch (DbUpdateException dbUpdateException)
         {

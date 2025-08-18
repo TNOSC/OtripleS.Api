@@ -72,7 +72,8 @@ public partial class StudentServiceTest
         };
 #pragma warning restore CS8601 // Possible null reference assignment.
 
-        var invalidStudentException = new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
+        var invalidStudentException = 
+            new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
 
         invalidStudentException.AddData(
                key: nameof(Student.Id),
@@ -145,7 +146,8 @@ public partial class StudentServiceTest
         Student invalidStudent = randomStudent;
         invalidStudent.UpdatedBy = Guid.NewGuid();
 
-        var invalidStudentException = new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
+        var invalidStudentException = 
+            new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
 
         invalidStudentException.AddData(
             key: nameof(Student.UpdatedBy),
@@ -190,7 +192,8 @@ public partial class StudentServiceTest
         Student invalidStudent = randomStudent;
         invalidStudent.UpdatedDate = GetRandomDateTime();
         
-        var invalidStudentException = new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
+        var invalidStudentException = 
+            new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
 
         invalidStudentException.AddData(
             key: nameof(Student.UpdatedDate),
@@ -239,7 +242,8 @@ public partial class StudentServiceTest
         invalidStudent.CreatedDate = randomDate.AddMinutes(minutes);
         invalidStudent.UpdatedDate = invalidStudent.CreatedDate;
 
-        var invalidStudentException = new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
+        var invalidStudentException = 
+            new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
 
         invalidStudentException.AddData(
             key: nameof(Student.CreatedDate),

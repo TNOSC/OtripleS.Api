@@ -75,7 +75,7 @@ public partial class StudentServiceTest
             randomMoreThanMinuteBeforeNow
         };
     }
-
+    private static string GetRandomMessage() => new MnemonicString().GetValue();
 
     private static SqlException CreateSqlException(int errorCode)
     {

@@ -13,6 +13,7 @@ using Tnosc.OtripleS.Server.Domain.Students;
 using Tnosc.OtripleS.Server.Domain.Students.Exceptions;
 using Xeptions;
 using Xunit;
+using EFxceptions.Models.Exceptions;
 
 namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.Students;
 
@@ -61,6 +62,57 @@ public partial class StudentServiceTest
         _loggingBrokerMock.Received(1)
             .LogCritical(Arg.Is<Xeption>(actualException =>
               actualException.SameExceptionAs(expectedStudentDependencyException)));
+
+        await _storageBrokerMock
+            .Received(1)
+            .InsertStudentAsync(inputStudent);
+    }
+
+    [Fact]
+    public async Task ShouldThrowDependencyValidationExceptionOnRegisterWhenStudentAlreadyExistsAndLogItAsync()
+    {
+        // given
+        DateTimeOffset randomDateTime = GetRandomDateTime();
+        DateTimeOffset dateTime = randomDateTime;
+        Student randomStudent = CreateRandomStudent(date: randomDateTime);
+        randomStudent.UpdatedBy = randomStudent.CreatedBy;
+        Student inputStudent = randomStudent;
+        string someMessage = GetRandomMessage();
+
+        var duplicateKeyException =
+            new DuplicateKeyException(message: someMessage);
+
+        var alreadyExistsStudentException =
+            new AlreadyExistsStudentException(
+                message: "Student with the same id already exists.",
+                innerException: duplicateKeyException);
+
+        var expectedStudentDependencyValidationException =
+            new StudentDependencyValidationException(
+                message: "Student dependency validation error occurred, fix the errors and try again.",
+                innerException: alreadyExistsStudentException);
+
+        _dateTimeBrokerMock.GetCurrentDateTime()
+           .Returns(dateTime);
+
+        _storageBrokerMock.InsertStudentAsync(inputStudent)
+               .ThrowsAsync(alreadyExistsStudentException);
+
+        // when
+        ValueTask<Student> registerStudentTask =
+            _studentService.RegisterStudentAsync(inputStudent);
+
+        // then
+        await Assert.ThrowsAsync<StudentDependencyException>(() =>
+            registerStudentTask.AsTask());
+
+        _dateTimeBrokerMock
+            .Received(1)
+            .GetCurrentDateTime();
+
+        _loggingBrokerMock.Received(1)
+            .LogCritical(Arg.Is<Xeption>(actualException =>
+              actualException.SameExceptionAs(expectedStudentDependencyValidationException)));
 
         await _storageBrokerMock
             .Received(1)

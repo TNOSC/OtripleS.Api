@@ -4,19 +4,17 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using System;
 using Xeptions;
 
 namespace Tnosc.OtripleS.Server.Domain.Students.Exceptions;
 
-public sealed class FailedStudentStorageException : Xeption
+public sealed class StudentDependencyValidationException : Xeption
 {
-    public FailedStudentStorageException(
-        string message, 
-        Exception innerException)
-        : base(
-            message: message, 
-            innerException: innerException)
+    public StudentDependencyValidationException(
+        string message,
+        Xeption innerException)
+       : base(
+           message: message,
+           innerException: innerException)
     { }
 }
-

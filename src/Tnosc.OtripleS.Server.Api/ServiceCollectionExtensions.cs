@@ -5,12 +5,14 @@
 // ----------------------------------------------------------------------------------
 
 using Microsoft.Extensions.DependencyInjection;
-using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 
-namespace Tnosc.OtripleS.Server.Application;
+namespace Tnosc.OtripleS.Server.Api;
 
-public static class Extensions
+internal static class ServiceCollectionExtensions
 {
-    public static void AddApplicationServices(this IServiceCollection services) => 
-        services.AddTransient<IStudentService, StudentService>();
+    internal static void AddEndpoints(this IServiceCollection services)
+    {
+        services.AddControllers();
+        services.AddOpenApi();
+    }
 }

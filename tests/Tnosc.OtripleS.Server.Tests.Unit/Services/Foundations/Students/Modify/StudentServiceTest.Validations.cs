@@ -4,6 +4,7 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
@@ -49,6 +50,89 @@ public partial class StudentServiceTest
             .ShouldBeEmpty();
 
         _dateTimeBrokerMock
+            .ReceivedCalls()
+            .ShouldBeEmpty();
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task ShouldThrowValidationExceptionOnModifyWhenStudentIsInvalidAndLogItAsync(string? invalidText)
+    {
+        // given
+#pragma warning disable CS8601 // Possible null reference assignment.
+        var invalidStudent = new Student(id: new StudentId(Guid.Empty))
+        {
+            UserId = invalidText,
+            IdentityNumber = invalidText,
+            FirstName = invalidText,
+            LastName = invalidText,
+        };
+#pragma warning restore CS8601 // Possible null reference assignment.
+
+        var invalidStudentException =
+            new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
+
+        invalidStudentException.AddData(
+            key: nameof(Student.Id),
+            values: "Id is required");
+
+        invalidStudentException.AddData(
+            key: nameof(Student.UserId),
+            values: "Text is required");
+
+        invalidStudentException.AddData(
+            key: nameof(Student.IdentityNumber),
+            values: "Text is required");
+
+        invalidStudentException.AddData(
+            key: nameof(Student.FirstName),
+            values: "Text is required");
+
+        invalidStudentException.AddData(
+            key: nameof(Student.LastName),
+            values: "Text is required");
+
+        invalidStudentException.AddData(
+            key: nameof(Student.BirthDate),
+            values: "Date is required");
+
+        invalidStudentException.AddData(
+            key: nameof(Student.CreatedBy),
+            values: "Id is required");
+
+        invalidStudentException.AddData(
+            key: nameof(Student.CreatedDate),
+            values: "Date is required");
+
+        invalidStudentException.AddData(
+            key: nameof(Student.UpdatedBy),
+            values: "Id is required");
+
+        invalidStudentException.AddData(
+            key: nameof(Student.UpdatedDate),
+            "Date is required",
+            $"Date is the same as {nameof(Student.CreatedDate)}");
+
+        var expectedStudentValidationException =
+            new StudentValidationException(
+                message: "Invalid input, fix the errors and try again.",
+                innerException: invalidStudentException);
+
+        // when
+        ValueTask<Student> modifyStudentTask =
+            _studentService.ModifyStudentAsync(student: invalidStudent);
+
+        // then
+        await Assert.ThrowsAsync<StudentValidationException>(() =>
+            modifyStudentTask.AsTask());
+
+        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
+            .LogError(Arg.Is<Xeption>(actualException =>
+                actualException.SameExceptionAs(expectedStudentValidationException)));
+
+        _storageBrokerMock
             .ReceivedCalls()
             .ShouldBeEmpty();
     }

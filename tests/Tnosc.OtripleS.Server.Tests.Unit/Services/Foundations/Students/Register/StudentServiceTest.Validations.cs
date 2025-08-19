@@ -58,8 +58,7 @@ public partial class StudentServiceTest
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public async Task ShouldThrowValidationExceptionOnRegisterWhenStudentIsInvalidAndLogItAsync(
-           string? invalidText)
+    public async Task ShouldThrowValidationExceptionOnRegisterWhenStudentIsInvalidAndLogItAsync(string? invalidText)
     {
         // given
 #pragma warning disable CS8601 // Possible null reference assignment.
@@ -68,6 +67,7 @@ public partial class StudentServiceTest
             UserId = invalidText,
             IdentityNumber = invalidText,
             FirstName = invalidText,
+            LastName = invalidText,
         };
 #pragma warning restore CS8601 // Possible null reference assignment.
 

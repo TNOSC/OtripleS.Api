@@ -135,6 +135,38 @@ public sealed partial class StudentService
         invalidStudentException.ThrowIfContainsErrors();
     }
 
-    private static void ValidateStudentOnModify(Student student) => 
+
+    private void ValidateStudentOnModify(Student student)
+    {
         ValidateStudent(student);
+
+        Validate(
+               (Rule: IsInvalid(student.Id), Parameter: nameof(Student.Id)),
+               (Rule: IsInvalid(student.UserId), Parameter: nameof(Student.UserId)),
+               (Rule: IsInvalid(student.IdentityNumber), Parameter: nameof(Student.IdentityNumber)),
+               (Rule: IsInvalid(student.FirstName), Parameter: nameof(Student.FirstName)),
+               (Rule: IsInvalid(student.LastName), Parameter: nameof(Student.LastName)),
+               (Rule: IsInvalid(student.BirthDate), Parameter: nameof(Student.BirthDate)),
+               (Rule: IsInvalid(student.CreatedBy), Parameter: nameof(Student.CreatedBy)),
+               (Rule: IsInvalid(student.UpdatedBy), Parameter: nameof(Student.UpdatedBy)),
+               (Rule: IsInvalid(student.CreatedDate), Parameter: nameof(Student.CreatedDate)),
+               (Rule: IsInvalid(student.UpdatedDate), Parameter: nameof(Student.UpdatedDate)),
+               (Rule: IsNotRecent(student.UpdatedDate), Parameter: nameof(Student.UpdatedDate)),
+
+               (Rule: IsSame(
+                   firstDate: student.UpdatedDate,
+                   secondDate: student.CreatedDate,
+                   secondDateName: nameof(Student.CreatedDate)),
+                   Parameter: nameof(Student.UpdatedDate))
+        );
+    }
+
+    private static dynamic IsSame(
+           DateTimeOffset firstDate,
+           DateTimeOffset secondDate,
+           string secondDateName) => new
+           {
+               Condition = firstDate == secondDate,
+               Message = $"Date is the same as {secondDateName}"
+           };
 }

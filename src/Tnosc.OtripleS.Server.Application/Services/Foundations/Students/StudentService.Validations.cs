@@ -134,4 +134,7 @@ public sealed partial class StudentService
 
         invalidStudentException.ThrowIfContainsErrors();
     }
+
+    private static void ValidateStudentOnModify(Student student) => 
+        ValidateStudent(student);
 }

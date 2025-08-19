@@ -30,8 +30,12 @@ public sealed partial class StudentService : IStudentService
         _loggingBroker = loggingBroker;
     }
 
-    public async ValueTask<Student> ModifyStudentAsync(Student student) => 
-        await _storageBroker.UpdateStudentAsync(student: student);
+    public async ValueTask<Student> ModifyStudentAsync(Student student) =>
+        await TryCatch(async () =>
+        {
+            ValidateStudentOnModify(student);
+            return await _storageBroker.UpdateStudentAsync(student);
+        });
 
     public async ValueTask<Student> RegisterStudentAsync(Student student) =>
         await TryCatch(async () =>

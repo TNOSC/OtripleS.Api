@@ -198,4 +198,7 @@ public sealed partial class StudentService
                 secondDateName: nameof(Student.CreatedDate)),
             Parameter: nameof(Student.CreatedDate))
         );
+
+    private static void ValidateStudentId(Guid studentId) =>
+       Validate((Rule: IsInvalid(studentId), Parameter: nameof(Student.Id)));
 }

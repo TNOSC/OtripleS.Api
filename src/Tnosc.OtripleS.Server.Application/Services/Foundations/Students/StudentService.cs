@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Threading.Tasks;
 using Tnosc.OtripleS.Server.Application.Brokers.DateTimes;
 using Tnosc.OtripleS.Server.Application.Brokers.Loggings;
@@ -33,7 +34,7 @@ public sealed partial class StudentService : IStudentService
     public async ValueTask<Student> ModifyStudentAsync(Student student) =>
         await TryCatch(async () =>
         {
-        ValidateStudentOnModify(student: student);
+            ValidateStudentOnModify(student: student);
 
             Student maybeStudent =
                await _storageBroker.SelectStudentByIdAsync(studentId: student.Id);
@@ -54,16 +55,18 @@ public sealed partial class StudentService : IStudentService
             return await _storageBroker.InsertStudentAsync(student: student);
         });
 
-    public async ValueTask<Student> RemoveStudentByIdAsync(Guid studentId) 
-    {
-        Student student =
-              await _storageBroker.SelectStudentByIdAsync(studentId: studentId);
-        return await _storageBroker.DeleteStudentAsync(student: student);
-    }
-    
-    public ValueTask<IEnumerable<Student>> RetrieveAllStudentsAsync() => 
+    public async ValueTask<Student> RemoveStudentByIdAsync(Guid studentId) =>
+        await TryCatch(async () =>
+        {
+            ValidateStudentId(studentId);
+            Student student =
+                  await _storageBroker.SelectStudentByIdAsync(studentId: studentId);
+            return await _storageBroker.DeleteStudentAsync(student: student);
+        });
+
+    public ValueTask<IEnumerable<Student>> RetrieveAllStudentsAsync() =>
         throw new NotImplementedException();
-    
-    public ValueTask<Student> RetrieveStudentByIdAsync(Guid studentId) => 
+
+    public ValueTask<Student> RetrieveStudentByIdAsync(Guid studentId) =>
         throw new NotImplementedException();
 }

@@ -18,7 +18,7 @@ using Xunit;
 
 namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.Students;
 
-public partial class StudentServiceTest
+public partial class StudentServiceTests
 {
     [Fact]
     public async Task ShouldThrowDependencyExceptionOnModifyIfDatabaseUpdateErrorOccursAndLogItAsync()

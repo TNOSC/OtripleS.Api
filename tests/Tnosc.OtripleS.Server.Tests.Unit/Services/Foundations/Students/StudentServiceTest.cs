@@ -16,14 +16,14 @@ using Xunit;
 
 namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.Students;
 
-public partial class StudentServiceTest
+public partial class StudentServiceTests
 {
     private readonly IStorageBroker _storageBrokerMock;
     private readonly IDateTimeBroker _dateTimeBrokerMock;
     private readonly ILoggingBroker _loggingBrokerMock;
     private readonly StudentService _studentService;
 
-    public StudentServiceTest()
+    public StudentServiceTests()
     {
         _storageBrokerMock = Substitute.For<IStorageBroker>();
         _dateTimeBrokerMock = Substitute.For<IDateTimeBroker>();

@@ -54,4 +54,43 @@ public partial class StudentServiceTests
             .Received(requiredNumberOfCalls: 1)
             .SelectAllStudentsAsync();
     }
+
+    [Fact]
+    public async Task ShouldThrowServiceExceptionOnRetrieveAllStudentsIfExceptionOccursAndLogItAsync()
+    {
+        // given
+        Student randomStudent = CreateRandomStudent();
+        StudentId studentId = randomStudent.Id;
+
+        var serviceException = new Exception();
+
+        var failedStudentServiceException =
+            new FailedStudentServiceException(
+                message: "Failed student service error occurred, contact support.",
+                innerException: serviceException);
+
+        var expectedStudentServiceException =
+            new StudentServiceException(
+                message: "Service error occurred, contact support.",
+                innerException: failedStudentServiceException);
+
+        _storageBrokerMock.SelectAllStudentsAsync()
+            .ThrowsAsync(ex: serviceException);
+
+        // when
+        ValueTask<Student> retrieveAllStudentTask =
+             _studentService.RemoveStudentByIdAsync(studentId: studentId);
+
+        // then
+        await Assert.ThrowsAsync<StudentServiceException>(() =>
+            retrieveAllStudentTask.AsTask());
+
+        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
+            .LogError(Arg.Is<Xeption>(actualException =>
+              actualException.SameExceptionAs(expectedStudentServiceException)));
+
+        await _storageBrokerMock
+            .Received(requiredNumberOfCalls: 1)
+            .SelectAllStudentsAsync();
+    }
 }

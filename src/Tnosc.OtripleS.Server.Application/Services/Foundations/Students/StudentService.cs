@@ -71,5 +71,10 @@ public sealed partial class StudentService : IStudentService
         throw new NotImplementedException();
 
     public async ValueTask<Student> RetrieveStudentByIdAsync(Guid studentId) =>
-        await _storageBroker.SelectStudentByIdAsync(studentId: studentId);
+        await TryCatch(async () =>
+        {
+            ValidateStudentId(studentId);
+
+            return await _storageBroker.SelectStudentByIdAsync(studentId: studentId);
+        });
 }

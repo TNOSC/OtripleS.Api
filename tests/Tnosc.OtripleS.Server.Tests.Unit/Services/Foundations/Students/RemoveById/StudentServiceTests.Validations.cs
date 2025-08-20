@@ -52,7 +52,6 @@ public partial class StudentServiceTests
             .ShouldBeEmpty();
     }
 
-
     [Fact]
     public async Task ShouldThrowNotFoundExceptionOnRemoveStudentByIdIfStudentIsNotFoundAndLogItAsync()
     {

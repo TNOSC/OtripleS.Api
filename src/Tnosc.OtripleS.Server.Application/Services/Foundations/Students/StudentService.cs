@@ -67,8 +67,8 @@ public sealed partial class StudentService : IStudentService
             return await _storageBroker.DeleteStudentAsync(student: maybeStudent);
         });
 
-    public ValueTask<IEnumerable<Student>> RetrieveAllStudentsAsync() =>
-        throw new NotImplementedException();
+    public async ValueTask<IEnumerable<Student>> RetrieveAllStudentsAsync() =>
+        await _storageBroker.SelectAllStudentsAsync();
 
     public async ValueTask<Student> RetrieveStudentByIdAsync(Guid studentId) =>
         await TryCatch(async () =>

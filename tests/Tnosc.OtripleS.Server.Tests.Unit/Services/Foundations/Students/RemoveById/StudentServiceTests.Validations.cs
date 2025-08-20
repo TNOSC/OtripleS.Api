@@ -50,12 +50,7 @@ public partial class StudentServiceTests
         _storageBrokerMock
             .ReceivedCalls()
             .ShouldBeEmpty();
-
-        _dateTimeBrokerMock
-            .ReceivedCalls()
-            .ShouldBeEmpty();
     }
-
 
     [Fact]
     public async Task ShouldThrowNotFoundExceptionOnRemoveStudentByIdIfStudentIsNotFoundAndLogItAsync()

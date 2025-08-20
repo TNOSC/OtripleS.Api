@@ -6,11 +6,9 @@
 
 using System;
 using System.Threading.Tasks;
-using Force.DeepCloner;
 using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
-using Shouldly;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Tnosc.OtripleS.Server.Domain.Students.Exceptions;
 using Xeptions;
@@ -21,12 +19,11 @@ namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.Students;
 public partial class StudentServiceTests
 {
     [Fact]
-    public async Task ShouldThrowDependencyExceptionOnRemoveStudentByIdIfDatabaseUpdateErrorOccursAndLogItAsync()
+    public async Task ShouldThrowDependencyExceptionOnRetrieveStudentByIdIfDatabaseUpdateErrorOccursAndLogItAsync()
     {
         // given
         Student randomStudent = CreateRandomStudent();
         StudentId studentId = randomStudent.Id;
-        Student storageStudent = randomStudent;
         var databaseUpdateException = new DbUpdateException();
 
         var failedStudentStorageException =
@@ -40,18 +37,15 @@ public partial class StudentServiceTests
                 innerException: failedStudentStorageException);
 
         _storageBrokerMock.SelectStudentByIdAsync(studentId: studentId)
-            .Returns(returnThis: storageStudent);
-
-        _storageBrokerMock.DeleteStudentAsync(student: storageStudent)
             .ThrowsAsync(ex: failedStudentStorageException);
 
         // when
-        ValueTask<Student> removeStudentTask =
-            _studentService.RemoveStudentByIdAsync(studentId: studentId);
+        ValueTask<Student> retrieveStudentTask =
+            _studentService.RetrieveStudentByIdAsync(studentId: studentId);
 
         // then
         await Assert.ThrowsAsync<StudentDependencyException>(() =>
-            removeStudentTask.AsTask());
+            retrieveStudentTask.AsTask());
 
         _loggingBrokerMock.Received(1)
             .LogCritical(Arg.Is<Xeption>(actualException =>
@@ -60,61 +54,10 @@ public partial class StudentServiceTests
         await _storageBrokerMock
             .Received(requiredNumberOfCalls: 1)
             .SelectStudentByIdAsync(studentId: studentId);
-
-        await _storageBrokerMock
-            .Received(requiredNumberOfCalls: 1)
-            .DeleteStudentAsync(student: storageStudent);
     }
 
     [Fact]
-    public async Task 
-        ShouldThrowDependencyValidationExceptionOnRemoveStudentByIdIfDatabaseUpdateConcurrencyErrorOccursAndLogItAsync()
-    {
-        // given
-        Student randomStudent = CreateRandomStudent();
-        StudentId studentId = randomStudent.Id;
-        Student storageStudent = randomStudent;
-        var databaseUpdateConcurrencyException = new DbUpdateConcurrencyException();
-
-        var lockedStudentException =
-            new LockedStudentException(
-                message: "Locked student record exception, please try again later.",
-                innerException: databaseUpdateConcurrencyException);
-
-        var expectedStudentDependencyException =
-            new StudentDependencyValidationException(
-                message: "Student dependency validation error occurred, fix the errors and try again.",
-                innerException: lockedStudentException);
-
-        _storageBrokerMock.SelectStudentByIdAsync(studentId: studentId)
-           .Returns(returnThis: storageStudent);
-
-        _storageBrokerMock.DeleteStudentAsync(student: storageStudent)
-            .ThrowsAsync(ex: lockedStudentException);
-
-        // when
-        ValueTask<Student> removeStudentTask =
-            _studentService.RemoveStudentByIdAsync(studentId: studentId);
-
-        // then
-        await Assert.ThrowsAsync<StudentDependencyValidationException>(() =>
-            removeStudentTask.AsTask());
-
-        _loggingBrokerMock.Received(1)
-            .LogError(Arg.Is<Xeption>(actualException =>
-              actualException.SameExceptionAs(expectedStudentDependencyException)));
-
-        await _storageBrokerMock
-            .Received(requiredNumberOfCalls: 1)
-            .SelectStudentByIdAsync(studentId: studentId);
-
-        await _storageBrokerMock
-            .Received(requiredNumberOfCalls: 1)
-            .DeleteStudentAsync(student: storageStudent);
-    }
-
-    [Fact]
-    public async Task ShouldThrowServiceExceptionOnRemoveStudentByIdIfExceptionOccursAndLogItAsync()
+    public async Task ShouldThrowServiceExceptionOnRetrieveStudentByIdIfExceptionOccursAndLogItAsync()
     {
         // given
         Student randomStudent = CreateRandomStudent();
@@ -136,12 +79,12 @@ public partial class StudentServiceTests
             .ThrowsAsync(ex: serviceException);
 
         // when
-        ValueTask<Student> modifyStudentTask =
+        ValueTask<Student> retrievedStudentTask =
              _studentService.RemoveStudentByIdAsync(studentId: studentId);
 
         // then
         await Assert.ThrowsAsync<StudentServiceException>(() =>
-            modifyStudentTask.AsTask());
+            retrievedStudentTask.AsTask());
 
         _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
             .LogError(Arg.Is<Xeption>(actualException =>

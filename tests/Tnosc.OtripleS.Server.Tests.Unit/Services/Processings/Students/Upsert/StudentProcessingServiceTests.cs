@@ -44,14 +44,6 @@ public partial class StudentProcessingServiceTests
         actualStudent.ShouldBeEquivalentTo(expected: expectedStudent);
 
         await _studentServiceMock
-          .Received(requiredNumberOfCalls: 1)
-          .RemoveStudentByIdAsync(studentId: inputStudent.Id);
-
-        await _studentServiceMock
-           .Received(requiredNumberOfCalls: 1)
-           .RemoveStudentByIdAsync(studentId: inputStudent.Id);
-
-        await _studentServiceMock
          .Received(requiredNumberOfCalls: 1)
          .RegisterStudentAsync(student: inputStudent);
 

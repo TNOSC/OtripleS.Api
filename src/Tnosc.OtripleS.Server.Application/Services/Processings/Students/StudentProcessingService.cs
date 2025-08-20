@@ -26,7 +26,16 @@ public sealed class StudentProcessingService : IStudentProcessingService
         _loggingBroker = loggingBroker;
     }
 
-    public ValueTask<Student> UpsertStudentAsync(Student student) => 
-        throw new System.NotImplementedException();
+    public async ValueTask<Student> UpsertStudentAsync(Student student) {
+
+        Student mayBeStudent = await _studentService
+            .RetrieveStudentByIdAsync(studentId: student.Id);
+
+        return mayBeStudent switch
+        {
+            null => await _studentService.RegisterStudentAsync(student: student),
+            _ => await _studentService.ModifyStudentAsync(student: student)
+        };
+    }
 }
 

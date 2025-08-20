@@ -33,7 +33,7 @@ public sealed partial class StudentService : IStudentService
     public async ValueTask<Student> ModifyStudentAsync(Student student) =>
         await TryCatch(async () =>
         {
-        ValidateStudentOnModify(student: student);
+            ValidateStudentOnModify(student: student);
 
             Student maybeStudent =
                await _storageBroker.SelectStudentByIdAsync(studentId: student.Id);
@@ -54,12 +54,22 @@ public sealed partial class StudentService : IStudentService
             return await _storageBroker.InsertStudentAsync(student: student);
         });
 
-    public ValueTask<Student> RemoveStudentByIdAsync(Guid studentId) => 
+    public async ValueTask<Student> RemoveStudentByIdAsync(Guid studentId) =>
+        await TryCatch(async () =>
+        {
+            ValidateStudentId(studentId);
+
+            Student maybeStudent =
+                  await _storageBroker.SelectStudentByIdAsync(studentId: studentId);
+
+            ValidateStorageStudent(maybeStudent, studentId);
+
+            return await _storageBroker.DeleteStudentAsync(student: maybeStudent);
+        });
+
+    public ValueTask<IEnumerable<Student>> RetrieveAllStudentsAsync() =>
         throw new NotImplementedException();
-    
-    public ValueTask<IEnumerable<Student>> RetrieveAllStudentsAsync() => 
-        throw new NotImplementedException();
-    
-    public ValueTask<Student> RetrieveStudentByIdAsync(Guid studentId) => 
+
+    public ValueTask<Student> RetrieveStudentByIdAsync(Guid studentId) =>
         throw new NotImplementedException();
 }

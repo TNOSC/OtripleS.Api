@@ -4,7 +4,6 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using System;
 using System.Threading.Tasks;
 using Force.DeepCloner;
 using NSubstitute;
@@ -14,43 +13,37 @@ using Xunit;
 
 namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.Students;
 
-public partial class StudentServiceTest
+public partial class StudentServiceTests
 {
     [Fact]
-    public async Task ShouldModifyStudentAsync()
+    public async Task ShouldRemoveStudentByIdAsync()
     {
         // given
-        DateTimeOffset randomDateTime = GetRandomDateTime();
         Student randomStudent = CreateRandomStudent();
-        randomStudent.UpdatedDate = randomDateTime;
-        Student inputStudent = randomStudent;
-        Student beforeUpdateStorageStudent = randomStudent.DeepClone();
-        Student storageStudent = inputStudent;
+        StudentId studentId = randomStudent.Id;
+        Student storageStudent = randomStudent;
         Student expectedStudent = storageStudent.DeepClone();
 
-        _dateTimeBrokerMock.GetCurrentDateTime()
-            .Returns(returnThis: randomDateTime);
+        _storageBrokerMock.SelectStudentByIdAsync(studentId: studentId)
+         .Returns(returnThis: storageStudent);
 
-        _storageBrokerMock.SelectStudentByIdAsync(studentId: inputStudent.Id)
-         .Returns(returnThis: beforeUpdateStorageStudent);
-
-        _storageBrokerMock.UpdateStudentAsync(student: inputStudent)
+        _storageBrokerMock.DeleteStudentAsync(student: storageStudent)
             .Returns(returnThis: storageStudent);
 
         // when
         Student actualStudent =
-            await _studentService.ModifyStudentAsync(student: inputStudent);
+            await _studentService.RemoveStudentByIdAsync(studentId: studentId);
 
         // then
         actualStudent.ShouldBeEquivalentTo(expected: expectedStudent);
 
         await _storageBrokerMock
             .Received(requiredNumberOfCalls: 1)
-            .UpdateStudentAsync(student: inputStudent);
+            .DeleteStudentAsync(student: storageStudent);
 
         await _storageBrokerMock
            .Received(requiredNumberOfCalls: 1)
-           .SelectStudentByIdAsync(inputStudent.Id);
+           .SelectStudentByIdAsync(studentId: studentId);
 
         _loggingBrokerMock
             .ReceivedCalls()

@@ -59,9 +59,6 @@ public partial class StudentServiceTests
     public async Task ShouldThrowServiceExceptionOnRetrieveAllStudentsIfExceptionOccursAndLogItAsync()
     {
         // given
-        Student randomStudent = CreateRandomStudent();
-        StudentId studentId = randomStudent.Id;
-
         var serviceException = new Exception();
 
         var failedStudentServiceException =
@@ -78,8 +75,8 @@ public partial class StudentServiceTests
             .ThrowsAsync(ex: serviceException);
 
         // when
-        ValueTask<Student> retrieveAllStudentTask =
-             _studentService.RemoveStudentByIdAsync(studentId: studentId);
+        ValueTask<IEnumerable<Student>> retrieveAllStudentTask =
+             _studentService.RetrieveAllStudentsAsync();
 
         // then
         await Assert.ThrowsAsync<StudentServiceException>(() =>

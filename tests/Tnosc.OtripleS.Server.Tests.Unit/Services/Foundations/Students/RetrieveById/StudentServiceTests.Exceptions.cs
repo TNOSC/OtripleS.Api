@@ -79,12 +79,12 @@ public partial class StudentServiceTests
             .ThrowsAsync(ex: serviceException);
 
         // when
-        ValueTask<Student> retrievedStudentTask =
-             _studentService.RemoveStudentByIdAsync(studentId: studentId);
+        ValueTask<Student> retrieveStudentTask =
+             _studentService.RetrieveStudentByIdAsync(studentId: studentId);
 
         // then
         await Assert.ThrowsAsync<StudentServiceException>(() =>
-            retrievedStudentTask.AsTask());
+            retrieveStudentTask.AsTask());
 
         _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
             .LogError(Arg.Is<Xeption>(actualException =>

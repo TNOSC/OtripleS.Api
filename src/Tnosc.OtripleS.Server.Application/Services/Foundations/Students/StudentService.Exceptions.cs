@@ -68,6 +68,15 @@ public sealed partial class StudentService
         {
             throw CreateAndLogCriticalDependencyException(failedStudentStorageException);
         }
+        catch (Exception exception)
+        {
+            var failedStudentServiceException =
+                   new FailedStudentServiceException(
+                       message: "Failed student service error occurred, contact support.",
+                       innerException: exception);
+
+            throw CreateAndLogServiceException(failedStudentServiceException);
+        }
     }
 
     private StudentServiceException CreateAndLogServiceException(Exception exception)

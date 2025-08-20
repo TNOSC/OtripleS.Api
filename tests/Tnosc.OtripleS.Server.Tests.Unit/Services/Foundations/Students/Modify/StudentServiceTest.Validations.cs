@@ -6,6 +6,7 @@
 
 using System;
 using System.Threading.Tasks;
+using Force.DeepCloner;
 using NSubstitute;
 using Shouldly;
 using Tnosc.OtripleS.Server.Domain.Students;
@@ -294,6 +295,64 @@ public partial class StudentServiceTest
         await _storageBrokerMock
            .Received(requiredNumberOfCalls: 1)
            .SelectStudentByIdAsync(nonExistentStudent.Id);
+
+        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
+            .LogError(Arg.Is<Xeption>(actualException =>
+              actualException.SameExceptionAs(expectedStudentValidationException)));
+    }
+
+    [Fact]
+    public async Task ShouldThrowValidationExceptionOnModifyIfStorageCreatedDateNotSameAsCreatedDateAndLogItAsync()
+    {
+        // given
+        int randomNumber = GetRandomNumber();
+        DateTimeOffset randomDateTime = GetRandomDateTime();
+        var differentId = Guid.NewGuid();
+        Guid invalidCreatedBy = differentId;
+        Student randomStudent = CreateRandomStudent(date: randomDateTime);
+        Student invalidStudent = randomStudent;
+        Student storageStudent = randomStudent.DeepClone();
+        invalidStudent.CreatedDate = storageStudent.CreatedDate.AddDays(randomNumber);
+        invalidStudent.UpdatedDate = randomDateTime;
+        invalidStudent.CreatedBy = invalidCreatedBy;
+        StudentId studentId = invalidStudent.Id;
+
+        var invalidStudentException =
+            new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
+
+        invalidStudentException.AddData(
+            key: nameof(Student.CreatedDate),
+            values: $"Date is not the same as {nameof(Student.CreatedDate)}");
+        invalidStudentException.AddData(
+            key: nameof(Student.CreatedBy),
+            values: $"Id is not the same as {nameof(Student.CreatedBy)}");
+
+        var expectedStudentValidationException =
+          new StudentValidationException(
+              message: "Invalid input, fix the errors and try again.",
+              innerException: invalidStudentException);
+
+        _dateTimeBrokerMock.GetCurrentDateTime()
+           .Returns(returnThis: randomDateTime);
+
+        _storageBrokerMock.SelectStudentByIdAsync(studentId: studentId)
+          .Returns(returnThis: storageStudent);
+
+        // when
+        ValueTask<Student> modifyStudentTask =
+            _studentService.ModifyStudentAsync(student: invalidStudent);
+
+        // then
+        await Assert.ThrowsAsync<StudentValidationException>(() =>
+            modifyStudentTask.AsTask());
+
+        _dateTimeBrokerMock
+            .Received(requiredNumberOfCalls: 1)
+            .GetCurrentDateTime();
+
+        await _storageBrokerMock
+           .Received(requiredNumberOfCalls: 1)
+           .SelectStudentByIdAsync(invalidStudent.Id);
 
         _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
             .LogError(Arg.Is<Xeption>(actualException =>

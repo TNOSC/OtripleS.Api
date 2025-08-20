@@ -265,7 +265,8 @@ public partial class StudentServiceTest
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
         Student noStudent = null;
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
-        var notFoundStudentException = new NotFoundStudentException(message: $"Couldn't find student with id: {nonExistentStudent.Id.Value}.");
+        var notFoundStudentException = 
+            new NotFoundStudentException(message: $"Couldn't find student with id: {nonExistentStudent.Id.Value}.");
 
         var expectedStudentValidationException =
             new StudentValidationException(

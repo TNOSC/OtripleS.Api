@@ -5,7 +5,6 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Force.DeepCloner;
 using NSubstitute;
@@ -26,7 +25,7 @@ public partial class StudentServiceTest
         randomStudent.UpdatedDate = randomDateTime;
         Student inputStudent = randomStudent;
         Student beforeUpdateStorageStudent = randomStudent.DeepClone();
-        Student storageStudent = randomStudent;
+        Student storageStudent = inputStudent;
         Student expectedStudent = storageStudent.DeepClone();
 
         _dateTimeBrokerMock.GetCurrentDateTime()

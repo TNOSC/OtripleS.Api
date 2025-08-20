@@ -33,7 +33,7 @@ public sealed partial class StudentService : IStudentService
     public async ValueTask<Student> ModifyStudentAsync(Student student) =>
         await TryCatch(async () =>
         {
-            ValidateStudentOnModify(student: student);
+        ValidateStudentOnModify(student: student);
 
             Student maybeStudent =
                await _storageBroker.SelectStudentByIdAsync(studentId: student.Id);

@@ -4,19 +4,13 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using System;
 using Xeptions;
 
 namespace Tnosc.OtripleS.Server.Domain.Students.Exceptions;
 
-public sealed class StudentConcurrencyStorageException : Xeption
+public class NotFoundStudentException : Xeption
 {
-    public StudentConcurrencyStorageException(
-        string message, 
-        Exception innerException)
-        : base(
-            message: message,
-            innerException: innerException)
+    public NotFoundStudentException(string message)
+        : base(message: message) 
     { }
 }
-

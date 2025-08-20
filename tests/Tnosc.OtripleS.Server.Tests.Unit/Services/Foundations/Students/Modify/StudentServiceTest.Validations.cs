@@ -6,6 +6,7 @@
 
 using System;
 using System.Threading.Tasks;
+using Force.DeepCloner;
 using NSubstitute;
 using Shouldly;
 using Tnosc.OtripleS.Server.Domain.Students;
@@ -18,7 +19,7 @@ namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.Students;
 public partial class StudentServiceTest
 {
     [Fact]
-    public async Task ShouldThrowValidationExceptionOnRegisterWhenStudentIsNullAndLogItAsync()
+    public async Task ShouldThrowValidationExceptionOnModifyWhenStudentIsNullAndLogItAsync()
     {
         // given
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
@@ -33,13 +34,13 @@ public partial class StudentServiceTest
 
         // when
 #pragma warning disable CS8604 // Possible null reference argument.
-        ValueTask<Student> registerStudentTask =
-            _studentService.RegisterStudentAsync(student: invalidStudent);
+        ValueTask<Student> modifyStudentTask =
+            _studentService.ModifyStudentAsync(student: invalidStudent);
 #pragma warning restore CS8604 // Possible null reference argument.
 
         // then
         await Assert.ThrowsAsync<StudentValidationException>(() =>
-            registerStudentTask.AsTask());
+            modifyStudentTask.AsTask());
 
         _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
             .LogError(Arg.Is<Xeption>(actualException =>
@@ -58,7 +59,7 @@ public partial class StudentServiceTest
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public async Task ShouldThrowValidationExceptionOnRegisterWhenStudentIsInvalidAndLogItAsync(string? invalidText)
+    public async Task ShouldThrowValidationExceptionOnModifyWhenStudentIsInvalidAndLogItAsync(string? invalidText)
     {
         // given
 #pragma warning disable CS8601 // Possible null reference assignment.
@@ -71,7 +72,7 @@ public partial class StudentServiceTest
         };
 #pragma warning restore CS8601 // Possible null reference assignment.
 
-        var invalidStudentException = 
+        var invalidStudentException =
             new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
 
         invalidStudentException.AddData(
@@ -103,16 +104,17 @@ public partial class StudentServiceTest
             values: "Id is required");
 
         invalidStudentException.AddData(
-            key: nameof(Student.UpdatedBy),
-            values: "Id is required");
-
-        invalidStudentException.AddData(
             key: nameof(Student.CreatedDate),
             values: "Date is required");
 
         invalidStudentException.AddData(
+            key: nameof(Student.UpdatedBy),
+            values: "Id is required");
+
+        invalidStudentException.AddData(
             key: nameof(Student.UpdatedDate),
-            values: "Date is required");
+            "Date is required",
+            $"Date is the same as {nameof(Student.CreatedDate)}");
 
         var expectedStudentValidationException =
             new StudentValidationException(
@@ -120,16 +122,12 @@ public partial class StudentServiceTest
                 innerException: invalidStudentException);
 
         // when
-        ValueTask<Student> registerStudentTask =
-            _studentService.RegisterStudentAsync(student: invalidStudent);
+        ValueTask<Student> modifyStudentTask =
+            _studentService.ModifyStudentAsync(student: invalidStudent);
 
         // then
         await Assert.ThrowsAsync<StudentValidationException>(() =>
-            registerStudentTask.AsTask());
-
-        _dateTimeBrokerMock
-            .Received(requiredNumberOfCalls: 1)
-            .GetCurrentDateTime();
+            modifyStudentTask.AsTask());
 
         _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
             .LogError(Arg.Is<Xeption>(actualException =>
@@ -141,13 +139,12 @@ public partial class StudentServiceTest
     }
 
     [Fact]
-    public async Task ShouldThrowValidationExceptionOnRegisterWhenStudentConstraintsAreInvalidAndLogItAsync()
+    public async Task ShouldThrowValidationExceptionOnModifyWhenStudentConstraintsAreInvalidAndLogItAsync()
     {
-        // given
+        // given 
         DateTimeOffset randomDateTime = GetRandomDateTime();
-        DateTimeOffset dateTime = randomDateTime;
-        Student invalidStudent = CreateRandomStudent(date: randomDateTime);
-        invalidStudent.UpdatedBy = invalidStudent.CreatedBy;
+        Student invalidStudent = CreateRandomStudent();
+        invalidStudent.UpdatedDate = randomDateTime;
 
         invalidStudent.UserId = GetRandomMessage(length: 255);
         invalidStudent.IdentityNumber = GetRandomMessage(length: 255);
@@ -184,15 +181,15 @@ public partial class StudentServiceTest
                 innerException: invalidStudentException);
 
         _dateTimeBrokerMock.GetCurrentDateTime()
-           .Returns(returnThis: dateTime);
+            .Returns(returnThis: randomDateTime);
 
         // when
-        ValueTask<Student> registerStudentTask =
-            _studentService.RegisterStudentAsync(invalidStudent);
+        ValueTask<Student> modifyStudentTask =
+            _studentService.ModifyStudentAsync(invalidStudent);
 
         // then
         await Assert.ThrowsAsync<StudentValidationException>(() =>
-            registerStudentTask.AsTask());
+            modifyStudentTask.AsTask());
 
         _dateTimeBrokerMock
             .Received(requiredNumberOfCalls: 1)
@@ -207,116 +204,25 @@ public partial class StudentServiceTest
             .ShouldBeEmpty();
     }
 
-    [Fact]
-    public async Task ShouldThrowValidationExceptionOnRegisterWhenUpdatedByIsNotSameToCreatedByAndLogItAsync()
-    {
-        // given
-        DateTimeOffset dateTime = GetRandomDateTime();
-        Student randomStudent = CreateRandomStudent(date: dateTime);
-        Student invalidStudent = randomStudent;
-        invalidStudent.UpdatedBy = Guid.NewGuid();
-
-        var invalidStudentException = 
-            new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
-
-        invalidStudentException.AddData(
-            key: nameof(Student.UpdatedBy),
-            values: $"Id is not the same as {nameof(Student.CreatedBy)}");
-
-        var expectedStudentValidationException =
-            new StudentValidationException(
-                message: "Invalid input, fix the errors and try again.",
-                innerException: invalidStudentException);
-
-        _dateTimeBrokerMock
-            .GetCurrentDateTime()
-            .Returns(returnThis: dateTime);
-
-        // when
-        ValueTask<Student> registerStudentTask =
-            _studentService.RegisterStudentAsync(student: invalidStudent);
-
-        // then
-        await Assert.ThrowsAsync<StudentValidationException>(() =>
-            registerStudentTask.AsTask());
-       
-        _dateTimeBrokerMock
-            .Received(requiredNumberOfCalls: 1)
-            .GetCurrentDateTime();
-
-        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
-            .LogError(Arg.Is<Xeption>(actualException =>
-                actualException.SameExceptionAs(expectedStudentValidationException)));
-
-        _storageBrokerMock
-            .ReceivedCalls()
-            .ShouldBeEmpty();
-    }
-
-    [Fact]
-    public async Task ShouldThrowValidationExceptionOnRegisterWhenUpdatedDateIsNotSameToCreatedDateAndLogItAsync()
-    {
-        // given
-        DateTimeOffset dateTime = GetRandomDateTime();
-        Student randomStudent = CreateRandomStudent(date: dateTime);
-        Student invalidStudent = randomStudent;
-        invalidStudent.UpdatedDate = GetRandomDateTime();
-        
-        var invalidStudentException = 
-            new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
-
-        invalidStudentException.AddData(
-            key: nameof(Student.UpdatedDate),
-            values: $"Date is not the same as {nameof(Student.CreatedDate)}");
-
-        var expectedStudentValidationException =
-            new StudentValidationException(
-                message: "Invalid input, fix the errors and try again.",
-                innerException: invalidStudentException);
-
-        _dateTimeBrokerMock.GetCurrentDateTime()
-           .Returns(returnThis: dateTime);
-
-        // when
-        ValueTask<Student> registerStudentTask =
-            _studentService.RegisterStudentAsync(student: invalidStudent);
-
-        // then
-        await Assert.ThrowsAsync<StudentValidationException>(() =>
-            registerStudentTask.AsTask());
-
-        _dateTimeBrokerMock
-            .Received(requiredNumberOfCalls: 1)
-            .GetCurrentDateTime();
-
-        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
-            .LogError(Arg.Is<Xeption>(actualException =>
-              actualException.SameExceptionAs(expectedStudentValidationException)));
-
-        _storageBrokerMock
-            .ReceivedCalls()
-            .ShouldBeEmpty();
-    }
 
     [Theory]
 #pragma warning disable xUnit1037 // There are fewer theory data type arguments than required by the parameters of the test method
     [MemberData(nameof(InvalidMinuteCases))]
 #pragma warning restore xUnit1037 // There are fewer theory data type arguments than required by the parameters of the test method
-    public async Task ShouldThrowValidationExceptionOnRegisterWhenCreatedDateIsNotRecentAndLogItAsync(
-            int minutes)
+    public async Task ShouldThrowValidationExceptionOnModifyIfStudentUpdatedDateIsNotRecentAndLogItAsync(
+           int randomMoreOrLessThanOneMinute)
     {
         // given
-        DateTimeOffset randomDate = GetRandomDateTime();
-        Student randomStudent = CreateRandomStudent(date: randomDate);
+        DateTimeOffset randomDateTime = GetRandomDateTime();
+        Student randomStudent = CreateRandomStudent(date: randomDateTime);
         Student invalidStudent = randomStudent;
-        invalidStudent.CreatedDate = randomDate.AddMinutes(minutes: minutes);
-        invalidStudent.UpdatedDate = invalidStudent.CreatedDate;
+        invalidStudent.UpdatedDate = randomDateTime.AddMinutes(minutes: randomMoreOrLessThanOneMinute);
 
-        var invalidStudentException = 
+        var invalidStudentException =
             new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
 
         invalidStudentException.AddData(
-            key: nameof(Student.CreatedDate),
+            key: nameof(Student.UpdatedDate),
             values: $"Date is not recent");
 
         var expectedStudentValidationException =
@@ -325,15 +231,15 @@ public partial class StudentServiceTest
                 innerException: invalidStudentException);
 
         _dateTimeBrokerMock.GetCurrentDateTime()
-           .Returns(returnThis: randomDate);
+            .Returns(returnThis: randomDateTime);
 
         // when
-        ValueTask<Student> registerStudentTask =
-            _studentService.RegisterStudentAsync(student: invalidStudent);
+        ValueTask<Student> modifyStudentTask =
+            _studentService.ModifyStudentAsync(student: invalidStudent);
 
         // then
         await Assert.ThrowsAsync<StudentValidationException>(() =>
-            registerStudentTask.AsTask());
+            modifyStudentTask.AsTask());
 
         _dateTimeBrokerMock
             .Received(requiredNumberOfCalls: 1)
@@ -346,5 +252,111 @@ public partial class StudentServiceTest
         _storageBrokerMock
             .ReceivedCalls()
             .ShouldBeEmpty();
+    }
+
+    [Fact]
+    public async Task ShouldThrowValidationExceptionOnModifyIfStudentDoesNotExistAndLogItAsync()
+    {
+        // given
+        DateTimeOffset randomDateTime = GetRandomDateTime();
+        Student randomStudent = CreateRandomStudent();
+        Student nonExistentStudent = randomStudent;
+        nonExistentStudent.UpdatedDate = randomDateTime;
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+        Student noStudent = null;
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+        var notFoundStudentException = 
+            new NotFoundStudentException(message: $"Couldn't find student with id: {nonExistentStudent.Id.Value}.");
+
+        var expectedStudentValidationException =
+            new StudentValidationException(
+                message: "Invalid input, fix the errors and try again.",
+                innerException: notFoundStudentException);
+
+        _dateTimeBrokerMock.GetCurrentDateTime()
+            .Returns(returnThis: randomDateTime);
+
+#pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
+        _storageBrokerMock.SelectStudentByIdAsync(studentId: nonExistentStudent.Id)
+          .Returns(returnThis: noStudent);
+#pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
+
+        // when
+        ValueTask<Student> modifyStudentTask =
+            _studentService.ModifyStudentAsync(student: nonExistentStudent);
+
+        // then
+        await Assert.ThrowsAsync<StudentValidationException>(() =>
+            modifyStudentTask.AsTask());
+
+        _dateTimeBrokerMock
+            .Received(requiredNumberOfCalls: 1)
+            .GetCurrentDateTime();
+
+        await _storageBrokerMock
+           .Received(requiredNumberOfCalls: 1)
+           .SelectStudentByIdAsync(nonExistentStudent.Id);
+
+        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
+            .LogError(Arg.Is<Xeption>(actualException =>
+              actualException.SameExceptionAs(expectedStudentValidationException)));
+    }
+
+    [Fact]
+    public async Task ShouldThrowValidationExceptionOnModifyIfStorageCreatedDateNotSameAsCreatedDateAndLogItAsync()
+    {
+        // given
+        int randomNumber = GetRandomNumber();
+        DateTimeOffset randomDateTime = GetRandomDateTime();
+        var differentId = Guid.NewGuid();
+        Guid invalidCreatedBy = differentId;
+        Student randomStudent = CreateRandomStudent(date: randomDateTime);
+        Student invalidStudent = randomStudent;
+        Student storageStudent = randomStudent.DeepClone();
+        invalidStudent.CreatedDate = storageStudent.CreatedDate.AddDays(randomNumber);
+        invalidStudent.UpdatedDate = randomDateTime;
+        invalidStudent.CreatedBy = invalidCreatedBy;
+        StudentId studentId = invalidStudent.Id;
+
+        var invalidStudentException =
+            new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
+
+        invalidStudentException.AddData(
+            key: nameof(Student.CreatedDate),
+            values: $"Date is not the same as {nameof(Student.CreatedDate)}");
+        invalidStudentException.AddData(
+            key: nameof(Student.CreatedBy),
+            values: $"Id is not the same as {nameof(Student.CreatedBy)}");
+
+        var expectedStudentValidationException =
+          new StudentValidationException(
+              message: "Invalid input, fix the errors and try again.",
+              innerException: invalidStudentException);
+
+        _dateTimeBrokerMock.GetCurrentDateTime()
+           .Returns(returnThis: randomDateTime);
+
+        _storageBrokerMock.SelectStudentByIdAsync(studentId: studentId)
+          .Returns(returnThis: storageStudent);
+
+        // when
+        ValueTask<Student> modifyStudentTask =
+            _studentService.ModifyStudentAsync(student: invalidStudent);
+
+        // then
+        await Assert.ThrowsAsync<StudentValidationException>(() =>
+            modifyStudentTask.AsTask());
+
+        _dateTimeBrokerMock
+            .Received(requiredNumberOfCalls: 1)
+            .GetCurrentDateTime();
+
+        await _storageBrokerMock
+           .Received(requiredNumberOfCalls: 1)
+           .SelectStudentByIdAsync(invalidStudent.Id);
+
+        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
+            .LogError(Arg.Is<Xeption>(actualException =>
+              actualException.SameExceptionAs(expectedStudentValidationException)));
     }
 }

@@ -29,13 +29,17 @@ public sealed partial class StudentService
         {
             throw CreateAndLogValidationException(invalidStudentException);
         }
+        catch (NotFoundStudentException notFoundSutdentException)
+        {
+            throw CreateAndLogValidationException(notFoundSutdentException);
+        }
         catch (FailedStudentStorageException failedStudentStorageException)
         {
             throw CreateAndLogCriticalDependencyException(failedStudentStorageException);
         }
-        catch (StudentConcurrencyStorageException studentConcurrencyStorageException)
+        catch (LockedStudentException lockedStudentException)
         {
-            throw CreateAndLogDependencyValidationException(studentConcurrencyStorageException);
+            throw CreateAndLogDependencyValidationException(lockedStudentException);
         }
         catch (AlreadyExistsStudentException alreadyExistsStudentException)
         {

@@ -9,13 +9,14 @@ using Xeptions;
 
 namespace Tnosc.OtripleS.Server.Domain.Students.Exceptions;
 
-public sealed class StudentValidationException : Xeption
+public sealed class LockedStudentException : Xeption
 {
-    public StudentValidationException(
+    public LockedStudentException(
         string message, 
-        Xeption innerException)
-       : base(
-           message: message,
-           innerException: innerException)
+        Exception innerException)
+        : base(
+            message: message,
+            innerException: innerException)
     { }
 }
+

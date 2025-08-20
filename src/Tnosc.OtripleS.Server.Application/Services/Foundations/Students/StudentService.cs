@@ -29,16 +29,30 @@ public sealed partial class StudentService : IStudentService
         _dateTimeBroker = dateTimeBroker;
         _loggingBroker = loggingBroker;
     }
-    public ValueTask<Student> ModifyStudentAsync(Student student) => 
-        throw new NotImplementedException();
+
+    public async ValueTask<Student> ModifyStudentAsync(Student student) =>
+        await TryCatch(async () =>
+        {
+        ValidateStudentOnModify(student: student);
+
+            Student maybeStudent =
+               await _storageBroker.SelectStudentByIdAsync(studentId: student.Id);
+
+            ValidateStorageStudent(
+                storageStudent: maybeStudent,
+                studentId: student.Id);
+
+            ValidateAgainstStorageStudentOnModify(inputStudent: student, storageStudent: maybeStudent);
+
+            return await _storageBroker.UpdateStudentAsync(student: student);
+        });
 
     public async ValueTask<Student> RegisterStudentAsync(Student student) =>
-    await TryCatch(async () =>
-    {
-        ValidateStudentOnRegister(student);
-        return await _storageBroker.InsertStudentAsync(student);
-    });
-    
+        await TryCatch(async () =>
+        {
+            ValidateStudentOnRegister(student: student);
+            return await _storageBroker.InsertStudentAsync(student: student);
+        });
 
     public ValueTask<Student> RemoveStudentByIdAsync(Guid studentId) => 
         throw new NotImplementedException();

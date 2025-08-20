@@ -4,6 +4,7 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using NSubstitute;
@@ -53,6 +54,44 @@ public partial class StudentServiceTests
         await _storageBrokerMock
             .Received(requiredNumberOfCalls: 1)
             .SelectStudentByIdAsync(studentId: studentId);
+    }
 
+    [Fact]
+    public async Task ShouldThrowServiceExceptionOnRetrieveStudentByIdIfExceptionOccursAndLogItAsync()
+    {
+        // given
+        Student randomStudent = CreateRandomStudent();
+        StudentId studentId = randomStudent.Id;
+
+        var serviceException = new Exception();
+
+        var failedStudentServiceException =
+            new FailedStudentServiceException(
+                message: "Failed student service error occurred, contact support.",
+                innerException: serviceException);
+
+        var expectedStudentServiceException =
+            new StudentServiceException(
+                message: "Service error occurred, contact support.",
+                innerException: failedStudentServiceException);
+
+        _storageBrokerMock.SelectStudentByIdAsync(studentId: studentId)
+            .ThrowsAsync(ex: serviceException);
+
+        // when
+        ValueTask<Student> retrievedStudentTask =
+             _studentService.RemoveStudentByIdAsync(studentId: studentId);
+
+        // then
+        await Assert.ThrowsAsync<StudentServiceException>(() =>
+            retrievedStudentTask.AsTask());
+
+        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
+            .LogError(Arg.Is<Xeption>(actualException =>
+              actualException.SameExceptionAs(expectedStudentServiceException)));
+
+        await _storageBrokerMock
+            .Received(requiredNumberOfCalls: 1)
+            .SelectStudentByIdAsync(studentId: studentId);
     }
 }

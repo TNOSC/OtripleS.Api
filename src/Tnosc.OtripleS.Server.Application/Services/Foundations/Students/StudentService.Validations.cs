@@ -136,7 +136,7 @@ public sealed partial class StudentService
     }
 
 
-    private static void ValidateStudentOnModify(Student student)
+    private void ValidateStudentOnModify(Student student)
     {
         ValidateStudent(student);
 
@@ -162,7 +162,9 @@ public sealed partial class StudentService
                     firstDate: student.UpdatedDate,
                     secondDate: student.CreatedDate,
                     secondDateName: nameof(Student.CreatedDate)),
-                    Parameter: nameof(Student.UpdatedDate))
+                    Parameter: nameof(Student.UpdatedDate)),
+                (Rule: IsNotRecent(student.UpdatedDate), Parameter: nameof(Student.UpdatedDate))
+
         );
     }
 

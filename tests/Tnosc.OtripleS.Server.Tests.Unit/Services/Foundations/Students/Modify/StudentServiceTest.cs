@@ -21,10 +21,15 @@ public partial class StudentServiceTest
     public async Task ShouldModifyStudentAsync()
     {
         // given
+        DateTimeOffset randomDateTime = GetRandomDateTime();
         Student randomStudent = CreateRandomStudent();
+        randomStudent.UpdatedDate = randomDateTime;
         Student inputStudent = randomStudent;
         Student storageStudent = randomStudent;
         Student expectedStudent = storageStudent.DeepClone();
+
+        _dateTimeBrokerMock.GetCurrentDateTime()
+            .Returns(returnThis: randomDateTime);
 
         _storageBrokerMock.UpdateStudentAsync(student: inputStudent)
             .Returns(returnThis: storageStudent);

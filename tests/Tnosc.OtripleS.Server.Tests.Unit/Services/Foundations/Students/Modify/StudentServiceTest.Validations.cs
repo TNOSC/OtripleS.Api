@@ -142,8 +142,8 @@ public partial class StudentServiceTest
     {
         // given 
         DateTimeOffset randomDateTime = GetRandomDateTime();
-        Student invalidStudent = CreateRandomStudent(date: randomDateTime);
-        invalidStudent.UpdatedDate = GetRandomDateTime();
+        Student invalidStudent = CreateRandomStudent();
+        invalidStudent.UpdatedDate = randomDateTime;
 
         invalidStudent.UserId = GetRandomMessage(length: 255);
         invalidStudent.IdentityNumber = GetRandomMessage(length: 255);
@@ -179,6 +179,9 @@ public partial class StudentServiceTest
                 message: "Invalid input, fix the errors and try again.",
                 innerException: invalidStudentException);
 
+        _dateTimeBrokerMock.GetCurrentDateTime()
+            .Returns(returnThis: randomDateTime);
+
         // when
         ValueTask<Student> modifyStudentTask =
             _studentService.ModifyStudentAsync(invalidStudent);
@@ -186,6 +189,10 @@ public partial class StudentServiceTest
         // then
         await Assert.ThrowsAsync<StudentValidationException>(() =>
             modifyStudentTask.AsTask());
+
+        _dateTimeBrokerMock
+            .Received(requiredNumberOfCalls: 1)
+            .GetCurrentDateTime();
 
         _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
             .LogError(Arg.Is<Xeption>(actualException =>
@@ -205,10 +212,10 @@ public partial class StudentServiceTest
            int randomMoreOrLessThanOneMinute)
     {
         // given
-        DateTimeOffset randomDate = GetRandomDateTime();
-        Student randomStudent = CreateRandomStudent(date: randomDate);
+        DateTimeOffset randomDateTime = GetRandomDateTime();
+        Student randomStudent = CreateRandomStudent(date: randomDateTime);
         Student invalidStudent = randomStudent;
-        invalidStudent.UpdatedDate = randomDate.AddMinutes(minutes: randomMoreOrLessThanOneMinute);
+        invalidStudent.UpdatedDate = randomDateTime.AddMinutes(minutes: randomMoreOrLessThanOneMinute);
 
         var invalidStudentException =
             new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
@@ -223,7 +230,7 @@ public partial class StudentServiceTest
                 innerException: invalidStudentException);
 
         _dateTimeBrokerMock.GetCurrentDateTime()
-           .Returns(returnThis: randomDate);
+            .Returns(returnThis: randomDateTime);
 
         // when
         ValueTask<Student> modifyStudentTask =

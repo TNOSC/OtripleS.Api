@@ -4,18 +4,13 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using System;
 using Xeptions;
 
 namespace Tnosc.OtripleS.Server.Domain.Students.Exceptions;
 
-public sealed class StudentValidationException : Xeption
+public class NotFoundStudentException : Xeption
 {
-    public StudentValidationException(
-        string message, 
-        Xeption innerException)
-       : base(
-           message: message,
-           innerException: innerException)
+    public NotFoundStudentException(string message)
+        : base(message: message) 
     { }
 }

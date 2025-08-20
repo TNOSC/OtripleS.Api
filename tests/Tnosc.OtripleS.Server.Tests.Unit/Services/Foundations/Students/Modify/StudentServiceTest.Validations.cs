@@ -252,4 +252,51 @@ public partial class StudentServiceTest
             .ReceivedCalls()
             .ShouldBeEmpty();
     }
+
+    [Fact]
+    public async Task ShouldThrowValidationExceptionOnModifyIfStudentDoesNotExistAndLogItAsync()
+    {
+        // given
+        DateTimeOffset randomDateTime = GetRandomDateTime();
+        Student randomStudent = CreateRandomStudent();
+        Student nonExistentStudent = randomStudent;
+        nonExistentStudent.UpdatedDate = randomDateTime;
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+        Student noStudent = null;
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+        var notFoundStudentException = new NotFoundStudentException(message: $"Couldn't find student with id: {nonExistentStudent.Id}.");
+
+        var expectedStudentValidationException =
+            new StudentValidationException(
+                message: "Invalid input, fix the errors and try again.",
+                innerException: notFoundStudentException);
+
+        _dateTimeBrokerMock.GetCurrentDateTime()
+            .Returns(returnThis: randomDateTime);
+
+#pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
+        _storageBrokerMock.SelectStudentByIdAsync(studentId: nonExistentStudent.Id)
+          .Returns(returnThis: noStudent);
+#pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
+
+        // when
+        ValueTask<Student> modifyStudentTask =
+            _studentService.ModifyStudentAsync(student: nonExistentStudent);
+
+        // then
+        await Assert.ThrowsAsync<StudentValidationException>(() =>
+            modifyStudentTask.AsTask());
+
+        _dateTimeBrokerMock
+            .Received(requiredNumberOfCalls: 1)
+            .GetCurrentDateTime();
+
+        await _storageBrokerMock
+           .Received(requiredNumberOfCalls: 1)
+           .SelectStudentByIdAsync(nonExistentStudent.Id);
+
+        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
+            .LogError(Arg.Is<Xeption>(actualException =>
+              actualException.SameExceptionAs(expectedStudentValidationException)));
+    }
 }

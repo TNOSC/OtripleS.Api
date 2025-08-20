@@ -21,3 +21,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification = "<Pending>", Scope = "type", Target = "~T:Tnosc.OtripleS.Server.Domain.Students.Exceptions.FailedStudentServiceException")]
 [assembly: SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification = "<Pending>", Scope = "type", Target = "~T:Tnosc.OtripleS.Server.Domain.Students.Exceptions.StudentServiceException")]
 [assembly: SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification = "<Pending>", Scope = "type", Target = "~T:Tnosc.OtripleS.Server.Domain.Students.Exceptions.StudentConcurrencyStorageException")]
+[assembly: SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification = "<Pending>", Scope = "type", Target = "~T:Tnosc.OtripleS.Server.Domain.Students.Exceptions.NotFoundStudentException")]

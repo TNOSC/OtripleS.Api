@@ -18,34 +18,34 @@ public sealed partial class StudentService
         ValidateStudent(student);
 
         Validate(
-            (Rule: IsInvalid(student.Id), Parameter: nameof(Student.Id)),
-            (Rule: IsInvalid(student.UserId), Parameter: nameof(Student.UserId)),
-            (Rule: IsInvalid(student.IdentityNumber), Parameter: nameof(Student.IdentityNumber)),
-            (Rule: IsInvalid(student.FirstName), Parameter: nameof(Student.FirstName)),
-            (Rule: IsInvalid(student.LastName), Parameter: nameof(Student.LastName)),
-            (Rule: IsInvalid(student.BirthDate), Parameter: nameof(Student.BirthDate)),
-            (Rule: IsInvalid(student.CreatedBy), Parameter: nameof(Student.CreatedBy)),
-            (Rule: IsInvalid(student.UpdatedBy), Parameter: nameof(Student.UpdatedBy)),
-            (Rule: IsInvalid(student.CreatedDate), Parameter: nameof(Student.CreatedDate)),
-            (Rule: IsInvalid(student.UpdatedDate), Parameter: nameof(Student.UpdatedDate)),
+                (Rule: IsInvalid(student.Id), Parameter: nameof(Student.Id)),
+                (Rule: IsInvalid(student.UserId), Parameter: nameof(Student.UserId)),
+                (Rule: IsInvalid(student.IdentityNumber), Parameter: nameof(Student.IdentityNumber)),
+                (Rule: IsInvalid(student.FirstName), Parameter: nameof(Student.FirstName)),
+                (Rule: IsInvalid(student.LastName), Parameter: nameof(Student.LastName)),
+                (Rule: IsInvalid(student.BirthDate), Parameter: nameof(Student.BirthDate)),
+                (Rule: IsInvalid(student.CreatedBy), Parameter: nameof(Student.CreatedBy)),
+                (Rule: IsInvalid(student.UpdatedBy), Parameter: nameof(Student.UpdatedBy)),
+                (Rule: IsInvalid(student.CreatedDate), Parameter: nameof(Student.CreatedDate)),
+                (Rule: IsInvalid(student.UpdatedDate), Parameter: nameof(Student.UpdatedDate)),
 
-            (Rule: IsInvalidLength(student.UserId, 100), Parameter: nameof(Student.UserId)),
-            (Rule: IsInvalidLength(student.IdentityNumber, 50), Parameter: nameof(Student.IdentityNumber)),
-            (Rule: IsInvalidLength(student.FirstName, 100), Parameter: nameof(Student.FirstName)),
-            (Rule: IsInvalidLength(student.MiddleName, 100), Parameter: nameof(Student.MiddleName)),
-            (Rule: IsInvalidLength(student.LastName, 100), Parameter: nameof(Student.LastName)),
+                (Rule: IsInvalidLength(student.UserId, 100), Parameter: nameof(Student.UserId)),
+                (Rule: IsInvalidLength(student.IdentityNumber, 50), Parameter: nameof(Student.IdentityNumber)),
+                (Rule: IsInvalidLength(student.FirstName, 100), Parameter: nameof(Student.FirstName)),
+                (Rule: IsInvalidLength(student.MiddleName, 100), Parameter: nameof(Student.MiddleName)),
+                (Rule: IsInvalidLength(student.LastName, 100), Parameter: nameof(Student.LastName)),
 
-            (Rule: IsNotRecent(student.CreatedDate), Parameter: nameof(Student.CreatedDate)),
-            (Rule: IsNotSame(
-                firstId: student.UpdatedBy,
-                secondId: student.CreatedBy,
-                secondIdName: nameof(Student.CreatedBy)),
-                Parameter: nameof(Student.UpdatedBy)),
-            (Rule: IsNotSame(
-                firstDate: student.UpdatedDate,
-                secondDate: student.CreatedDate,
-                secondDateName: nameof(Student.CreatedDate)),
-                Parameter: nameof(Student.UpdatedDate))
+                (Rule: IsNotRecent(student.CreatedDate), Parameter: nameof(Student.CreatedDate)),
+                (Rule: IsNotSame(
+                    firstId: student.UpdatedBy,
+                    secondId: student.CreatedBy,
+                    secondIdName: nameof(Student.CreatedBy)),
+                    Parameter: nameof(Student.UpdatedBy)),
+                (Rule: IsNotSame(
+                    firstDate: student.UpdatedDate,
+                    secondDate: student.CreatedDate,
+                    secondDateName: nameof(Student.CreatedDate)),
+                    Parameter: nameof(Student.UpdatedDate))
         );
     }
 
@@ -136,28 +136,33 @@ public sealed partial class StudentService
     }
 
 
-    private void ValidateStudentOnModify(Student student)
+    private static void ValidateStudentOnModify(Student student)
     {
         ValidateStudent(student);
 
         Validate(
-               (Rule: IsInvalid(student.Id), Parameter: nameof(Student.Id)),
-               (Rule: IsInvalid(student.UserId), Parameter: nameof(Student.UserId)),
-               (Rule: IsInvalid(student.IdentityNumber), Parameter: nameof(Student.IdentityNumber)),
-               (Rule: IsInvalid(student.FirstName), Parameter: nameof(Student.FirstName)),
-               (Rule: IsInvalid(student.LastName), Parameter: nameof(Student.LastName)),
-               (Rule: IsInvalid(student.BirthDate), Parameter: nameof(Student.BirthDate)),
-               (Rule: IsInvalid(student.CreatedBy), Parameter: nameof(Student.CreatedBy)),
-               (Rule: IsInvalid(student.UpdatedBy), Parameter: nameof(Student.UpdatedBy)),
-               (Rule: IsInvalid(student.CreatedDate), Parameter: nameof(Student.CreatedDate)),
-               (Rule: IsInvalid(student.UpdatedDate), Parameter: nameof(Student.UpdatedDate)),
-               (Rule: IsNotRecent(student.UpdatedDate), Parameter: nameof(Student.UpdatedDate)),
+                (Rule: IsInvalid(student.Id), Parameter: nameof(Student.Id)),
+                (Rule: IsInvalid(student.UserId), Parameter: nameof(Student.UserId)),
+                (Rule: IsInvalid(student.IdentityNumber), Parameter: nameof(Student.IdentityNumber)),
+                (Rule: IsInvalid(student.FirstName), Parameter: nameof(Student.FirstName)),
+                (Rule: IsInvalid(student.LastName), Parameter: nameof(Student.LastName)),
+                (Rule: IsInvalid(student.BirthDate), Parameter: nameof(Student.BirthDate)),
+                (Rule: IsInvalid(student.CreatedBy), Parameter: nameof(Student.CreatedBy)),
+                (Rule: IsInvalid(student.UpdatedBy), Parameter: nameof(Student.UpdatedBy)),
+                (Rule: IsInvalid(student.CreatedDate), Parameter: nameof(Student.CreatedDate)),
+                (Rule: IsInvalid(student.UpdatedDate), Parameter: nameof(Student.UpdatedDate)),
 
-               (Rule: IsSame(
-                   firstDate: student.UpdatedDate,
-                   secondDate: student.CreatedDate,
-                   secondDateName: nameof(Student.CreatedDate)),
-                   Parameter: nameof(Student.UpdatedDate))
+                (Rule: IsInvalidLength(student.UserId, 100), Parameter: nameof(Student.UserId)),
+                (Rule: IsInvalidLength(student.IdentityNumber, 50), Parameter: nameof(Student.IdentityNumber)),
+                (Rule: IsInvalidLength(student.FirstName, 100), Parameter: nameof(Student.FirstName)),
+                (Rule: IsInvalidLength(student.MiddleName, 100), Parameter: nameof(Student.MiddleName)),
+                (Rule: IsInvalidLength(student.LastName, 100), Parameter: nameof(Student.LastName)),
+
+                (Rule: IsSame(
+                    firstDate: student.UpdatedDate,
+                    secondDate: student.CreatedDate,
+                    secondDateName: nameof(Student.CreatedDate)),
+                    Parameter: nameof(Student.UpdatedDate))
         );
     }
 

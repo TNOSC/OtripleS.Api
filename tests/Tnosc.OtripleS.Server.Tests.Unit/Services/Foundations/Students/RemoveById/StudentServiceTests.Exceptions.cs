@@ -6,11 +6,9 @@
 
 using System;
 using System.Threading.Tasks;
-using Force.DeepCloner;
 using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
-using Shouldly;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Tnosc.OtripleS.Server.Domain.Students.Exceptions;
 using Xeptions;
@@ -67,7 +65,7 @@ public partial class StudentServiceTests
     }
 
     [Fact]
-    public async Task 
+    public async Task
         ShouldThrowDependencyValidationExceptionOnRemoveStudentByIdIfDatabaseUpdateConcurrencyErrorOccursAndLogItAsync()
     {
         // given

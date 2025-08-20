@@ -18,7 +18,7 @@ namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.Students;
 public partial class StudentServiceTest
 {
     [Fact]
-    public async Task ShouldThrowValidationExceptionOnRemoveByIdWhenIdIsInvalidAndLogItAsync()
+    public async Task ShouldThrowValidationExceptionOnRemoveStudentByIdWhenIdIsInvalidAndLogItAsync()
     {
         // given
         Guid inputStudentId = Guid.Empty;
@@ -58,7 +58,7 @@ public partial class StudentServiceTest
 
 
     [Fact]
-    public async Task ShouldThrowNotFoundExceptionOnRemoveByIdIfPostIsNotFoundAndLogItAsync()
+    public async Task ShouldThrowNotFoundExceptionOnRemoveStudentByIdIfStudentIsNotFoundAndLogItAsync()
     {
         //given
         var someStudentId = Guid.NewGuid();

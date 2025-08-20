@@ -6,7 +6,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Threading.Tasks;
 using Tnosc.OtripleS.Server.Application.Brokers.DateTimes;
 using Tnosc.OtripleS.Server.Application.Brokers.Loggings;
@@ -59,9 +58,13 @@ public sealed partial class StudentService : IStudentService
         await TryCatch(async () =>
         {
             ValidateStudentId(studentId);
-            Student student =
+
+            Student maybeStudent =
                   await _storageBroker.SelectStudentByIdAsync(studentId: studentId);
-            return await _storageBroker.DeleteStudentAsync(student: student);
+
+            ValidateStorageStudent(maybeStudent, studentId);
+
+            return await _storageBroker.DeleteStudentAsync(student: maybeStudent);
         });
 
     public ValueTask<IEnumerable<Student>> RetrieveAllStudentsAsync() =>

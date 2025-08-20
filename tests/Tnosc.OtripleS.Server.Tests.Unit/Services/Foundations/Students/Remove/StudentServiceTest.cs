@@ -16,7 +16,7 @@ namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.Students;
 public partial class StudentServiceTest
 {
     [Fact]
-    public async Task ShouldRemoveStudentAsync()
+    public async Task ShouldRemoveStudentByIdAsync()
     {
         // given
         Student randomStudent = CreateRandomStudent();

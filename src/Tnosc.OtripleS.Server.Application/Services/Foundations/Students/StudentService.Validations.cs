@@ -176,4 +176,12 @@ public sealed partial class StudentService
                Condition = firstDate == secondDate,
                Message = $"Date is the same as {secondDateName}"
            };
+
+    private static void ValidateStorageStudent(Student storageStudent, Guid studentId)
+    {
+        if (storageStudent is null)
+        {
+            throw new NotFoundStudentException(message: $"Couldn't find student with id: {studentId}.");
+        }
+    }
 }

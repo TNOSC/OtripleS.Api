@@ -25,11 +25,15 @@ public partial class StudentServiceTest
         Student randomStudent = CreateRandomStudent();
         randomStudent.UpdatedDate = randomDateTime;
         Student inputStudent = randomStudent;
+        Student beforeUpdateStorageStudent = randomStudent.DeepClone();
         Student storageStudent = randomStudent;
         Student expectedStudent = storageStudent.DeepClone();
 
         _dateTimeBrokerMock.GetCurrentDateTime()
             .Returns(returnThis: randomDateTime);
+
+        _storageBrokerMock.SelectStudentByIdAsync(studentId: inputStudent.Id)
+         .Returns(returnThis: beforeUpdateStorageStudent);
 
         _storageBrokerMock.UpdateStudentAsync(student: inputStudent)
             .Returns(returnThis: storageStudent);
@@ -45,10 +49,9 @@ public partial class StudentServiceTest
             .Received(requiredNumberOfCalls: 1)
             .UpdateStudentAsync(student: inputStudent);
 
-        _storageBrokerMock
-            .ReceivedCalls()
-            .Count()
-            .ShouldBe(expected: 1);
+        await _storageBrokerMock
+           .Received(requiredNumberOfCalls: 1)
+           .SelectStudentByIdAsync(inputStudent.Id);
 
         _loggingBrokerMock
             .ReceivedCalls()

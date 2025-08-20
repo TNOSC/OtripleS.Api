@@ -29,6 +29,10 @@ public sealed partial class StudentService
         {
             throw CreateAndLogValidationException(invalidStudentException);
         }
+        catch (NotFoundStudentException notFoundSutdentException)
+        {
+            throw CreateAndLogValidationException(notFoundSutdentException);
+        }
         catch (FailedStudentStorageException failedStudentStorageException)
         {
             throw CreateAndLogCriticalDependencyException(failedStudentStorageException);

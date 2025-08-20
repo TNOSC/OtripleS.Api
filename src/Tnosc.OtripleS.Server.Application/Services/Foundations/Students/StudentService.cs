@@ -34,6 +34,12 @@ public sealed partial class StudentService : IStudentService
         await TryCatch(async () =>
         {
             ValidateStudentOnModify(student);
+
+            Student maybeStudent =
+               await _storageBroker.SelectStudentByIdAsync(student.Id);
+
+            ValidateStorageStudent(maybeStudent, student.Id);
+
             return await _storageBroker.UpdateStudentAsync(student);
         });
 

@@ -33,21 +33,25 @@ public sealed partial class StudentService : IStudentService
     public async ValueTask<Student> ModifyStudentAsync(Student student) =>
         await TryCatch(async () =>
         {
-            ValidateStudentOnModify(student);
+            ValidateStudentOnModify(student: student);
 
             Student maybeStudent =
-               await _storageBroker.SelectStudentByIdAsync(student.Id);
+               await _storageBroker.SelectStudentByIdAsync(studentId: student.Id);
 
-            ValidateStorageStudent(maybeStudent, student.Id);
+            ValidateStorageStudent(
+                storageStudent: maybeStudent,
+                studentId: student.Id);
 
-            return await _storageBroker.UpdateStudentAsync(student);
+            ValidateAgainstStorageStudentOnModify(inputStudent: student, storageStudent: maybeStudent);
+
+            return await _storageBroker.UpdateStudentAsync(student: student);
         });
 
     public async ValueTask<Student> RegisterStudentAsync(Student student) =>
         await TryCatch(async () =>
         {
-            ValidateStudentOnRegister(student);
-            return await _storageBroker.InsertStudentAsync(student);
+            ValidateStudentOnRegister(student: student);
+            return await _storageBroker.InsertStudentAsync(student: student);
         });
 
     public ValueTask<Student> RemoveStudentByIdAsync(Guid studentId) => 

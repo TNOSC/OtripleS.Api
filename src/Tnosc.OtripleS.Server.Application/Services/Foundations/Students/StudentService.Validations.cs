@@ -40,12 +40,12 @@ public sealed partial class StudentService
                     firstId: student.UpdatedBy,
                     secondId: student.CreatedBy,
                     secondIdName: nameof(Student.CreatedBy)),
-                    Parameter: nameof(Student.UpdatedBy)),
+                Parameter: nameof(Student.UpdatedBy)),
                 (Rule: IsNotSame(
                     firstDate: student.UpdatedDate,
                     secondDate: student.CreatedDate,
                     secondDateName: nameof(Student.CreatedDate)),
-                    Parameter: nameof(Student.UpdatedDate))
+                Parameter: nameof(Student.UpdatedDate))
         );
     }
 
@@ -69,7 +69,7 @@ public sealed partial class StudentService
         Message = "Text is required"
     };
 
-   
+
 
     private static dynamic IsInvalid(DateTimeOffset date) => new
     {
@@ -162,7 +162,7 @@ public sealed partial class StudentService
                     firstDate: student.UpdatedDate,
                     secondDate: student.CreatedDate,
                     secondDateName: nameof(Student.CreatedDate)),
-                    Parameter: nameof(Student.UpdatedDate)),
+                Parameter: nameof(Student.UpdatedDate)),
                 (Rule: IsNotRecent(student.UpdatedDate), Parameter: nameof(Student.UpdatedDate))
 
         );
@@ -184,4 +184,18 @@ public sealed partial class StudentService
             throw new NotFoundStudentException(message: $"Couldn't find student with id: {studentId}.");
         }
     }
+
+    private static void ValidateAgainstStorageStudentOnModify(Student inputStudent, Student storageStudent) => 
+        Validate(
+            (Rule: IsNotSame(
+                firstId: inputStudent.CreatedBy,
+                secondId: storageStudent.CreatedBy,
+                secondIdName: nameof(Student.CreatedBy)),
+            Parameter: nameof(Student.CreatedBy)),
+            (Rule: IsNotSame(
+                firstDate: inputStudent.CreatedDate,
+                secondDate: storageStudent.CreatedDate,
+                secondDateName: nameof(Student.CreatedDate)),
+            Parameter: nameof(Student.CreatedDate))
+        );
 }

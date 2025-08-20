@@ -25,7 +25,7 @@ public partial class StudentServiceTests
         Student expectedStudent = storageStudent.DeepClone();
 
         _storageBrokerMock.SelectStudentByIdAsync(studentId: studentId)
-         .Returns(returnThis: storageStudent);
+            .Returns(returnThis: storageStudent);
 
         // when
         Student actualStudent =

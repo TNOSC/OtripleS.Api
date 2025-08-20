@@ -136,4 +136,71 @@ public partial class StudentServiceTest
             .ReceivedCalls()
             .ShouldBeEmpty();
     }
+
+    [Fact]
+    public async Task ShouldThrowValidationExceptionOnModifyWhenStudentConstraintsAreInvalidAndLogItAsync()
+    {
+        // given
+        DateTimeOffset randomDateTime = GetRandomDateTime();
+        DateTimeOffset dateTime = randomDateTime;
+        Student invalidStudent = CreateRandomStudent(date: randomDateTime);
+        invalidStudent.UpdatedBy = invalidStudent.CreatedBy;
+
+        invalidStudent.UserId = GetRandomMessage(length: 255);
+        invalidStudent.IdentityNumber = GetRandomMessage(length: 255);
+        invalidStudent.FirstName = GetRandomMessage(length: 255);
+        invalidStudent.MiddleName = GetRandomMessage(length: 255);
+        invalidStudent.LastName = GetRandomMessage(length: 255);
+
+        var invalidStudentException =
+            new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
+
+        invalidStudentException.AddData(
+               key: nameof(Student.UserId),
+               values: "Text cannot be longer than 100 characters");
+
+        invalidStudentException.AddData(
+              key: nameof(Student.IdentityNumber),
+              values: "Text cannot be longer than 50 characters");
+
+        invalidStudentException.AddData(
+            key: nameof(Student.FirstName),
+            values: "Text cannot be longer than 100 characters");
+
+        invalidStudentException.AddData(
+            key: nameof(Student.MiddleName),
+            values: "Text cannot be longer than 100 characters");
+
+        invalidStudentException.AddData(
+           key: nameof(Student.LastName),
+           values: "Text cannot be longer than 100 characters");
+
+        var expectedStudentValidationException =
+            new StudentValidationException(
+                message: "Invalid input, fix the errors and try again.",
+                innerException: invalidStudentException);
+
+        _dateTimeBrokerMock.GetCurrentDateTime()
+           .Returns(returnThis: dateTime);
+
+        // when
+        ValueTask<Student> modifyStudentTask =
+            _studentService.ModifyStudentAsync(invalidStudent);
+
+        // then
+        await Assert.ThrowsAsync<StudentValidationException>(() =>
+            modifyStudentTask.AsTask());
+
+        _dateTimeBrokerMock
+            .Received(requiredNumberOfCalls: 1)
+            .GetCurrentDateTime();
+
+        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
+            .LogError(Arg.Is<Xeption>(actualException =>
+                actualException.SameExceptionAs(expectedStudentValidationException)));
+
+        _storageBrokerMock
+            .ReceivedCalls()
+            .ShouldBeEmpty();
+    }
 }

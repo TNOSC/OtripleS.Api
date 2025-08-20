@@ -88,6 +88,6 @@ public partial class StudentServiceTests
 
         await _storageBrokerMock
           .Received(requiredNumberOfCalls: 1)
-          .SelectStudentByIdAsync(someStudentId);
+          .SelectStudentByIdAsync(studentId: someStudentId);
     }
 }

@@ -10,6 +10,7 @@ using Force.DeepCloner;
 using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
+using Shouldly;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Tnosc.OtripleS.Server.Domain.Students.Exceptions;
 using Xeptions;
@@ -110,5 +111,44 @@ public partial class StudentServiceTests
         await _storageBrokerMock
             .Received(requiredNumberOfCalls: 1)
             .DeleteStudentAsync(student: storageStudent);
+    }
+
+    [Fact]
+    public async Task ShouldThrowServiceExceptionOnRemoveStudentByIdIfExceptionOccursAndLogItAsync()
+    {
+        // given
+        Student randomStudent = CreateRandomStudent();
+        StudentId studentId = randomStudent.Id;
+
+        var serviceException = new Exception();
+
+        var failedStudentServiceException =
+            new FailedStudentServiceException(
+                message: "Failed student service error occurred, contact support.",
+                innerException: serviceException);
+
+        var expectedStudentServiceException =
+            new StudentServiceException(
+                message: "Service error occurred, contact support.",
+                innerException: failedStudentServiceException);
+
+        _storageBrokerMock.SelectStudentByIdAsync(studentId: studentId)
+            .ThrowsAsync(ex: serviceException);
+
+        // when
+        ValueTask<Student> modifyStudentTask =
+             _studentService.RemoveStudentByIdAsync(studentId: studentId);
+
+        // then
+        await Assert.ThrowsAsync<StudentServiceException>(() =>
+            modifyStudentTask.AsTask());
+
+        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
+            .LogError(Arg.Is<Xeption>(actualException =>
+              actualException.SameExceptionAs(expectedStudentServiceException)));
+
+        await _storageBrokerMock
+            .Received(requiredNumberOfCalls: 1)
+            .SelectStudentByIdAsync(studentId: studentId);
     }
 }

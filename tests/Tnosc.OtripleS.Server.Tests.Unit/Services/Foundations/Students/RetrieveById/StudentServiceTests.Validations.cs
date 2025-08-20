@@ -75,12 +75,12 @@ public partial class StudentServiceTests
 #pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
 
         //when
-        ValueTask<Student> removeStudentTask =
+        ValueTask<Student> retrieveStudentTask =
            _studentService.RetrieveStudentByIdAsync(studentId: someStudentId);
 
         // then
         await Assert.ThrowsAsync<StudentValidationException>(() =>
-            removeStudentTask.AsTask());
+            retrieveStudentTask.AsTask());
 
         _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
             .LogError(Arg.Is<Xeption>(actualException =>

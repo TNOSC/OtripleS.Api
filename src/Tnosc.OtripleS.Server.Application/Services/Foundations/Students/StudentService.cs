@@ -75,6 +75,11 @@ public sealed partial class StudentService : IStudentService
         {
             ValidateStudentId(studentId);
 
-            return await _storageBroker.SelectStudentByIdAsync(studentId: studentId);
+            Student maybeStudent =
+                  await _storageBroker.SelectStudentByIdAsync(studentId: studentId);
+
+            ValidateStorageStudent(maybeStudent, studentId);
+
+            return maybeStudent;
         });
 }

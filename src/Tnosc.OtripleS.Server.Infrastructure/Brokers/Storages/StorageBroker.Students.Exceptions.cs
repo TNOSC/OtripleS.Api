@@ -24,12 +24,12 @@ internal partial class StorageBroker
         }
         catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
         {
-            var studentConcurrencyStorageException =
-                new StudentConcurrencyStorageException(
-                    message: "Failed student concurrency storage error occurred, try again.",
+            var lockedStudentException =
+                new LockedStudentException(
+                    message: "Locked student record exception, please try again later.",
                     innerException: dbUpdateConcurrencyException);
 
-            throw studentConcurrencyStorageException;
+            throw lockedStudentException;
         }
         catch (DbUpdateException dbUpdateException)
         {

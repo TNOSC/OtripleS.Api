@@ -9,9 +9,9 @@ using Xeptions;
 
 namespace Tnosc.OtripleS.Server.Domain.Students.Exceptions;
 
-public sealed class StudentConcurrencyStorageException : Xeption
+public sealed class LockedStudentException : Xeption
 {
-    public StudentConcurrencyStorageException(
+    public LockedStudentException(
         string message, 
         Exception innerException)
         : base(

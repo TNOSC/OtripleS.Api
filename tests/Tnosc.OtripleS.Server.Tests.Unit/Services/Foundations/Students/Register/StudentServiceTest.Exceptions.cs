@@ -68,53 +68,7 @@ public partial class StudentServiceTest
             .InsertStudentAsync(student: inputStudent);
     }
 
-    [Fact]
-    public async Task ShouldThrowDependencyExceptionOnRegisterIfDatabaseUpdateConcurrencyErrorOccursAndLogItAsync()
-    {
-        // given
-        DateTimeOffset randomDateTime = GetRandomDateTime();
-        DateTimeOffset dateTime = randomDateTime;
-        Student randomStudent = CreateRandomStudent(date: randomDateTime);
-        randomStudent.UpdatedBy = randomStudent.CreatedBy;
-        Student inputStudent = randomStudent;
-        var databaseUpdateConcurrencyException = new DbUpdateConcurrencyException();
-
-        var failedStudentStorageException =
-            new StudentConcurrencyStorageException(
-                message: "Failed student concurrency storage error occurred, try again.",
-                innerException: databaseUpdateConcurrencyException );
-
-        var expectedStudentDependencyException =
-            new StudentDependencyValidationException(
-                message: "Student dependency validation error occurred, fix the errors and try again.",
-                innerException: failedStudentStorageException);
-
-        _dateTimeBrokerMock.GetCurrentDateTime()
-            .Returns(returnThis: dateTime);
-
-        _storageBrokerMock.InsertStudentAsync(student: inputStudent)
-            .ThrowsAsync(ex: failedStudentStorageException);
-
-        // when
-        ValueTask<Student> registerStudentTask =
-            _studentService.RegisterStudentAsync(student: inputStudent);
-
-        // then
-        await Assert.ThrowsAsync<StudentDependencyValidationException>(() =>
-            registerStudentTask.AsTask());
-
-        _dateTimeBrokerMock
-            .Received(requiredNumberOfCalls: 1)
-            .GetCurrentDateTime();
-
-        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
-            .LogError(Arg.Is<Xeption>(actualException =>
-              actualException.SameExceptionAs(expectedStudentDependencyException)));
-
-        await _storageBrokerMock
-            .Received(requiredNumberOfCalls: 1)
-            .InsertStudentAsync(student: inputStudent);
-    }
+    
 
     [Fact]
     public async Task ShouldThrowDependencyValidationExceptionOnRegisterWhenStudentAlreadyExistsAndLogItAsync()

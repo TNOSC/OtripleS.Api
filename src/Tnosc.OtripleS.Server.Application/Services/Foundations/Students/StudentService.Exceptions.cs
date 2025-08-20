@@ -37,9 +37,9 @@ public sealed partial class StudentService
         {
             throw CreateAndLogCriticalDependencyException(failedStudentStorageException);
         }
-        catch (StudentConcurrencyStorageException studentConcurrencyStorageException)
+        catch (LockedStudentException lockedStudentException)
         {
-            throw CreateAndLogDependencyValidationException(studentConcurrencyStorageException);
+            throw CreateAndLogDependencyValidationException(lockedStudentException);
         }
         catch (AlreadyExistsStudentException alreadyExistsStudentException)
         {

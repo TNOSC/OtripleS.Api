@@ -4,6 +4,7 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using EFxceptions.Models.Exceptions;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ namespace Tnosc.OtripleS.Server.Infrastructure.Brokers.Storages;
 internal partial class StorageBroker
 {
     private delegate ValueTask<Student> ReturningStudentFunction();
+    private delegate ValueTask<IEnumerable<Student>> ReturningStudentsFunction();
 
     private static async ValueTask<Student> TryCatch(ReturningStudentFunction returningStudentFunction)
     {
@@ -48,6 +50,23 @@ internal partial class StorageBroker
                     innerException: duplicateKeyException);
 
             throw alreadyExistsStudentException;
+        }
+    }
+
+    private static async ValueTask<IEnumerable<Student>> TryCatch(ReturningStudentsFunction returningStudentsFunction)
+    {
+        try
+        {
+            return await returningStudentsFunction();
+        }
+        catch (DbUpdateException dbUpdateException)
+        {
+            var failedStudentStorageException =
+                new FailedStudentStorageException(
+                    message: "Failed student storage error occurred, contact support.",
+                    innerException: dbUpdateException);
+
+            throw failedStudentStorageException;
         }
     }
 }

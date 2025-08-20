@@ -68,7 +68,7 @@ public sealed partial class StudentService : IStudentService
         });
 
     public async ValueTask<IEnumerable<Student>> RetrieveAllStudentsAsync() =>
-        await _storageBroker.SelectAllStudentsAsync();
+        await TryCatch(_storageBroker.SelectAllStudentsAsync);
 
     public async ValueTask<Student> RetrieveStudentByIdAsync(Guid studentId) =>
         await TryCatch(async () =>

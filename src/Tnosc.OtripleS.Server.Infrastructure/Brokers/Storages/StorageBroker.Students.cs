@@ -16,18 +16,18 @@ internal partial class StorageBroker
 {
     public DbSet<Student> Students { get; set; }
 
-    public ValueTask<Student> InsertStudentAsync(Student student) =>
-         TryCatch(async () => await InsertAsync(@object: student));
+    public async ValueTask<Student> InsertStudentAsync(Student student) =>
+         await TryCatch(async () => await InsertAsync(@object: student));
 
-    public async ValueTask<IEnumerable<Student>> SelectAllStudentsAsync() => 
-        await SelectAllAsync<Student>();
+    public async ValueTask<IEnumerable<Student>> SelectAllStudentsAsync() =>
+        await TryCatch(SelectAllAsync<Student>);
 
     public async ValueTask<Student> SelectStudentByIdAsync(Guid studentId) =>
-        await SelectAsync<Student>(objectIds: studentId);
+        await TryCatch(async () => await SelectAsync<Student>(objectIds: studentId));
 
     public async ValueTask<Student> UpdateStudentAsync(Student student) =>
-        await UpdateAsync(@object: student);
+         await TryCatch(async () => await UpdateAsync(@object: student));
 
     public async ValueTask<Student> DeleteStudentAsync(Student student) =>
-        await DeleteAsync(@object: student);
+         await TryCatch(async () => await DeleteAsync(@object: student));
 }

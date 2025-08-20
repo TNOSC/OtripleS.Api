@@ -5,6 +5,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Tnosc.OtripleS.Server.Domain.Students.Exceptions;
@@ -15,6 +16,7 @@ namespace Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 public sealed partial class StudentService
 {
     private delegate ValueTask<Student> ReturningStudentFunction();
+    private delegate ValueTask<IEnumerable<Student>> ReturningStudentsFunction();
     private async ValueTask<Student> TryCatch(ReturningStudentFunction returningStudentFunction)
     {
         try
@@ -53,6 +55,18 @@ public sealed partial class StudentService
                        innerException: exception);
 
             throw CreateAndLogServiceException(failedStudentServiceException);
+        }
+    }
+
+    private async ValueTask<IEnumerable<Student>> TryCatch(ReturningStudentsFunction returningStudentsFunction)
+    {
+        try
+        {
+            return await returningStudentsFunction();
+        }
+        catch (FailedStudentStorageException failedStudentStorageException)
+        {
+            throw CreateAndLogCriticalDependencyException(failedStudentStorageException);
         }
     }
 

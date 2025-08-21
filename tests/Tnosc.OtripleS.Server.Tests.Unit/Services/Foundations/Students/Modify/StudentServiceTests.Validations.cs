@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 using Force.DeepCloner;
 using NSubstitute;
 using Shouldly;
+using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
-using Tnosc.OtripleS.Server.Domain.Students.Exceptions;
 using Xeptions;
 using Xunit;
 

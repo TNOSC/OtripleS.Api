@@ -7,11 +7,11 @@
 using System;
 using Xeptions;
 
-namespace Tnosc.OtripleS.Server.Domain.Students.Exceptions;
+namespace Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 
-public class StudentServiceException : Xeption
+public class StudentDependencyException : Xeption
 {
-    public StudentServiceException(
+    public StudentDependencyException(
         string message,
         Exception innerException)
         : base(

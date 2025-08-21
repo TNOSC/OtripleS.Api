@@ -7,15 +7,15 @@
 using System;
 using Xeptions;
 
-namespace Tnosc.OtripleS.Server.Domain.Students.Exceptions;
+namespace Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 
-public sealed class StudentValidationException : Xeption
+public class StudentServiceException : Xeption
 {
-    public StudentValidationException(
-        string message, 
-        Xeption innerException)
-       : base(
-           message: message,
-           innerException: innerException)
+    public StudentServiceException(
+        string message,
+        Exception innerException)
+        : base(
+            message: message,
+            innerException: innerException)
     { }
 }

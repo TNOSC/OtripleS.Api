@@ -7,8 +7,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
-using Tnosc.OtripleS.Server.Domain.Students.Exceptions;
 using Xeptions;
 
 namespace Tnosc.OtripleS.Server.Application.Services.Foundations.Students;

@@ -7,11 +7,18 @@
 using System;
 using Xeptions;
 
-namespace Tnosc.OtripleS.Server.Domain.Students.Exceptions;
+namespace Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 
-public sealed class NullStudentException : Xeption
+public sealed class FailedStudentServiceException : Xeption
 {
-    public NullStudentException(string message)
-        : base(message: message)
+    public FailedStudentServiceException(
+        string message,
+        Exception innerException)
+        : base(
+            message: message,
+            innerException: innerException)
     { }
 }
+
+
+

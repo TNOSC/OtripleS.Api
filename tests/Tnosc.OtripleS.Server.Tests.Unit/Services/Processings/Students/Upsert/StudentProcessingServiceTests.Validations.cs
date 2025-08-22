@@ -4,6 +4,7 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
@@ -24,7 +25,7 @@ public partial class StudentProcessingServiceTests
         Student nullStudent = null;
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
         var nullStudentProcessingException =
-            new NullStudentProcessingException(message: "The student is null");
+            new NullStudentProcessingException(message: "The student is null.");
 
         var expectedProcessingStudentValidationException =
            new StudentProcessingValidationException(
@@ -36,6 +37,41 @@ public partial class StudentProcessingServiceTests
         ValueTask<Student> upsertStudentTask =
             _studentProcessingService.UpsertStudentAsync(student: nullStudent);
 #pragma warning restore CS8604 // Possible null reference argument.
+
+        // then
+        await Assert.ThrowsAsync<StudentProcessingValidationException>(() =>
+            upsertStudentTask.AsTask());
+
+        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
+            .LogError(Arg.Is<Xeption>(actualException =>
+                actualException.SameExceptionAs(expectedProcessingStudentValidationException)));
+
+        _studentServiceMock
+            .ReceivedCalls()
+            .ShouldBeEmpty();
+    }
+
+    [Fact]
+    public async Task ShouldThrowValidationExceptionOnUpsertIfStudentIdIsInvalidAndLogItAsync()
+    {
+        // given
+        var invalidStudent = new Student(id: new StudentId(Guid.Empty));
+
+        var invalidStudentProcessingException =
+           new InvalidStudentProcessingException(message: "Invalid student. Please fix the errors and try again.");
+
+        invalidStudentProcessingException.AddData(
+            key: nameof(Student.Id),
+            values: "Id is required");
+
+        var expectedProcessingStudentValidationException =
+           new StudentProcessingValidationException(
+               message: "Invalid input, fix the errors and try again.",
+               innerException: invalidStudentProcessingException);
+
+        // when
+        ValueTask<Student> upsertStudentTask =
+            _studentProcessingService.UpsertStudentAsync(student: invalidStudent);
 
         // then
         await Assert.ThrowsAsync<StudentProcessingValidationException>(() =>

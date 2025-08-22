@@ -9,7 +9,7 @@ using Xeptions;
 
 namespace Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 
-public class StudentDependencyException : Xeption
+public sealed class StudentDependencyException : Xeption
 {
     public StudentDependencyException(
         string message,

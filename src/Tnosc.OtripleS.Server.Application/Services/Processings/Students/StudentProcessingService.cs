@@ -4,6 +4,7 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
+
 using System.Threading.Tasks;
 using Tnosc.OtripleS.Server.Application.Brokers.Loggings;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
@@ -11,31 +12,31 @@ using Tnosc.OtripleS.Server.Domain.Students;
 
 namespace Tnosc.OtripleS.Server.Application.Services.Processings.Students;
 
-public sealed class StudentProcessingService : IStudentProcessingService
+public sealed partial class StudentProcessingService : IStudentProcessingService
 {
-#pragma warning disable S4487 // Unread "private" fields should be removed
     private readonly IStudentService _studentService;
     private readonly ILoggingBroker _loggingBroker;
-#pragma warning restore S4487 // Unread "private" fields should be removed
 
     public StudentProcessingService(
-        IStudentService studentService, 
+        IStudentService studentService,
         ILoggingBroker loggingBroker)
     {
         _studentService = studentService;
         _loggingBroker = loggingBroker;
     }
 
-    public async ValueTask<Student> UpsertStudentAsync(Student student) {
-
-        Student mayBeStudent = await _studentService
-            .RetrieveStudentByIdAsync(studentId: student.Id);
-
-        return mayBeStudent switch
+    public async ValueTask<Student> UpsertStudentAsync(Student student) =>
+        await TryCatch(async () =>
         {
-            null => await _studentService.RegisterStudentAsync(student: student),
-            _ => await _studentService.ModifyStudentAsync(student: student)
-        };
-    }
+            ValidateStudentOnUpsert(student: student);
+            Student mayBeStudent = await _studentService
+                .RetrieveStudentByIdAsync(studentId: student.Id);
+
+            return mayBeStudent switch
+            {
+                null => await _studentService.RegisterStudentAsync(student: student),
+                _ => await _studentService.ModifyStudentAsync(student: student)
+            };
+        });
 }
 

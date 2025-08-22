@@ -8,9 +8,11 @@ using Xeptions;
 
 namespace Tnosc.OtripleS.Server.Application.Exceptions.Processings.Students;
 
-public sealed class NullStudentProcessingException : Xeption
+public sealed class InvalidStudentProcessingException : Xeption
 {
-    public NullStudentProcessingException(string message)
+    public InvalidStudentProcessingException(string message)
         : base(message: message)
     { }
 }
+
+

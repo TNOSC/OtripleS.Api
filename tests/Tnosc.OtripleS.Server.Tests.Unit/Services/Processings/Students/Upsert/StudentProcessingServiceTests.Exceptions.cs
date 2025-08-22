@@ -7,7 +7,6 @@
 using System.Threading.Tasks;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
-using Shouldly;
 using Tnosc.OtripleS.Server.Application.Exceptions.Processings.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xeptions;
@@ -19,7 +18,7 @@ public partial class StudentProcessingServiceTests
 {
     [Theory]
     [MemberData(nameof(DependencyValidationExceptions))]
-    public async Task ShouldThrowDependencyValidationOnUpsertIfDependencyValidationErrorOccursAndLogItAsync(
+    public async Task ShouldThrowDependencyValidationExceptionOnUpsertIfDependencyValidationErrorOccursAndLogItAsync(
           Xeption dependencyValidationExceptions)
     {
         // given
@@ -35,7 +34,7 @@ public partial class StudentProcessingServiceTests
 
         // when
         ValueTask<Student> upsertStudentTask =
-           _studentProcessingService.UpsertStudentAsync(student : someStudent);
+           _studentProcessingService.UpsertStudentAsync(student: someStudent);
 
         // then
         await Assert.ThrowsAsync<StudentProcessingDependencyValidationException>(() =>
@@ -52,6 +51,42 @@ public partial class StudentProcessingServiceTests
         await _studentServiceMock
             .Received(requiredNumberOfCalls: 0)
             .ModifyStudentAsync(student: someStudent);
+    }
 
+    [Theory]
+    [MemberData(nameof(DependencyExceptions))]
+    public async Task ShouldThrowDependencyExceptionOnUpsertIfDependencyErrorOccursAndLogItAsync(
+          Xeption dependencyValidationExceptions)
+    {
+        // given
+        Student someStudent = CreateRandomStudent();
+
+        var expectedStudentProcessingDependencyValidationException =
+            new StudentProcessingDependencyException(
+                message: "Student processing dependency error occurred, please contact support.",
+                innerException: (dependencyValidationExceptions.InnerException as Xeption)!);
+
+        _studentServiceMock.RetrieveStudentByIdAsync(studentId: someStudent.Id)
+            .ThrowsAsync(ex: dependencyValidationExceptions);
+
+        // when
+        ValueTask<Student> upsertStudentTask =
+           _studentProcessingService.UpsertStudentAsync(student: someStudent);
+
+        // then
+        await Assert.ThrowsAsync<StudentProcessingDependencyException>(() =>
+            upsertStudentTask.AsTask());
+
+        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
+            .LogError(Arg.Is<Xeption>(actualException =>
+                actualException.SameExceptionAs(expectedStudentProcessingDependencyValidationException)));
+
+        await _studentServiceMock
+            .Received(requiredNumberOfCalls: 0)
+            .RegisterStudentAsync(student: someStudent);
+
+        await _studentServiceMock
+            .Received(requiredNumberOfCalls: 0)
+            .ModifyStudentAsync(student: someStudent);
     }
 }

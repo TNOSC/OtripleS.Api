@@ -73,4 +73,21 @@ public partial class StudentProcessingServiceTests
                 innerException: innerException)
         };
     }
+
+    public static TheoryData DependencyExceptions()
+    {
+        string randomMessage = GetRandomMessage();
+        string exceptionMessage = randomMessage;
+        var innerException = new Xeption(message: exceptionMessage);
+
+        return new TheoryData<Xeption>
+        {
+            new StudentDependencyException(
+                message: "Student dependency error occurred, contact support.",
+                innerException: innerException),
+            new StudentServiceException(
+                message: "Service error occurred, contact support.",
+                innerException: innerException)
+        };
+    }
 }

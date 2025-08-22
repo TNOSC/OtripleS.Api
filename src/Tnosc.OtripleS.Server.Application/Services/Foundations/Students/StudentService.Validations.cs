@@ -5,9 +5,8 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using System.Data;
+using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
-using Tnosc.OtripleS.Server.Domain.Students.Exceptions;
 
 namespace Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 
@@ -164,7 +163,6 @@ public sealed partial class StudentService
                     secondDateName: nameof(Student.CreatedDate)),
                 Parameter: nameof(Student.UpdatedDate)),
                 (Rule: IsNotRecent(student.UpdatedDate), Parameter: nameof(Student.UpdatedDate))
-
         );
     }
 
@@ -185,7 +183,7 @@ public sealed partial class StudentService
         }
     }
 
-    private static void ValidateAgainstStorageStudentOnModify(Student inputStudent, Student storageStudent) => 
+    private static void ValidateAgainstStorageStudentOnModify(Student inputStudent, Student storageStudent) =>
         Validate(
             (Rule: IsNotSame(
                 firstId: inputStudent.CreatedBy,

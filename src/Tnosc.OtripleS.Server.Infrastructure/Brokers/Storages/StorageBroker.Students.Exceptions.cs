@@ -8,8 +8,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using EFxceptions.Models.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
-using Tnosc.OtripleS.Server.Domain.Students.Exceptions;
 
 namespace Tnosc.OtripleS.Server.Infrastructure.Brokers.Storages;
 

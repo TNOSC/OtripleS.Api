@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
 using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
+using Tnosc.OtripleS.Server.Application.Exceptions.Processings.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xeptions;
 using Xunit;
@@ -40,7 +41,7 @@ public partial class StudentServiceTests
             _studentService.RetrieveStudentByIdAsync(studentId: inputStudentId);
 
         // then
-        await Assert.ThrowsAsync<StudentValidationException>(() =>
+        await Assert.ThrowsAsync<StudentProcessingValidationException>(() =>
             retrieveStudentTask.AsTask());
 
         _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
@@ -79,7 +80,7 @@ public partial class StudentServiceTests
            _studentService.RetrieveStudentByIdAsync(studentId: someStudentId);
 
         // then
-        await Assert.ThrowsAsync<StudentValidationException>(() =>
+        await Assert.ThrowsAsync<StudentProcessingValidationException>(() =>
             retrieveStudentTask.AsTask());
 
         _loggingBrokerMock.Received(requiredNumberOfCalls: 1)

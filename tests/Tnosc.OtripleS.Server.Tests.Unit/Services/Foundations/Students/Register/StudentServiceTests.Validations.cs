@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
 using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
+using Tnosc.OtripleS.Server.Application.Exceptions.Processings.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xeptions;
 using Xunit;
@@ -38,7 +39,7 @@ public partial class StudentServiceTests
 #pragma warning restore CS8604 // Possible null reference argument.
 
         // then
-        await Assert.ThrowsAsync<StudentValidationException>(() =>
+        await Assert.ThrowsAsync<StudentProcessingValidationException>(() =>
             registerStudentTask.AsTask());
 
         _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
@@ -124,7 +125,7 @@ public partial class StudentServiceTests
             _studentService.RegisterStudentAsync(student: invalidStudent);
 
         // then
-        await Assert.ThrowsAsync<StudentValidationException>(() =>
+        await Assert.ThrowsAsync<StudentProcessingValidationException>(() =>
             registerStudentTask.AsTask());
 
         _dateTimeBrokerMock
@@ -191,7 +192,7 @@ public partial class StudentServiceTests
             _studentService.RegisterStudentAsync(invalidStudent);
 
         // then
-        await Assert.ThrowsAsync<StudentValidationException>(() =>
+        await Assert.ThrowsAsync<StudentProcessingValidationException>(() =>
             registerStudentTask.AsTask());
 
         _dateTimeBrokerMock
@@ -237,7 +238,7 @@ public partial class StudentServiceTests
             _studentService.RegisterStudentAsync(student: invalidStudent);
 
         // then
-        await Assert.ThrowsAsync<StudentValidationException>(() =>
+        await Assert.ThrowsAsync<StudentProcessingValidationException>(() =>
             registerStudentTask.AsTask());
        
         _dateTimeBrokerMock
@@ -282,7 +283,7 @@ public partial class StudentServiceTests
             _studentService.RegisterStudentAsync(student: invalidStudent);
 
         // then
-        await Assert.ThrowsAsync<StudentValidationException>(() =>
+        await Assert.ThrowsAsync<StudentProcessingValidationException>(() =>
             registerStudentTask.AsTask());
 
         _dateTimeBrokerMock
@@ -332,7 +333,7 @@ public partial class StudentServiceTests
             _studentService.RegisterStudentAsync(student: invalidStudent);
 
         // then
-        await Assert.ThrowsAsync<StudentValidationException>(() =>
+        await Assert.ThrowsAsync<StudentProcessingValidationException>(() =>
             registerStudentTask.AsTask());
 
         _dateTimeBrokerMock

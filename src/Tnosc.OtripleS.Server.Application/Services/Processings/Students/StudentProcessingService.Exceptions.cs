@@ -5,7 +5,9 @@
 // ----------------------------------------------------------------------------------
 
 
+using System;
 using System.Threading.Tasks;
+using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 using Tnosc.OtripleS.Server.Application.Exceptions.Processings.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xeptions;
@@ -24,22 +26,40 @@ public sealed partial class StudentProcessingService
         }
         catch (NullStudentProcessingException nullStudentProcessingException)
         {
-            throw CreateAndLogValidationException(nullStudentProcessingException);
+            throw CreateAndLogValidationException(exception: nullStudentProcessingException);
         }
         catch (InvalidStudentProcessingException invalidStudentProcessingException)
         {
-            throw CreateAndLogValidationException(invalidStudentProcessingException);
+            throw CreateAndLogValidationException(exception: invalidStudentProcessingException);
         }
+        catch (StudentValidationException studentValidationException)
+        {
+            throw CreateAndLogDependencyValidationException(exception: studentValidationException);
+        }
+        catch (StudentDependencyValidationException studentValidationException)
+        {
+            throw CreateAndLogDependencyValidationException(exception: studentValidationException);
+        }
+    }
+
+    private StudentProcessingDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
+    {
+        var studentProcessingDependencyValidationException = new StudentProcessingDependencyValidationException(
+           message: "Student processing dependency validation error occurred, fix the errors and try again.",
+           innerException: (exception.InnerException as Xeption)!);
+        _loggingBroker.LogError(exception: studentProcessingDependencyValidationException);
+
+        return studentProcessingDependencyValidationException;
     }
 
     private StudentProcessingValidationException CreateAndLogValidationException(Xeption exception)
     {
-        var studentValidationException = new StudentProcessingValidationException(
+        var studentProcessingValidationException = new StudentProcessingValidationException(
             message: "Invalid input, fix the errors and try again.",
             innerException: exception);
-        _loggingBroker.LogError(exception: studentValidationException);
+        _loggingBroker.LogError(exception: studentProcessingValidationException);
 
-        return studentValidationException;
+        return studentProcessingValidationException;
     }
 }
 

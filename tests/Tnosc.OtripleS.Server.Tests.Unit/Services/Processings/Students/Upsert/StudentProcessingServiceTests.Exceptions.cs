@@ -44,6 +44,14 @@ public partial class StudentProcessingServiceTests
         _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
             .LogError(Arg.Is<Xeption>(actualException =>
                 actualException.SameExceptionAs(expectedStudentProcessingDependencyValidationException)));
-        
+
+        await _studentServiceMock
+            .Received(requiredNumberOfCalls: 0)
+            .RegisterStudentAsync(student: someStudent);
+
+        await _studentServiceMock
+            .Received(requiredNumberOfCalls: 0)
+            .ModifyStudentAsync(student: someStudent);
+
     }
 }

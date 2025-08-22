@@ -207,9 +207,7 @@ public partial class StudentServiceTests
 
 
     [Theory]
-#pragma warning disable xUnit1037 // There are fewer theory data type arguments than required by the parameters of the test method
     [MemberData(nameof(InvalidMinuteCases))]
-#pragma warning restore xUnit1037 // There are fewer theory data type arguments than required by the parameters of the test method
     public async Task ShouldThrowValidationExceptionOnModifyIfStudentUpdatedDateIsNotRecentAndLogItAsync(
            int randomMoreOrLessThanOneMinute)
     {

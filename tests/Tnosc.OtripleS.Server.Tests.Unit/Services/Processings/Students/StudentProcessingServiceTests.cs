@@ -7,10 +7,13 @@
 using System;
 using NSubstitute;
 using Tnosc.OtripleS.Server.Application.Brokers.Loggings;
+using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 using Tnosc.OtripleS.Server.Application.Services.Processings.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Tynamix.ObjectFiller;
+using Xeptions;
+using Xunit;
 
 namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Processings.Students;
 
@@ -48,4 +51,26 @@ public partial class StudentProcessingServiceTests
 
     private static DateTimeOffset GetRandomDateTime() =>
           new DateTimeRange(earliestDate: DateTime.UtcNow).GetValue();
+
+    private static string GetRandomMessage() =>
+            new MnemonicString(wordCount: GetRandomNumber()).GetValue();
+    private static int GetRandomNumber() =>
+          new IntRange(min: 2, max: 10).GetValue();
+
+    public static TheoryData DependencyValidationExceptions()
+    {
+        string randomMessage = GetRandomMessage();
+        string exceptionMessage = randomMessage;
+        var innerException = new Xeption(message: exceptionMessage);
+
+        return new TheoryData<Xeption>
+        {
+            new StudentValidationException(
+                message: "Invalid input, fix the errors and try again.",
+                innerException: innerException),
+            new StudentDependencyValidationException(
+                message: "Student dependency validation error occurred, fix the errors and try again.",
+                innerException: innerException)
+        };
+    }
 }

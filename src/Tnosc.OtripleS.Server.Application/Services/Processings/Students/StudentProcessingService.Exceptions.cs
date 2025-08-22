@@ -36,10 +36,28 @@ public sealed partial class StudentProcessingService
         {
             throw CreateAndLogDependencyValidationException(exception: studentValidationException);
         }
-        catch (StudentDependencyValidationException studentValidationException)
+        catch (StudentDependencyValidationException studentDependencyValidationException)
         {
-            throw CreateAndLogDependencyValidationException(exception: studentValidationException);
+            throw CreateAndLogDependencyValidationException(exception: studentDependencyValidationException);
         }
+        catch (StudentDependencyException studentDependencyException)
+        {
+            throw CreateAndLogDependencyException(exception: studentDependencyException);
+        }
+        catch (StudentServiceException studentServiceException)
+        {
+            throw CreateAndLogDependencyException(exception: studentServiceException);
+        }
+    }
+
+    private StudentProcessingDependencyException CreateAndLogDependencyException(Xeption exception)
+    {
+        var studentProcessingDependencyException = new StudentProcessingDependencyException(
+           message: "Student processing dependency error occurred, please contact support.",
+           innerException: (exception.InnerException as Xeption)!);
+        _loggingBroker.LogError(exception: studentProcessingDependencyException);
+
+        return studentProcessingDependencyException;
     }
 
     private StudentProcessingDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)

@@ -6,7 +6,6 @@
 
 
 using System.Threading.Tasks;
-using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 using Tnosc.OtripleS.Server.Application.Exceptions.Processings.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xeptions;
@@ -23,9 +22,13 @@ public sealed partial class StudentProcessingService
         {
             return await returningStudentFunction();
         }
-        catch (NullStudentProcessingException nullStudentException)
+        catch (NullStudentProcessingException nullStudentProcessingException)
         {
-            throw CreateAndLogValidationException(nullStudentException);
+            throw CreateAndLogValidationException(nullStudentProcessingException);
+        }
+        catch (InvalidStudentProcessingException invalidStudentProcessingException)
+        {
+            throw CreateAndLogValidationException(invalidStudentProcessingException);
         }
     }
 

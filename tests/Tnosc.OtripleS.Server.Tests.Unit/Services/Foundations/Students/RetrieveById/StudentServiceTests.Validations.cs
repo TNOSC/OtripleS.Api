@@ -41,7 +41,7 @@ public partial class StudentServiceTests
             _studentService.RetrieveStudentByIdAsync(studentId: inputStudentId);
 
         // then
-        await Assert.ThrowsAsync<StudentProcessingValidationException>(() =>
+        await Assert.ThrowsAsync<StudentValidationException>(() =>
             retrieveStudentTask.AsTask());
 
         _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
@@ -80,7 +80,7 @@ public partial class StudentServiceTests
            _studentService.RetrieveStudentByIdAsync(studentId: someStudentId);
 
         // then
-        await Assert.ThrowsAsync<StudentProcessingValidationException>(() =>
+        await Assert.ThrowsAsync<StudentValidationException>(() =>
             retrieveStudentTask.AsTask());
 
         _loggingBrokerMock.Received(requiredNumberOfCalls: 1)

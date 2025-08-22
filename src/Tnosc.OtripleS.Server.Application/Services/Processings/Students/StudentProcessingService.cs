@@ -29,6 +29,7 @@ public sealed partial class StudentProcessingService : IStudentProcessingService
         await TryCatch(async () =>
         {
             ValidateStudentOnUpsert(student: student);
+
             Student mayBeStudent = await _studentService
                 .RetrieveStudentByIdAsync(studentId: student.Id);
 

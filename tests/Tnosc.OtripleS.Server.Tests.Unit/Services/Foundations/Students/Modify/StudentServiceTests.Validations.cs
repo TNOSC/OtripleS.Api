@@ -40,7 +40,7 @@ public partial class StudentServiceTests
 #pragma warning restore CS8604 // Possible null reference argument.
 
         // then
-        await Assert.ThrowsAsync<StudentProcessingValidationException>(() =>
+        await Assert.ThrowsAsync<StudentValidationException>(() =>
             modifyStudentTask.AsTask());
 
         _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
@@ -127,7 +127,7 @@ public partial class StudentServiceTests
             _studentService.ModifyStudentAsync(student: invalidStudent);
 
         // then
-        await Assert.ThrowsAsync<StudentProcessingValidationException>(() =>
+        await Assert.ThrowsAsync<StudentValidationException>(() =>
             modifyStudentTask.AsTask());
 
         _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
@@ -189,7 +189,7 @@ public partial class StudentServiceTests
             _studentService.ModifyStudentAsync(invalidStudent);
 
         // then
-        await Assert.ThrowsAsync<StudentProcessingValidationException>(() =>
+        await Assert.ThrowsAsync<StudentValidationException>(() =>
             modifyStudentTask.AsTask());
 
         _dateTimeBrokerMock
@@ -239,7 +239,7 @@ public partial class StudentServiceTests
             _studentService.ModifyStudentAsync(student: invalidStudent);
 
         // then
-        await Assert.ThrowsAsync<StudentProcessingValidationException>(() =>
+        await Assert.ThrowsAsync<StudentValidationException>(() =>
             modifyStudentTask.AsTask());
 
         _dateTimeBrokerMock
@@ -266,7 +266,7 @@ public partial class StudentServiceTests
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
         Student noStudent = null;
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
-        var notFoundStudentException = 
+        var notFoundStudentException =
             new NotFoundStudentException(message: $"Couldn't find student with id: {nonExistentStudent.Id.Value}.");
 
         var expectedStudentValidationException =
@@ -287,7 +287,7 @@ public partial class StudentServiceTests
             _studentService.ModifyStudentAsync(student: nonExistentStudent);
 
         // then
-        await Assert.ThrowsAsync<StudentProcessingValidationException>(() =>
+        await Assert.ThrowsAsync<StudentValidationException>(() =>
             modifyStudentTask.AsTask());
 
         _dateTimeBrokerMock
@@ -345,7 +345,7 @@ public partial class StudentServiceTests
             _studentService.ModifyStudentAsync(student: invalidStudent);
 
         // then
-        await Assert.ThrowsAsync<StudentProcessingValidationException>(() =>
+        await Assert.ThrowsAsync<StudentValidationException>(() =>
             modifyStudentTask.AsTask());
 
         _dateTimeBrokerMock

@@ -5,6 +5,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
@@ -152,6 +153,26 @@ public class StudentsController : RESTFulController
         catch (StudentDependencyValidationException studentDependencyValidationException)
         {
             return BadRequest(exception: studentDependencyValidationException.InnerException);
+        }
+        catch (StudentDependencyException studentDependencyException)
+        {
+            return InternalServerError(exception: studentDependencyException);
+        }
+        catch (StudentServiceException studentServiceException)
+        {
+            return InternalServerError(exception: studentServiceException);
+        }
+    }
+
+    [HttpGet]
+    public async ValueTask<ActionResult<Student>> GetAllStudentsAsync()
+    {
+        try
+        {
+            IEnumerable<Student> retrievedAllStudents = await _studentService
+                .RetrieveAllStudentsAsync();
+
+            return Ok(value: retrievedAllStudents);
         }
         catch (StudentDependencyException studentDependencyException)
         {

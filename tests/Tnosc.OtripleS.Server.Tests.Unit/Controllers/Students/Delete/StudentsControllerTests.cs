@@ -22,8 +22,8 @@ public partial class StudentsControllerTests
         // given
         Student randomStudent = CreateRandomStudent();
         StudentId studentId = randomStudent.Id;
-        Student storageSource = randomStudent;
-        Student expectedStudent = storageSource.DeepClone();
+        Student storageStudent = randomStudent;
+        Student expectedStudent = storageStudent.DeepClone();
 
         var expectedObjectResult =
             new OkObjectResult(value: expectedStudent);

@@ -4,6 +4,7 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Force.DeepCloner;
 using Microsoft.AspNetCore.Mvc;
@@ -17,32 +18,31 @@ namespace Tnosc.OtripleS.Server.Tests.Unit.Controllers.Students;
 public partial class StudentsControllerTests
 {
     [Fact]
-    public async Task ShouldReturnOkOnGetByIdAsync()
+    public async Task ShouldReturnOkOnGetAsync()
     {
         // given
-        Student randomStudent = CreateRandomStudent();
-        StudentId studentId = randomStudent.Id;
-        Student storageStudent = randomStudent;
-        Student expectedStudent = storageStudent.DeepClone();
+        IEnumerable<Student> randomStudents = CreateRandomStudents();
+        IEnumerable<Student> storageStudents = randomStudents.DeepClone();
+        IEnumerable<Student> expectedStudents = storageStudents.DeepClone();
 
         var expectedObjectResult =
-            new OkObjectResult(value: expectedStudent);
+            new OkObjectResult(value: expectedStudents);
 
         var expectedActionResult =
             new ActionResult<Student>(result: expectedObjectResult);
 
-        _studentService.RetrieveStudentByIdAsync(studentId: studentId)
-            .Returns(returnThis: storageStudent);
+        _studentService.RetrieveAllStudentsAsync()
+            .Returns(returnThis: storageStudents);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.GetStudentByIdAsync(studentId: studentId);
+            await _studentsController.GetAllStudentsAsync();
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
         await _studentService.Received(requiredNumberOfCalls: 1)
-            .RetrieveStudentByIdAsync(studentId: studentId);
+            .RetrieveAllStudentsAsync();
     }
 }

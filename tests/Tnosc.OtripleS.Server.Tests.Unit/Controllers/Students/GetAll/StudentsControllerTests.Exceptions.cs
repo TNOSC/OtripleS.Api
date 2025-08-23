@@ -5,44 +5,43 @@
 // ----------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
-using Force.DeepCloner;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
+using RESTFulSense.Models;
 using Shouldly;
 using Tnosc.OtripleS.Server.Domain.Students;
+using Xeptions;
 using Xunit;
 
 namespace Tnosc.OtripleS.Server.Tests.Unit.Controllers.Students;
 
 public partial class StudentsControllerTests
 {
-    [Fact]
-    public async Task ShouldReturnOkOnGetByIdAsync()
+    [Theory]
+    [MemberData(nameof(ServerExceptions))]
+    public async Task ShouldReturnInternalServerErrorOnGetIfServerErrorOccurredAsync(
+           Xeption serverException)
     {
         // given
-        Student randomStudent = CreateRandomStudent();
-        StudentId studentId = randomStudent.Id;
-        Student storageStudent = randomStudent;
-        Student expectedStudent = storageStudent.DeepClone();
-
-        var expectedObjectResult =
-            new OkObjectResult(value: expectedStudent);
+        InternalServerErrorObjectResult expectedInternalServerErrorObjectResult =
+            InternalServerError(exception: serverException);
 
         var expectedActionResult =
-            new ActionResult<Student>(result: expectedObjectResult);
+            new ActionResult<Student>(result: expectedInternalServerErrorObjectResult);
 
-        _studentService.RetrieveStudentByIdAsync(studentId: studentId)
-            .Returns(returnThis: storageStudent);
+        _studentService.RetrieveAllStudentsAsync()
+            .ThrowsAsync(ex: serverException);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.GetStudentByIdAsync(studentId: studentId);
+            await _studentsController.GetAllStudentsAsync();
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
         await _studentService.Received(requiredNumberOfCalls: 1)
-            .RetrieveStudentByIdAsync(studentId: studentId);
+            .RetrieveAllStudentsAsync();
     }
 }

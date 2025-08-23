@@ -57,7 +57,11 @@ public class StudentsController : RESTFulController
     }
 
     [HttpPut]
-    public ValueTask<ActionResult<Student>> PutStudentAsync(Student student) =>
-        throw new NotImplementedException();
-    
+    public async ValueTask<ActionResult<Student>> PutStudentAsync(Student student)
+    {
+        Student modifiedStudent =
+               await _studentService.ModifyStudentAsync(student);
+
+        return Ok(modifiedStudent);
+    }
 }

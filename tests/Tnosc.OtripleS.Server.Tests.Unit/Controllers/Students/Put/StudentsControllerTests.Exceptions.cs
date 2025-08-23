@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
+using RESTFulSense.Models;
 using Shouldly;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xeptions;
@@ -32,6 +33,35 @@ public partial class StudentsControllerTests
 
         _studentService.ModifyStudentAsync(someStudent)
             .ThrowsAsync(validationException);
+
+        // when
+        ActionResult<Student> actualActionResult =
+             await _studentsController.PutStudentAsync(someStudent);
+
+        // then
+        actualActionResult.ShouldBeEquivalentTo(
+              expectedActionResult);
+
+        await _studentService.Received(1)
+            .ModifyStudentAsync(someStudent);
+    }
+
+    [Theory]
+    [MemberData(nameof(ServerExceptions))]
+    public async Task ShouldReturnInternalServerErrorOnPutIfServerErrorOccurredAsync(
+           Xeption serverException)
+    {
+        // given
+        Student someStudent = CreateRandomStudent();
+
+        InternalServerErrorObjectResult expectedInternalServerErrorObjectResult =
+               InternalServerError(serverException);
+
+        var expectedActionResult =
+               new ActionResult<Student>(expectedInternalServerErrorObjectResult);
+
+        _studentService.ModifyStudentAsync(someStudent)
+            .ThrowsAsync(serverException);
 
         // when
         ActionResult<Student> actualActionResult =

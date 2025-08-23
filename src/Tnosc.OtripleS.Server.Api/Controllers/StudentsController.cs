@@ -36,6 +36,11 @@ public class StudentsController : RESTFulController
         {
             return BadRequest(studentValidationException.InnerException);
         }
+        catch (StudentDependencyValidationException sourceDependencyValidationException)
+               when (sourceDependencyValidationException.InnerException is AlreadyExistsStudentException)
+        {
+            return Conflict(sourceDependencyValidationException.InnerException);
+        }
         catch (StudentDependencyValidationException studentDependencyValidationException)
         {
             return BadRequest(studentDependencyValidationException.InnerException);

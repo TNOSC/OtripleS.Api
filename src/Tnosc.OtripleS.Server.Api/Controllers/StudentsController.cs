@@ -7,6 +7,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
+using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
 
@@ -24,9 +25,20 @@ public class StudentsController : RESTFulController
     [HttpPost]
     public async ValueTask<ActionResult<Student>> PostStudentAsync(Student student)
     {
-        Student registeredStudent = 
-            await _studentService.RegisterStudentAsync(student);
+        try
+        {
+            Student registeredStudent =
+                await _studentService.RegisterStudentAsync(student);
 
-        return Created(registeredStudent);
+            return Created(registeredStudent);
+        }
+        catch (StudentValidationException studentValidationException)
+        {
+            return BadRequest(studentValidationException.InnerException);
+        }
+        catch (StudentDependencyValidationException studentDependencyValidationException)
+        {
+            return BadRequest(studentDependencyValidationException.InnerException);
+        }
     }
 }

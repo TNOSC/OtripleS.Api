@@ -4,13 +4,10 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Force.DeepCloner;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
-using RESTFulSense.Models;
 using Shouldly;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xeptions;
@@ -32,7 +29,7 @@ public partial class StudentsControllerTests
 
         var expectedActionResult =
                new ActionResult<Student>(expectedBadRequestObjectResult);
-     
+
         _studentService.RegisterStudentAsync(someStudent)
             .ThrowsAsync(validationException);
 

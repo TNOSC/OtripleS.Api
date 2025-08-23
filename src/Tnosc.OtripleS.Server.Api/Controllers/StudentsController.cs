@@ -97,8 +97,19 @@ public class StudentsController : RESTFulController
     [HttpDelete]
     public async ValueTask<ActionResult<Student>> DeleteStudentAsync(Guid studentId)
     {
-        Student deletedStudent =
-                await _studentService.RemoveStudentByIdAsync(studentId);
-        return Ok(deletedStudent);
+        try
+        {
+            Student deletedStudent =
+                await _studentService.RemoveStudentByIdAsync(studentId: studentId);
+            return Ok(value: deletedStudent);
+        }
+        catch (StudentValidationException studentValidationException)
+        {
+            return BadRequest(exception: studentValidationException.InnerException);
+        }
+        catch (StudentDependencyValidationException studentDependencyValidationException)
+        {
+            return BadRequest(exception: studentDependencyValidationException.InnerException);
+        }
     }
 }

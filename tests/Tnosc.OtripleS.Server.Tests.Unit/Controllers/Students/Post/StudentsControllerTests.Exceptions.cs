@@ -4,6 +4,7 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using RESTFulSense.Models;
 using Shouldly;
+using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xeptions;
 using Xunit;
@@ -63,6 +65,45 @@ public partial class StudentsControllerTests
 
         _studentService.RegisterStudentAsync(someStudent)
             .ThrowsAsync(serverException);
+
+        // when
+        ActionResult<Student> actualActionResult =
+             await _studentsController.PostStudentAsync(someStudent);
+
+        // then
+        actualActionResult.ShouldBeEquivalentTo(
+              expectedActionResult);
+
+        await _studentService.Received(1)
+            .RegisterStudentAsync(someStudent);
+    }
+
+    [Fact]
+    public async Task ShouldReturnConflictOnPostIfAlreadyExistsStudentErrorOccurredAsync()
+    {
+        // given
+        Student someStudent = CreateRandomStudent();
+        var someInnerException = new Exception();
+        string someMessage = GetRandomString();
+
+        var alreadyExistsSourceException =
+            new AlreadyExistsStudentException(
+                message: someMessage,
+                innerException: someInnerException);
+
+        var sourceDependencyValidationException =
+            new StudentDependencyValidationException(
+                message: someMessage,
+                innerException: alreadyExistsSourceException);
+
+        ConflictObjectResult expectedConflictObjectResult =
+            Conflict(alreadyExistsSourceException);
+
+        var expectedActionResult =
+            new ActionResult<Student>(expectedConflictObjectResult);
+
+        _studentService.RegisterStudentAsync(someStudent)
+           .ThrowsAsync(sourceDependencyValidationException);
 
         // when
         ActionResult<Student> actualActionResult =

@@ -45,6 +45,23 @@ public partial class StudentsControllerTests : RESTFulController
         ];
     }
 
+    public static TheoryData<Xeption> ServerExceptions()
+    {
+        var someInnerException = new Xeption();
+        string someMessage = GetRandomString();
+
+        return
+            [
+                new StudentDependencyException(
+                    message: someMessage,
+                    innerException: someInnerException),
+
+                new StudentServiceException(
+                    message: someMessage,
+                    innerException: someInnerException)
+            ];
+    }
+
     private static Student CreateRandomStudent() =>
        CreateStudentFiller(date: DateTimeOffset.UtcNow).Create();
 

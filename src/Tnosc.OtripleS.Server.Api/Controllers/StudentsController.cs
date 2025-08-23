@@ -130,4 +130,36 @@ public class StudentsController : RESTFulController
             return InternalServerError(exception: studentServiceException);
         }
     }
+
+    [HttpGet("{studentId}")]
+    public async ValueTask<ActionResult<Student>> GetStudentByIdAsync(Guid studentId)
+    {
+        try
+        {
+            Student retrievedStudentTask =
+                await _studentService.RetrieveStudentByIdAsync(studentId: studentId);
+            return Ok(value: retrievedStudentTask);
+        }
+        catch (StudentValidationException studentValidationException)
+          when (studentValidationException.InnerException is NotFoundStudentException)
+        {
+            return NotFound(exception: studentValidationException.InnerException);
+        }
+        catch (StudentValidationException studentValidationException)
+        {
+            return BadRequest(exception: studentValidationException.InnerException);
+        }
+        catch (StudentDependencyValidationException studentDependencyValidationException)
+        {
+            return BadRequest(exception: studentDependencyValidationException.InnerException);
+        }
+        catch (StudentDependencyException studentDependencyException)
+        {
+            return InternalServerError(exception: studentDependencyException);
+        }
+        catch (StudentServiceException studentServiceException)
+        {
+            return InternalServerError(exception: studentServiceException);
+        }
+    }
 }

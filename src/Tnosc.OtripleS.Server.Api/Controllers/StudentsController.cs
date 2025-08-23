@@ -134,8 +134,19 @@ public class StudentsController : RESTFulController
     [HttpGet("{studentId}")]
     public async ValueTask<ActionResult<Student>> GetStudentByIdAsync(Guid studentId)
     {
-        Student retrievedStudentTask = 
-            await _studentService.RetrieveStudentByIdAsync(studentId: studentId);
-        return Ok(value: retrievedStudentTask);
+        try
+        {
+            Student retrievedStudentTask =
+                await _studentService.RetrieveStudentByIdAsync(studentId: studentId);
+            return Ok(value: retrievedStudentTask);
+        }
+        catch (StudentValidationException studentValidationException)
+        {
+            return BadRequest(exception: studentValidationException.InnerException);
+        }
+        catch (StudentDependencyValidationException studentDependencyValidationException)
+        {
+            return BadRequest(exception: studentDependencyValidationException.InnerException);
+        }
     }
 }

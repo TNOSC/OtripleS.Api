@@ -95,6 +95,10 @@ public class StudentsController : RESTFulController
     }
 
     [HttpDelete]
-    public ValueTask<ActionResult<Student>> DeleteStudentAsync(Guid studentId) =>
-        throw new NotImplementedException();
+    public async ValueTask<ActionResult<Student>> DeleteStudentAsync(Guid studentId)
+    {
+        Student deletedStudent =
+                await _studentService.RemoveStudentByIdAsync(studentId);
+        return Ok(deletedStudent);
+    }
 }

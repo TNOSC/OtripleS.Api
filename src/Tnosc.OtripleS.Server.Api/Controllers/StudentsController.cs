@@ -162,4 +162,8 @@ public class StudentsController : RESTFulController
             return InternalServerError(exception: studentServiceException);
         }
     }
+
+    [HttpGet]
+    public ValueTask<ActionResult<Student>> GetAllStudentsAsync() =>
+        throw new NotImplementedException();
 }

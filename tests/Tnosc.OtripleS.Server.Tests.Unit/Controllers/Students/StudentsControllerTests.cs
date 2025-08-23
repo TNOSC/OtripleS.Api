@@ -5,6 +5,9 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using NSubstitute;
 using RESTFulSense.Controllers;
 using Tnosc.OtripleS.Server.Api.Controllers;
@@ -61,6 +64,13 @@ public partial class StudentsControllerTests : RESTFulController
                     innerException: someInnerException)
             ];
     }
+
+    private static IEnumerable<Student> CreateRandomStudents() =>
+      CreateStudentFiller(date: GetRandomDateTime())
+          .Create(count: GetRandomNumber());
+
+    private static int GetRandomNumber() =>
+          new IntRange(min: 2, max: 10).GetValue();
 
     private static Student CreateRandomStudent() =>
        CreateStudentFiller(date: DateTimeOffset.UtcNow).Create();

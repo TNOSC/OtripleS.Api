@@ -22,7 +22,7 @@ public partial class StudentsControllerTests
 {
     [Theory]
     [MemberData(nameof(ValidationExceptions))]
-    public async Task ShouldReturnBadRequestOnPostIfValidationErrorOccurredAsync(Xeption validationException)
+    public async Task ShouldReturnBadRequestOnPutIfValidationErrorOccurredAsync(Xeption validationException)
     {
         // given
         Student someStudent = CreateRandomStudent();
@@ -33,25 +33,25 @@ public partial class StudentsControllerTests
         var expectedActionResult =
             new ActionResult<Student>(expectedBadRequestObjectResult);
 
-        _studentService.RegisterStudentAsync(someStudent)
+        _studentService.ModifyStudentAsync(someStudent)
             .ThrowsAsync(validationException);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.PostStudentAsync(someStudent);
+            await _studentsController.PutStudentAsync(someStudent);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expectedActionResult);
 
         await _studentService.Received(1)
-            .RegisterStudentAsync(someStudent);
+            .ModifyStudentAsync(someStudent);
     }
 
     [Theory]
     [MemberData(nameof(ServerExceptions))]
-    public async Task ShouldReturnInternalServerErrorOnPostIfServerErrorOccurredAsync(
-            Xeption serverException)
+    public async Task ShouldReturnInternalServerErrorOnPutIfServerErrorOccurredAsync(
+           Xeption serverException)
     {
         // given
         Student someStudent = CreateRandomStudent();
@@ -62,57 +62,94 @@ public partial class StudentsControllerTests
         var expectedActionResult =
             new ActionResult<Student>(expectedInternalServerErrorObjectResult);
 
-        _studentService.RegisterStudentAsync(someStudent)
+        _studentService.ModifyStudentAsync(someStudent)
             .ThrowsAsync(serverException);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.PostStudentAsync(someStudent);
+            await _studentsController.PutStudentAsync(someStudent);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expectedActionResult);
 
         await _studentService.Received(1)
-            .RegisterStudentAsync(someStudent);
+            .ModifyStudentAsync(someStudent);
     }
 
     [Fact]
-    public async Task ShouldReturnConflictOnPostIfAlreadyExistsStudentErrorOccurredAsync()
+    public async Task ShouldReturnNotFoundOnPutIfItemDoesNotExistAsync()
+    {
+        // given
+        Student someStudent = CreateRandomStudent();
+        string someMessage = GetRandomString();
+
+        var notFoundStudentException =
+            new NotFoundStudentException(
+                message: someMessage);
+
+        var studentValidationException =
+            new StudentValidationException(
+                message: someMessage,
+                innerException: notFoundStudentException);
+
+        NotFoundObjectResult expectedNotFoundObjectResult =
+            NotFound(notFoundStudentException);
+
+        var expectedActionResult =
+            new ActionResult<Student>(expectedNotFoundObjectResult);
+
+        _studentService.ModifyStudentAsync(someStudent)
+            .ThrowsAsync(studentValidationException);
+
+        // when
+        ActionResult<Student> actualActionResult =
+            await _studentsController.PutStudentAsync(someStudent);
+
+        // then
+        actualActionResult.ShouldBeEquivalentTo(
+            expectedActionResult);
+
+        await _studentService.Received(1)
+            .ModifyStudentAsync(someStudent);
+    }
+
+    [Fact]
+    public async Task ShouldReturnConflictOnPutIfLockedStudentErrorOccurredAsync()
     {
         // given
         Student someStudent = CreateRandomStudent();
         var someInnerException = new Exception();
         string someMessage = GetRandomString();
 
-        var alreadyExistsStudentException =
-            new AlreadyExistsStudentException(
+        var lockedStudentException =
+            new LockedStudentException(
                 message: someMessage,
                 innerException: someInnerException);
 
         var studentDependencyValidationException =
             new StudentDependencyValidationException(
                 message: someMessage,
-                innerException: alreadyExistsStudentException);
+                innerException: lockedStudentException);
 
         ConflictObjectResult expectedConflictObjectResult =
-            Conflict(alreadyExistsStudentException);
+            Conflict(lockedStudentException);
 
         var expectedActionResult =
             new ActionResult<Student>(expectedConflictObjectResult);
 
-        _studentService.RegisterStudentAsync(someStudent)
-           .ThrowsAsync(studentDependencyValidationException);
+        _studentService.ModifyStudentAsync(someStudent)
+            .ThrowsAsync(studentDependencyValidationException);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.PostStudentAsync(someStudent);
+            await _studentsController.PutStudentAsync(someStudent);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expectedActionResult);
 
         await _studentService.Received(1)
-            .RegisterStudentAsync(someStudent);
+            .ModifyStudentAsync(someStudent);
     }
 }

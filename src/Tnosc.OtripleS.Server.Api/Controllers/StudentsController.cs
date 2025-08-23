@@ -4,6 +4,7 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
@@ -36,10 +37,48 @@ public class StudentsController : RESTFulController
         {
             return BadRequest(studentValidationException.InnerException);
         }
-        catch (StudentDependencyValidationException sourceDependencyValidationException)
-               when (sourceDependencyValidationException.InnerException is AlreadyExistsStudentException)
+        catch (StudentDependencyValidationException studentDependencyValidationException)
+            when (studentDependencyValidationException.InnerException is AlreadyExistsStudentException)
         {
-            return Conflict(sourceDependencyValidationException.InnerException);
+            return Conflict(studentDependencyValidationException.InnerException);
+        }
+        catch (StudentDependencyValidationException studentDependencyValidationException)
+        {
+            return BadRequest(studentDependencyValidationException.InnerException);
+        }
+        catch (StudentDependencyException studentDependencyException)
+        {
+            return InternalServerError(studentDependencyException);
+        }
+        catch (StudentServiceException studentServiceException)
+        {
+            return InternalServerError(studentServiceException);
+        }
+    }
+
+    [HttpPut]
+    public async ValueTask<ActionResult<Student>> PutStudentAsync(Student student)
+    {
+        try
+        {
+            Student modifiedStudent =
+                await _studentService.ModifyStudentAsync(student);
+
+            return Ok(modifiedStudent);
+        }
+        catch (StudentValidationException studentValidationException)
+            when (studentValidationException.InnerException is NotFoundStudentException)
+        {
+            return NotFound(studentValidationException.InnerException);
+        }
+        catch (StudentValidationException studentValidationException)
+        {
+            return BadRequest(studentValidationException.InnerException);
+        }
+        catch (StudentDependencyValidationException studentDependencyValidationException)
+            when (studentDependencyValidationException.InnerException is LockedStudentException)
+        {
+            return Conflict(studentDependencyValidationException.InnerException);
         }
         catch (StudentDependencyValidationException studentDependencyValidationException)
         {

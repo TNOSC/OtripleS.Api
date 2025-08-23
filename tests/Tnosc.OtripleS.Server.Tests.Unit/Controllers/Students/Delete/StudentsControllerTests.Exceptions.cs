@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
+using RESTFulSense.Models;
 using Shouldly;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xeptions;
@@ -29,7 +30,7 @@ public partial class StudentsControllerTests
             BadRequest(exception: validationException.InnerException);
 
         var expectedActionResult =
-            new ActionResult<Student>(expectedBadRequestObjectResult);
+            new ActionResult<Student>(result: expectedBadRequestObjectResult);
 
         _studentService.RemoveStudentByIdAsync(studentId: someStudentId)
             .ThrowsAsync(ex: validationException);
@@ -42,7 +43,36 @@ public partial class StudentsControllerTests
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
-        await _studentService.Received(1)
+        await _studentService.Received(requiredNumberOfCalls: 1)
+            .RemoveStudentByIdAsync(studentId: someStudentId);
+    }
+
+    [Theory]
+    [MemberData(nameof(ServerExceptions))]
+    public async Task ShouldReturnInternalServerErrorOnDeleteIfServerErrorOccurredAsync(
+           Xeption serverException)
+    {
+        // given
+        var someStudentId = Guid.NewGuid();
+
+        InternalServerErrorObjectResult expectedInternalServerErrorObjectResult =
+            InternalServerError(exception: serverException);
+
+        var expectedActionResult =
+            new ActionResult<Student>(result: expectedInternalServerErrorObjectResult);
+
+        _studentService.RemoveStudentByIdAsync(studentId: someStudentId)
+            .ThrowsAsync(ex: serverException);
+
+        // when
+        ActionResult<Student> actualActionResult =
+            await _studentsController.DeleteStudentAsync(studentId: someStudentId);
+
+        // then
+        actualActionResult.ShouldBeEquivalentTo(
+            expected: expectedActionResult);
+
+        await _studentService.Received(requiredNumberOfCalls: 1)
             .RemoveStudentByIdAsync(studentId: someStudentId);
     }
 }

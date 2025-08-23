@@ -74,5 +74,13 @@ public class StudentsController : RESTFulController
         {
             return BadRequest(studentDependencyValidationException.InnerException);
         }
+        catch (StudentDependencyException studentDependencyException)
+        {
+            return InternalServerError(studentDependencyException);
+        }
+        catch (StudentServiceException studentServiceException)
+        {
+            return InternalServerError(studentServiceException);
+        }
     }
 }

@@ -76,4 +76,41 @@ public partial class StudentsControllerTests
         await _studentService.Received(requiredNumberOfCalls: 1)
             .RetrieveStudentByIdAsync(studentId: someStudentId);
     }
+
+    [Fact]
+    public async Task ShouldReturnNotFoundOnGetByIdIfItemDoesNotExistAsync()
+    {
+        // given
+        var someStudentId = Guid.NewGuid();
+        string someMessage = GetRandomString();
+
+        var notFoundStudentException =
+            new NotFoundStudentException(
+                message: someMessage);
+
+        var studentValidationException =
+            new StudentValidationException(
+                message: someMessage,
+                innerException: notFoundStudentException);
+
+        NotFoundObjectResult expectedNotFoundObjectResult =
+            NotFound(exception: notFoundStudentException);
+
+        var expectedActionResult =
+            new ActionResult<Student>(result: expectedNotFoundObjectResult);
+
+        _studentService.RetrieveStudentByIdAsync(studentId: someStudentId)
+            .ThrowsAsync(ex: studentValidationException);
+
+        // when
+        ActionResult<Student> actualActionResult =
+            await _studentsController.GetStudentByIdAsync(studentId: someStudentId);
+
+        // then
+        actualActionResult.ShouldBeEquivalentTo(
+            expected: expectedActionResult);
+
+        await _studentService.Received(requiredNumberOfCalls: 1)
+            .RetrieveStudentByIdAsync(studentId: someStudentId);
+    }
 }

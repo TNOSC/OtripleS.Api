@@ -25,7 +25,7 @@ public partial class StudentsControllerTests : RESTFulController
     public StudentsControllerTests()
     {
         _studentService = Substitute.For<IStudentService>();
-        _studentsController = new StudentsController(_studentService);
+        _studentsController = new StudentsController(studentService: _studentService);
     }
 
     public static TheoryData<Xeption> ValidationExceptions()

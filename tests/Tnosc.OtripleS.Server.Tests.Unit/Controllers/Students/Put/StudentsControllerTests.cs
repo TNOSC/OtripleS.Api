@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Force.DeepCloner;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using RESTFulSense.Models;
 using Shouldly;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xunit;
@@ -27,23 +26,23 @@ public partial class StudentsControllerTests
         Student expectedStudent = inputStudent.DeepClone();
 
         var expectedObjectResult =
-            new OkObjectResult(expectedStudent);
+            new OkObjectResult(value: expectedStudent);
 
         var expectedActionResult =
-            new ActionResult<Student>(expectedObjectResult);
+            new ActionResult<Student>(result: expectedObjectResult);
 
-        _studentService.ModifyStudentAsync(inputStudent)
+        _studentService.ModifyStudentAsync(student: inputStudent)
             .Returns(returnThis: updatedStudent);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.PutStudentAsync(inputStudent);
+            await _studentsController.PutStudentAsync(student: inputStudent);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
-             expectedActionResult);
+             expected: expectedActionResult);
 
-        await _studentService.Received(1)
-            .ModifyStudentAsync(inputStudent);
+        await _studentService.Received(requiredNumberOfCalls: 1)
+            .ModifyStudentAsync(student: inputStudent);
     }
 }

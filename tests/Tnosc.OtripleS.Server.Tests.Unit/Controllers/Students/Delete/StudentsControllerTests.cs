@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Force.DeepCloner;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using RESTFulSense.Models;
 using Shouldly;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xunit;
@@ -18,32 +17,32 @@ namespace Tnosc.OtripleS.Server.Tests.Unit.Controllers.Students;
 public partial class StudentsControllerTests
 {
     [Fact]
-    public async Task ShouldReturnCreatedOnPostAsync()
+    public async Task ShouldReturnOkOnDeleteByIdAsync()
     {
         // given
         Student randomStudent = CreateRandomStudent();
-        Student inputStudent = randomStudent;
-        Student addedStudent = inputStudent;
-        Student expectedStudent = inputStudent.DeepClone();
+        StudentId studentId = randomStudent.Id;
+        Student storageSource = randomStudent;
+        Student expectedStudent = storageSource.DeepClone();
 
         var expectedObjectResult =
-            new CreatedObjectResult(value: expectedStudent);
+            new OkObjectResult(value: expectedStudent);
 
         var expectedActionResult =
             new ActionResult<Student>(result: expectedObjectResult);
 
-        _studentService.RegisterStudentAsync(student: inputStudent)
-            .Returns(returnThis: addedStudent);
+        _studentService.RemoveStudentByIdAsync(studentId:studentId)
+            .Returns(returnThis: expectedStudent);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.PostStudentAsync(student: inputStudent);
+            await _studentsController.DeleteStudentAsync(studentId: studentId);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
-        await _studentService.Received(1)
-            .RegisterStudentAsync(student: inputStudent);
+        await _studentService.Received(requiredNumberOfCalls: 1)
+            .RemoveStudentByIdAsync(studentId: studentId);
     }
 }

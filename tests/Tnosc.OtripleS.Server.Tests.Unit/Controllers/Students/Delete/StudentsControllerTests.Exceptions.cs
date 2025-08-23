@@ -22,10 +22,10 @@ public partial class StudentsControllerTests
 {
     [Theory]
     [MemberData(nameof(ValidationExceptions))]
-    public async Task ShouldReturnBadRequestOnPostIfValidationErrorOccurredAsync(Xeption validationException)
+    public async Task ShouldReturnBadRequestOnDeleteIfValidationErrorOccurredAsync(Xeption validationException)
     {
         // given
-        Student someStudent = CreateRandomStudent();
+        var someStudentId = Guid.NewGuid();
 
         BadRequestObjectResult expectedBadRequestObjectResult =
             BadRequest(exception: validationException.InnerException);
@@ -33,28 +33,28 @@ public partial class StudentsControllerTests
         var expectedActionResult =
             new ActionResult<Student>(result: expectedBadRequestObjectResult);
 
-        _studentService.RegisterStudentAsync(student: someStudent)
+        _studentService.RemoveStudentByIdAsync(studentId: someStudentId)
             .ThrowsAsync(ex: validationException);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.PostStudentAsync(student: someStudent);
+            await _studentsController.DeleteStudentAsync(studentId: someStudentId);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
         await _studentService.Received(requiredNumberOfCalls: 1)
-            .RegisterStudentAsync(student: someStudent);
+            .RemoveStudentByIdAsync(studentId: someStudentId);
     }
 
     [Theory]
     [MemberData(nameof(ServerExceptions))]
-    public async Task ShouldReturnInternalServerErrorOnPostIfServerErrorOccurredAsync(
-            Xeption serverException)
+    public async Task ShouldReturnInternalServerErrorOnDeleteIfServerErrorOccurredAsync(
+           Xeption serverException)
     {
         // given
-        Student someStudent = CreateRandomStudent();
+        var someStudentId = Guid.NewGuid();
 
         InternalServerErrorObjectResult expectedInternalServerErrorObjectResult =
             InternalServerError(exception: serverException);
@@ -62,57 +62,94 @@ public partial class StudentsControllerTests
         var expectedActionResult =
             new ActionResult<Student>(result: expectedInternalServerErrorObjectResult);
 
-        _studentService.RegisterStudentAsync(student: someStudent)
-            .ThrowsAsync(ex: serverException); 
+        _studentService.RemoveStudentByIdAsync(studentId: someStudentId)
+            .ThrowsAsync(ex: serverException);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.PostStudentAsync(student: someStudent);
+            await _studentsController.DeleteStudentAsync(studentId: someStudentId);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
         await _studentService.Received(requiredNumberOfCalls: 1)
-            .RegisterStudentAsync(student: someStudent);
+            .RemoveStudentByIdAsync(studentId: someStudentId);
     }
 
     [Fact]
-    public async Task ShouldReturnConflictOnPostIfAlreadyExistsStudentErrorOccurredAsync()
+    public async Task ShouldReturnNotFoundOnDeleteIfItemDoesNotExistAsync()
     {
         // given
-        Student someStudent = CreateRandomStudent();
+        var someStudentId = Guid.NewGuid();
+        string someMessage = GetRandomString();
+
+        var notFoundStudentException =
+            new NotFoundStudentException(
+                message: someMessage);
+
+        var studentValidationException =
+            new StudentValidationException(
+                message: someMessage,
+                innerException: notFoundStudentException);
+
+        NotFoundObjectResult expectedNotFoundObjectResult =
+            NotFound(exception: notFoundStudentException); 
+
+        var expectedActionResult =
+            new ActionResult<Student>(result: expectedNotFoundObjectResult);
+
+        _studentService.RemoveStudentByIdAsync(studentId: someStudentId)
+            .ThrowsAsync(ex: studentValidationException);
+
+        // when
+        ActionResult<Student> actualActionResult =
+            await _studentsController.DeleteStudentAsync(studentId: someStudentId);
+
+        // then
+        actualActionResult.ShouldBeEquivalentTo(
+            expected: expectedActionResult);
+
+        await _studentService.Received(requiredNumberOfCalls: 1)
+            .RemoveStudentByIdAsync(studentId: someStudentId);
+    }
+
+    [Fact]
+    public async Task ShouldReturnConflictOnDeleteIfLockedStudentErrorOccurredAsync()
+    {
+        // given
+        var someStudentId = Guid.NewGuid();
         var someInnerException = new Exception();
         string someMessage = GetRandomString();
 
-        var alreadyExistsStudentException =
-            new AlreadyExistsStudentException(
+        var lockedStudentException =
+            new LockedStudentException(
                 message: someMessage,
                 innerException: someInnerException);
 
         var studentDependencyValidationException =
             new StudentDependencyValidationException(
                 message: someMessage,
-                innerException: alreadyExistsStudentException);
+                innerException: lockedStudentException);
 
         ConflictObjectResult expectedConflictObjectResult =
-            Conflict(exception: alreadyExistsStudentException);
+            Conflict(exception: lockedStudentException);
 
         var expectedActionResult =
             new ActionResult<Student>(result: expectedConflictObjectResult);
 
-        _studentService.RegisterStudentAsync(student: someStudent)
-           .ThrowsAsync(ex: studentDependencyValidationException);
+        _studentService.RemoveStudentByIdAsync(studentId: someStudentId)
+            .ThrowsAsync(ex: studentDependencyValidationException);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.PostStudentAsync(student: someStudent);
+            await _studentsController.DeleteStudentAsync(studentId: someStudentId);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
         await _studentService.Received(requiredNumberOfCalls: 1)
-            .RegisterStudentAsync(student: someStudent);
+            .RemoveStudentByIdAsync(studentId: someStudentId);
     }
 }

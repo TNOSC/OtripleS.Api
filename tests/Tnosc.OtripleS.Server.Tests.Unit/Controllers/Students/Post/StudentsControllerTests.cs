@@ -27,23 +27,23 @@ public partial class StudentsControllerTests
         Student expectedStudent = inputStudent.DeepClone();
 
         var expectedObjectResult =
-            new CreatedObjectResult(expectedStudent);
+            new CreatedObjectResult(value: expectedStudent);
 
         var expectedActionResult =
-            new ActionResult<Student>(expectedObjectResult);
+            new ActionResult<Student>(result: expectedObjectResult);
 
-        _studentService.RegisterStudentAsync(inputStudent)
+        _studentService.RegisterStudentAsync(student: inputStudent)
             .Returns(returnThis: addedStudent);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.PostStudentAsync(inputStudent);
+            await _studentsController.PostStudentAsync(student: inputStudent);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
-            expectedActionResult);
+            expected: expectedActionResult);
 
         await _studentService.Received(1)
-            .RegisterStudentAsync(inputStudent);
+            .RegisterStudentAsync(student: inputStudent);
     }
 }

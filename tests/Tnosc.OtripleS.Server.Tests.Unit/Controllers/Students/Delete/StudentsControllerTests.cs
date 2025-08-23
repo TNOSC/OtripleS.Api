@@ -26,23 +26,23 @@ public partial class StudentsControllerTests
         Student expectedStudent = storageSource.DeepClone();
 
         var expectedObjectResult =
-            new OkObjectResult(expectedStudent);
+            new OkObjectResult(value: expectedStudent);
 
         var expectedActionResult =
-            new ActionResult<Student>(expectedObjectResult);
+            new ActionResult<Student>(result: expectedObjectResult);
 
-        _studentService.RemoveStudentByIdAsync(studentId)
+        _studentService.RemoveStudentByIdAsync(studentId:studentId)
             .Returns(returnThis: expectedStudent);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.DeleteStudentAsync(studentId);
+            await _studentsController.DeleteStudentAsync(studentId: studentId);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
-            expectedActionResult);
+            expected: expectedActionResult);
 
-        await _studentService.Received(1)
-            .RemoveStudentByIdAsync(studentId);
+        await _studentService.Received(requiredNumberOfCalls: 1)
+            .RemoveStudentByIdAsync(studentId: studentId);
     }
 }

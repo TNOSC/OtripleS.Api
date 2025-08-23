@@ -28,24 +28,24 @@ public partial class StudentsControllerTests
         Student someStudent = CreateRandomStudent();
 
         BadRequestObjectResult expectedBadRequestObjectResult =
-            BadRequest(validationException.InnerException);
+            BadRequest(exception: validationException.InnerException);
 
         var expectedActionResult =
-            new ActionResult<Student>(expectedBadRequestObjectResult);
+            new ActionResult<Student>(result: expectedBadRequestObjectResult);
 
-        _studentService.RegisterStudentAsync(someStudent)
-            .ThrowsAsync(validationException);
+        _studentService.RegisterStudentAsync(student: someStudent)
+            .ThrowsAsync(ex: validationException);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.PostStudentAsync(someStudent);
+            await _studentsController.PostStudentAsync(student: someStudent);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
-            expectedActionResult);
+            expected: expectedActionResult);
 
-        await _studentService.Received(1)
-            .RegisterStudentAsync(someStudent);
+        await _studentService.Received(requiredNumberOfCalls: 1)
+            .RegisterStudentAsync(student: someStudent);
     }
 
     [Theory]
@@ -57,24 +57,24 @@ public partial class StudentsControllerTests
         Student someStudent = CreateRandomStudent();
 
         InternalServerErrorObjectResult expectedInternalServerErrorObjectResult =
-            InternalServerError(serverException);
+            InternalServerError(exception: serverException);
 
         var expectedActionResult =
-            new ActionResult<Student>(expectedInternalServerErrorObjectResult);
+            new ActionResult<Student>(result: expectedInternalServerErrorObjectResult);
 
-        _studentService.RegisterStudentAsync(someStudent)
-            .ThrowsAsync(serverException);
+        _studentService.RegisterStudentAsync(student: someStudent)
+            .ThrowsAsync(ex: serverException); 
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.PostStudentAsync(someStudent);
+            await _studentsController.PostStudentAsync(student: someStudent);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
-            expectedActionResult);
+            expected: expectedActionResult);
 
-        await _studentService.Received(1)
-            .RegisterStudentAsync(someStudent);
+        await _studentService.Received(requiredNumberOfCalls: 1)
+            .RegisterStudentAsync(student: someStudent);
     }
 
     [Fact]
@@ -96,23 +96,23 @@ public partial class StudentsControllerTests
                 innerException: alreadyExistsStudentException);
 
         ConflictObjectResult expectedConflictObjectResult =
-            Conflict(alreadyExistsStudentException);
+            Conflict(exception: alreadyExistsStudentException);
 
         var expectedActionResult =
-            new ActionResult<Student>(expectedConflictObjectResult);
+            new ActionResult<Student>(result: expectedConflictObjectResult);
 
-        _studentService.RegisterStudentAsync(someStudent)
-           .ThrowsAsync(studentDependencyValidationException);
+        _studentService.RegisterStudentAsync(student: someStudent)
+           .ThrowsAsync(ex: studentDependencyValidationException);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.PostStudentAsync(someStudent);
+            await _studentsController.PostStudentAsync(student: someStudent);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
-            expectedActionResult);
+            expected: expectedActionResult);
 
-        await _studentService.Received(1)
-            .RegisterStudentAsync(someStudent);
+        await _studentService.Received(requiredNumberOfCalls: 1)
+            .RegisterStudentAsync(student: someStudent);
     }
 }

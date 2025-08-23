@@ -132,7 +132,10 @@ public class StudentsController : RESTFulController
     }
 
     [HttpGet("{studentId}")]
-    public ValueTask<ActionResult<Student>> GetStudentByIdAsync(Guid studentId) =>
-        throw new NotImplementedException();
-
+    public async ValueTask<ActionResult<Student>> GetStudentByIdAsync(Guid studentId)
+    {
+        Student retrievedStudentTask = 
+            await _studentService.RetrieveStudentByIdAsync(studentId: studentId);
+        return Ok(value: retrievedStudentTask);
+    }
 }

@@ -7,16 +7,15 @@
 using System;
 using Xeptions;
 
-namespace Tnosc.OtripleS.Server.Domain.Students.Exceptions;
+namespace Tnosc.OtripleS.Server.Application.Exceptions.Processings.Students;
 
-public sealed class LockedStudentException : Xeption
+public sealed class FailedStudentProcessingServiceException : Xeption
 {
-    public LockedStudentException(
-        string message, 
+    public FailedStudentProcessingServiceException(
+        string message,
         Exception innerException)
-        : base(
-            message: message,
-            innerException: innerException)
+       : base(
+           message: message,
+           innerException: innerException)
     { }
 }
-

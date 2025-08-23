@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Shouldly;
+using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
-using Tnosc.OtripleS.Server.Domain.Students.Exceptions;
 using Xeptions;
 using Xunit;
 

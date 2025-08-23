@@ -6,11 +6,11 @@
 
 using Xeptions;
 
-namespace Tnosc.OtripleS.Server.Domain.Students.Exceptions;
+namespace Tnosc.OtripleS.Server.Application.Exceptions.Processings.Students;
 
-public class NotFoundStudentException : Xeption
+public sealed class NullStudentProcessingException : Xeption
 {
-    public NotFoundStudentException(string message)
-        : base(message: message) 
+    public NullStudentProcessingException(string message)
+        : base(message: message)
     { }
 }

@@ -8,8 +8,9 @@ using System;
 using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
+using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
+using Tnosc.OtripleS.Server.Application.Exceptions.Processings.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
-using Tnosc.OtripleS.Server.Domain.Students.Exceptions;
 using Xeptions;
 using Xunit;
 
@@ -88,6 +89,6 @@ public partial class StudentServiceTests
 
         await _storageBrokerMock
           .Received(requiredNumberOfCalls: 1)
-          .SelectStudentByIdAsync(someStudentId);
+          .SelectStudentByIdAsync(studentId: someStudentId);
     }
 }

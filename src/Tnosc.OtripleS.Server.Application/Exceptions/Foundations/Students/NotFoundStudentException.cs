@@ -6,15 +6,11 @@
 
 using Xeptions;
 
-namespace Tnosc.OtripleS.Server.Domain.Students.Exceptions;
+namespace Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 
-public sealed class StudentDependencyValidationException : Xeption
+public class NotFoundStudentException : Xeption
 {
-    public StudentDependencyValidationException(
-        string message,
-        Xeption innerException)
-       : base(
-           message: message,
-           innerException: innerException)
+    public NotFoundStudentException(string message)
+        : base(message: message) 
     { }
 }

@@ -6,11 +6,11 @@
 
 using Xeptions;
 
-namespace Tnosc.OtripleS.Server.Domain.Students.Exceptions;
+namespace Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 
-public sealed class InvalidStudentException : Xeption
+public sealed class NullStudentException : Xeption
 {
-    public InvalidStudentException(string message)
-       : base(message: message)
+    public NullStudentException(string message)
+        : base(message: message)
     { }
 }

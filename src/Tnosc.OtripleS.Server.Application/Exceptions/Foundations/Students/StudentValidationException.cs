@@ -4,21 +4,17 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using System;
 using Xeptions;
 
-namespace Tnosc.OtripleS.Server.Domain.Students.Exceptions;
+namespace Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 
-public sealed class FailedStudentServiceException : Xeption
+public sealed class StudentValidationException : Xeption
 {
-    public FailedStudentServiceException(
+    public StudentValidationException(
         string message,
-        Exception innerException)
-        : base(
-            message: message,
-            innerException: innerException)
+        Xeption innerException)
+       : base(
+           message: message,
+           innerException: innerException)
     { }
 }
-
-
-

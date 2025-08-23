@@ -8,8 +8,9 @@ using System;
 using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
+using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
+using Tnosc.OtripleS.Server.Application.Exceptions.Processings.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
-using Tnosc.OtripleS.Server.Domain.Students.Exceptions;
 using Xeptions;
 using Xunit;
 
@@ -71,7 +72,7 @@ public partial class StudentServiceTests
         };
 #pragma warning restore CS8601 // Possible null reference assignment.
 
-        var invalidStudentException = 
+        var invalidStudentException =
             new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
 
         invalidStudentException.AddData(
@@ -216,7 +217,7 @@ public partial class StudentServiceTests
         Student invalidStudent = randomStudent;
         invalidStudent.UpdatedBy = Guid.NewGuid();
 
-        var invalidStudentException = 
+        var invalidStudentException =
             new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
 
         invalidStudentException.AddData(
@@ -239,7 +240,7 @@ public partial class StudentServiceTests
         // then
         await Assert.ThrowsAsync<StudentValidationException>(() =>
             registerStudentTask.AsTask());
-       
+
         _dateTimeBrokerMock
             .Received(requiredNumberOfCalls: 1)
             .GetCurrentDateTime();
@@ -261,8 +262,8 @@ public partial class StudentServiceTests
         Student randomStudent = CreateRandomStudent(date: dateTime);
         Student invalidStudent = randomStudent;
         invalidStudent.UpdatedDate = GetRandomDateTime();
-        
-        var invalidStudentException = 
+
+        var invalidStudentException =
             new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
 
         invalidStudentException.AddData(
@@ -312,7 +313,7 @@ public partial class StudentServiceTests
         invalidStudent.CreatedDate = randomDate.AddMinutes(minutes: minutes);
         invalidStudent.UpdatedDate = invalidStudent.CreatedDate;
 
-        var invalidStudentException = 
+        var invalidStudentException =
             new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
 
         invalidStudentException.AddData(

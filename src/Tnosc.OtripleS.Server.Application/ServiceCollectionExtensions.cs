@@ -6,11 +6,15 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
+using Tnosc.OtripleS.Server.Application.Services.Processings.Students;
 
 namespace Tnosc.OtripleS.Server.Application;
 
 public static class ServiceCollectionExtensions
 {
-    public static void AddApplicationServices(this IServiceCollection services) => 
+    public static void AddApplicationServices(this IServiceCollection services)
+    {
         services.AddTransient<IStudentService, StudentService>();
+        services.AddTransient<IStudentProcessingService, StudentProcessingService>();
+    }
 }

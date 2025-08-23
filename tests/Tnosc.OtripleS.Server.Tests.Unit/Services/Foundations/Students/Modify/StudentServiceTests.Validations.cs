@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 using Force.DeepCloner;
 using NSubstitute;
 using Shouldly;
+using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
+using Tnosc.OtripleS.Server.Application.Exceptions.Processings.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
-using Tnosc.OtripleS.Server.Domain.Students.Exceptions;
 using Xeptions;
 using Xunit;
 
@@ -206,9 +207,7 @@ public partial class StudentServiceTests
 
 
     [Theory]
-#pragma warning disable xUnit1037 // There are fewer theory data type arguments than required by the parameters of the test method
     [MemberData(nameof(InvalidMinuteCases))]
-#pragma warning restore xUnit1037 // There are fewer theory data type arguments than required by the parameters of the test method
     public async Task ShouldThrowValidationExceptionOnModifyIfStudentUpdatedDateIsNotRecentAndLogItAsync(
            int randomMoreOrLessThanOneMinute)
     {
@@ -265,7 +264,7 @@ public partial class StudentServiceTests
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
         Student noStudent = null;
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
-        var notFoundStudentException = 
+        var notFoundStudentException =
             new NotFoundStudentException(message: $"Couldn't find student with id: {nonExistentStudent.Id.Value}.");
 
         var expectedStudentValidationException =

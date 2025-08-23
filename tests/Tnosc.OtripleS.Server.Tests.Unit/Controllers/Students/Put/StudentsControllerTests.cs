@@ -18,32 +18,32 @@ namespace Tnosc.OtripleS.Server.Tests.Unit.Controllers.Students;
 public partial class StudentsControllerTests
 {
     [Fact]
-    public async Task ShouldReturnCreatedOnPostAsync()
+    public async Task ShouldReturnOkOnPutAsync()
     {
         // given
         Student randomStudent = CreateRandomStudent();
         Student inputStudent = randomStudent;
-        Student addedStudent = inputStudent;
+        Student updatedStudent = inputStudent;
         Student expectedStudent = inputStudent.DeepClone();
 
         var expectedObjectResult =
-            new CreatedObjectResult(expectedStudent);
+            new OkObjectResult(expectedStudent);
 
         var expectedActionResult =
             new ActionResult<Student>(expectedObjectResult);
 
-        _studentService.RegisterStudentAsync(inputStudent)
-            .Returns(returnThis: addedStudent);
+        _studentService.ModifyStudentAsync(inputStudent)
+            .Returns(returnThis: updatedStudent);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.PostStudentAsync(inputStudent);
+            await _studentsController.PutStudentAsync(inputStudent);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
               expectedActionResult);
 
         await _studentService.Received(1)
-            .RegisterStudentAsync(inputStudent);
+            .ModifyStudentAsync(inputStudent);
     }
 }

@@ -4,6 +4,7 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
@@ -54,4 +55,9 @@ public class StudentsController : RESTFulController
             return InternalServerError(studentServiceException);
         }
     }
+
+    [HttpPut]
+    public ValueTask<ActionResult<Student>> PutStudentAsync(Student student) =>
+        throw new NotImplementedException();
+    
 }

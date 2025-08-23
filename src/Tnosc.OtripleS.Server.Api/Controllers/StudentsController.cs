@@ -5,6 +5,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
@@ -164,6 +165,11 @@ public class StudentsController : RESTFulController
     }
 
     [HttpGet]
-    public ValueTask<ActionResult<Student>> GetAllStudentsAsync() =>
-        throw new NotImplementedException();
+    public async ValueTask<ActionResult<Student>> GetAllStudentsAsync()
+    {
+        IEnumerable<Student> retrievedAllStudents = await _studentService
+            .RetrieveAllStudentsAsync();
+
+        return Ok(value: retrievedAllStudents);
+    }
 }

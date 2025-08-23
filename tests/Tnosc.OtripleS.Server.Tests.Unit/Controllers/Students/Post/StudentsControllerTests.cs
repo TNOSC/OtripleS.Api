@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using Force.DeepCloner;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using RESTFulSense.Clients.Extensions;
 using RESTFulSense.Models;
+using Shouldly;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xunit;
 
@@ -45,6 +45,5 @@ public partial class StudentsControllerTests
 
         await _studentService.Received(1)
             .RegisterStudentAsync(inputStudent);
-
     }
 }

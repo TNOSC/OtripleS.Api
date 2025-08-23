@@ -21,7 +21,7 @@ public partial class StudentsControllerTests : RESTFulController
 
     public StudentsControllerTests()
     {
-        _studentService = Substitute.For<StudentService>();
+        _studentService = Substitute.For<IStudentService>();
         _studentsController = new StudentsController(_studentService);
     }
 

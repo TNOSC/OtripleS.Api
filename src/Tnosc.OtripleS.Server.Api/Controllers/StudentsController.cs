@@ -4,7 +4,6 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
@@ -23,6 +22,11 @@ public class StudentsController : RESTFulController
         _studentService = studentService;
 
     [HttpPost]
-    public ValueTask<ActionResult<Student>> PostStudentAsync(Student student) =>
-        throw new NotImplementedException();
+    public async ValueTask<ActionResult<Student>> PostStudentAsync(Student student)
+    {
+        Student registeredStudent = 
+            await _studentService.RegisterStudentAsync(student);
+
+        return Created(registeredStudent);
+    }
 }

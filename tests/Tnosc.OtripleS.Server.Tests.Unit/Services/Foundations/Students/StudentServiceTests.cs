@@ -6,7 +6,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using NSubstitute;
 using Tnosc.OtripleS.Server.Application.Brokers.DateTimes;
 using Tnosc.OtripleS.Server.Application.Brokers.Loggings;
@@ -49,18 +48,18 @@ public partial class StudentServiceTests
         };
     }
 
-    private static IEnumerable<Student> CreateRandomStudents() => 
+    private static IEnumerable<Student> CreateRandomStudents() =>
         CreateStudentFiller(date: GetRandomDateTime())
             .Create(count: GetRandomNumber());
 
     private static DateTimeOffset GetRandomDateTime() =>
-           new DateTimeRange(earliestDate: DateTime.UtcNow).GetValue();
+        new DateTimeRange(earliestDate: DateTime.UtcNow).GetValue();
 
     private static Student CreateRandomStudent() =>
-          CreateStudentFiller(date: DateTimeOffset.UtcNow).Create();
+        CreateStudentFiller(date: DateTimeOffset.UtcNow).Create();
 
     private static Student CreateRandomStudent(DateTimeOffset date) =>
-           CreateStudentFiller(date).Create();
+        CreateStudentFiller(date).Create();
 
     private static Filler<Student> CreateStudentFiller(DateTimeOffset date)
     {
@@ -77,11 +76,15 @@ public partial class StudentServiceTests
         return filler;
     }
 
-    private static int GetRandomNumber() => new IntRange(min: 2, max: 10).GetValue();
-    
-    private static int GetNegativeRandomNumber() => -1 * GetRandomNumber();
+    private static int GetRandomNumber() =>
+        new IntRange(min: 2, max: 10).GetValue();
 
-    private static string GetRandomMessage() => new MnemonicString().GetValue();
+    private static int GetNegativeRandomNumber() =>
+        -1 * GetRandomNumber();
 
-    private static string GetRandomMessage(int length) => new MnemonicString(wordCount: length).GetValue();
+    private static string GetRandomMessage() =>
+        new MnemonicString().GetValue();
+
+    private static string GetRandomMessage(int length) =>
+        new MnemonicString(wordCount: length).GetValue();
 }

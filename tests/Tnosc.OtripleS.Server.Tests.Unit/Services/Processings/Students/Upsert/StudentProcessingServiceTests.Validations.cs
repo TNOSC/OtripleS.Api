@@ -58,16 +58,16 @@ public partial class StudentProcessingServiceTests
         var invalidStudent = new Student(id: new StudentId(Guid.Empty));
 
         var invalidStudentProcessingException =
-           new InvalidStudentProcessingException(message: "Invalid student. Please fix the errors and try again.");
+            new InvalidStudentProcessingException(message: "Invalid student. Please fix the errors and try again.");
 
         invalidStudentProcessingException.AddData(
             key: nameof(Student.Id),
             values: "Id is required");
 
         var expectedProcessingStudentValidationException =
-           new StudentProcessingValidationException(
-               message: "Invalid input, fix the errors and try again.",
-               innerException: invalidStudentProcessingException);
+        new StudentProcessingValidationException(
+            message: "Invalid input, fix the errors and try again.",
+            innerException: invalidStudentProcessingException);
 
         // when
         ValueTask<Student> upsertStudentTask =

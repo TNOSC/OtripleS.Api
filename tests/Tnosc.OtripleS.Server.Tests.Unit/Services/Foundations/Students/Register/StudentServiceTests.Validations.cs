@@ -160,12 +160,12 @@ public partial class StudentServiceTests
             new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
 
         invalidStudentException.AddData(
-               key: nameof(Student.UserId),
-               values: "Text cannot be longer than 100 characters");
+            key: nameof(Student.UserId),
+            values: "Text cannot be longer than 100 characters");
 
         invalidStudentException.AddData(
-              key: nameof(Student.IdentityNumber),
-              values: "Text cannot be longer than 50 characters");
+            key: nameof(Student.IdentityNumber),
+            values: "Text cannot be longer than 50 characters");
 
         invalidStudentException.AddData(
             key: nameof(Student.FirstName),
@@ -176,8 +176,8 @@ public partial class StudentServiceTests
             values: "Text cannot be longer than 100 characters");
 
         invalidStudentException.AddData(
-           key: nameof(Student.LastName),
-           values: "Text cannot be longer than 100 characters");
+            key: nameof(Student.LastName),
+            values: "Text cannot be longer than 100 characters");
 
         var expectedStudentValidationException =
             new StudentValidationException(

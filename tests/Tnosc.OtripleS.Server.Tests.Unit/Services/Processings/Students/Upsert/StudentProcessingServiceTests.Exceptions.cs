@@ -20,7 +20,7 @@ public partial class StudentProcessingServiceTests
     [Theory]
     [MemberData(nameof(DependencyValidationExceptions))]
     public async Task ShouldThrowDependencyValidationExceptionOnUpsertIfDependencyValidationErrorOccursAndLogItAsync(
-          Xeption dependencyValidationExceptions)
+        Xeption dependencyValidationExceptions)
     {
         // given
         Student someStudent = CreateRandomStudent();
@@ -35,7 +35,7 @@ public partial class StudentProcessingServiceTests
 
         // when
         ValueTask<Student> upsertStudentTask =
-           _studentProcessingService.UpsertStudentAsync(student: someStudent);
+            _studentProcessingService.UpsertStudentAsync(student: someStudent);
 
         // then
         await Assert.ThrowsAsync<StudentProcessingDependencyValidationException>(() =>
@@ -57,7 +57,7 @@ public partial class StudentProcessingServiceTests
     [Theory]
     [MemberData(nameof(DependencyExceptions))]
     public async Task ShouldThrowDependencyExceptionOnUpsertIfDependencyErrorOccursAndLogItAsync(
-          Xeption dependencyValidationExceptions)
+        Xeption dependencyValidationExceptions)
     {
         // given
         Student someStudent = CreateRandomStudent();
@@ -72,7 +72,7 @@ public partial class StudentProcessingServiceTests
 
         // when
         ValueTask<Student> upsertStudentTask =
-           _studentProcessingService.UpsertStudentAsync(student: someStudent);
+            _studentProcessingService.UpsertStudentAsync(student: someStudent);
 
         // then
         await Assert.ThrowsAsync<StudentProcessingDependencyException>(() =>
@@ -96,24 +96,24 @@ public partial class StudentProcessingServiceTests
     {
         // given
         Student someStudent = CreateRandomStudent();
-        var serviceExcpetion = new Exception();
+        var serviceException = new Exception();
 
         var failedStudentProcessingServiceException =
             new FailedStudentProcessingServiceException(
                 message: "Failed student service occurred, please contact support.",
-                innerException: serviceExcpetion);
+                innerException: serviceException);
 
         var expectedStudentProcessingServiceException =
             new StudentProcessingServiceException(
                 message: "Student service processing error occurred, contact support.",
-                innerException: serviceExcpetion);
+                innerException: serviceException);
 
         _studentServiceMock.RetrieveStudentByIdAsync(studentId: someStudent.Id)
-            .ThrowsAsync(ex: serviceExcpetion);
+            .ThrowsAsync(ex: serviceException);
 
         // when
         ValueTask<Student> upsertStudentTask =
-           _studentProcessingService.UpsertStudentAsync(student: someStudent);
+            _studentProcessingService.UpsertStudentAsync(student: someStudent);
 
         // then
         await Assert.ThrowsAsync<StudentProcessingServiceException>(() =>

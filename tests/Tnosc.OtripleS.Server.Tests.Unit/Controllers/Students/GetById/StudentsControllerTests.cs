@@ -22,8 +22,8 @@ public partial class StudentsControllerTests
         // given
         Student randomStudent = CreateRandomStudent();
         StudentId studentId = randomStudent.Id;
-        Student storageSource = randomStudent;
-        Student expectedStudent = storageSource.DeepClone();
+        Student storageStudent = randomStudent;
+        Student expectedStudent = storageStudent.DeepClone();
 
         var expectedObjectResult =
             new OkObjectResult(value: expectedStudent);
@@ -32,7 +32,7 @@ public partial class StudentsControllerTests
             new ActionResult<Student>(result: expectedObjectResult);
 
         _studentService.RetrieveStudentByIdAsync(studentId: studentId)
-            .Returns(returnThis: storageSource);
+            .Returns(returnThis: storageStudent);
 
         // when
         ActionResult<Student> actualActionResult =

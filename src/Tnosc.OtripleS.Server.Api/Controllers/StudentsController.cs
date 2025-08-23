@@ -37,10 +37,10 @@ public class StudentsController : RESTFulController
         {
             return BadRequest(studentValidationException.InnerException);
         }
-        catch (StudentDependencyValidationException sourceDependencyValidationException)
-               when (sourceDependencyValidationException.InnerException is AlreadyExistsStudentException)
+        catch (StudentDependencyValidationException studentDependencyValidationException)
+            when (studentDependencyValidationException.InnerException is AlreadyExistsStudentException)
         {
-            return Conflict(sourceDependencyValidationException.InnerException);
+            return Conflict(studentDependencyValidationException.InnerException);
         }
         catch (StudentDependencyValidationException studentDependencyValidationException)
         {
@@ -62,13 +62,18 @@ public class StudentsController : RESTFulController
         try
         {
             Student modifiedStudent =
-                   await _studentService.ModifyStudentAsync(student);
+                await _studentService.ModifyStudentAsync(student);
 
             return Ok(modifiedStudent);
         }
         catch (StudentValidationException studentValidationException)
         {
             return BadRequest(studentValidationException.InnerException);
+        }
+        catch (StudentDependencyValidationException studentDependencyValidationException)
+            when (studentDependencyValidationException.InnerException is LockedStudentException)
+        {
+            return Conflict(studentDependencyValidationException.InnerException);
         }
         catch (StudentDependencyValidationException studentDependencyValidationException)
         {

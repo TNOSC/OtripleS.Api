@@ -167,9 +167,20 @@ public class StudentsController : RESTFulController
     [HttpGet]
     public async ValueTask<ActionResult<Student>> GetAllStudentsAsync()
     {
-        IEnumerable<Student> retrievedAllStudents = await _studentService
-            .RetrieveAllStudentsAsync();
+        try
+        {
+            IEnumerable<Student> retrievedAllStudents = await _studentService
+                .RetrieveAllStudentsAsync();
 
-        return Ok(value: retrievedAllStudents);
+            return Ok(value: retrievedAllStudents);
+        }
+        catch (StudentDependencyException studentDependencyException)
+        {
+            return InternalServerError(exception: studentDependencyException);
+        }
+        catch (StudentServiceException studentServiceException)
+        {
+            return InternalServerError(exception: studentServiceException);
+        }
     }
 }

@@ -59,9 +59,20 @@ public class StudentsController : RESTFulController
     [HttpPut]
     public async ValueTask<ActionResult<Student>> PutStudentAsync(Student student)
     {
-        Student modifiedStudent =
-               await _studentService.ModifyStudentAsync(student);
+        try
+        {
+            Student modifiedStudent =
+                   await _studentService.ModifyStudentAsync(student);
 
-        return Ok(modifiedStudent);
+            return Ok(modifiedStudent);
+        }
+        catch (StudentValidationException studentValidationException)
+        {
+            return BadRequest(studentValidationException.InnerException);
+        }
+        catch (StudentDependencyValidationException studentDependencyValidationException)
+        {
+            return BadRequest(studentDependencyValidationException.InnerException);
+        }
     }
 }

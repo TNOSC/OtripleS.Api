@@ -47,4 +47,33 @@ public partial class StudentsControllerTests
         await _studentService.Received(requiredNumberOfCalls: 1)
             .RetrieveStudentByIdAsync(studentId: someStudentId);
     }
+
+    [Theory]
+    [MemberData(nameof(ServerExceptions))]
+    public async Task ShouldReturnInternalServerErrorOnGetByIdIfServerErrorOccurredAsync(
+           Xeption serverException)
+    {
+        // given
+        var someStudentId = Guid.NewGuid();
+
+        InternalServerErrorObjectResult expectedInternalServerErrorObjectResult =
+            InternalServerError(exception: serverException);
+
+        var expectedActionResult =
+            new ActionResult<Student>(result: expectedInternalServerErrorObjectResult);
+
+        _studentService.RetrieveStudentByIdAsync(studentId: someStudentId)
+            .ThrowsAsync(ex: serverException);
+
+        // when
+        ActionResult<Student> actualActionResult =
+            await _studentsController.GetStudentByIdAsync(studentId: someStudentId);
+
+        // then
+        actualActionResult.ShouldBeEquivalentTo(
+            expected: expectedActionResult);
+
+        await _studentService.Received(requiredNumberOfCalls: 1)
+            .RetrieveStudentByIdAsync(studentId: someStudentId);
+    }
 }

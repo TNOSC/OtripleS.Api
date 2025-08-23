@@ -28,21 +28,21 @@ public partial class StudentsControllerTests
         Student someStudent = CreateRandomStudent();
 
         BadRequestObjectResult expectedBadRequestObjectResult =
-               BadRequest(validationException.InnerException);
+            BadRequest(validationException.InnerException);
 
         var expectedActionResult =
-               new ActionResult<Student>(expectedBadRequestObjectResult);
+            new ActionResult<Student>(expectedBadRequestObjectResult);
 
         _studentService.RegisterStudentAsync(someStudent)
             .ThrowsAsync(validationException);
 
         // when
         ActionResult<Student> actualActionResult =
-             await _studentsController.PostStudentAsync(someStudent);
+            await _studentsController.PostStudentAsync(someStudent);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
-              expectedActionResult);
+            expectedActionResult);
 
         await _studentService.Received(1)
             .RegisterStudentAsync(someStudent);
@@ -57,21 +57,21 @@ public partial class StudentsControllerTests
         Student someStudent = CreateRandomStudent();
 
         InternalServerErrorObjectResult expectedInternalServerErrorObjectResult =
-               InternalServerError(serverException);
+            InternalServerError(serverException);
 
         var expectedActionResult =
-               new ActionResult<Student>(expectedInternalServerErrorObjectResult);
+            new ActionResult<Student>(expectedInternalServerErrorObjectResult);
 
         _studentService.RegisterStudentAsync(someStudent)
             .ThrowsAsync(serverException);
 
         // when
         ActionResult<Student> actualActionResult =
-             await _studentsController.PostStudentAsync(someStudent);
+            await _studentsController.PostStudentAsync(someStudent);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
-              expectedActionResult);
+            expectedActionResult);
 
         await _studentService.Received(1)
             .RegisterStudentAsync(someStudent);
@@ -106,11 +106,11 @@ public partial class StudentsControllerTests
 
         // when
         ActionResult<Student> actualActionResult =
-             await _studentsController.PostStudentAsync(someStudent);
+            await _studentsController.PostStudentAsync(someStudent);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
-              expectedActionResult);
+            expectedActionResult);
 
         await _studentService.Received(1)
             .RegisterStudentAsync(someStudent);

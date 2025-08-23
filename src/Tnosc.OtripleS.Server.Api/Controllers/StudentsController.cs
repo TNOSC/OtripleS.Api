@@ -93,4 +93,8 @@ public class StudentsController : RESTFulController
             return InternalServerError(studentServiceException);
         }
     }
+
+    [HttpDelete]
+    public ValueTask<ActionResult<Student>> DeleteStudentAsync(Guid studentId) =>
+        throw new NotImplementedException();
 }

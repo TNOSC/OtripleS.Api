@@ -29,30 +29,30 @@ public class StudentsController : RESTFulController
         try
         {
             Student registeredStudent =
-                await _studentService.RegisterStudentAsync(student);
+                await _studentService.RegisterStudentAsync(student: student);
 
-            return Created(registeredStudent);
+            return Created(value: registeredStudent);
         }
         catch (StudentValidationException studentValidationException)
         {
-            return BadRequest(studentValidationException.InnerException);
+            return BadRequest(exception: studentValidationException.InnerException);
         }
         catch (StudentDependencyValidationException studentDependencyValidationException)
             when (studentDependencyValidationException.InnerException is AlreadyExistsStudentException)
         {
-            return Conflict(studentDependencyValidationException.InnerException);
+            return Conflict(exception: studentDependencyValidationException.InnerException);
         }
         catch (StudentDependencyValidationException studentDependencyValidationException)
         {
-            return BadRequest(studentDependencyValidationException.InnerException);
+            return BadRequest(exception: studentDependencyValidationException.InnerException);
         }
         catch (StudentDependencyException studentDependencyException)
         {
-            return InternalServerError(studentDependencyException);
+            return InternalServerError(exception: studentDependencyException);
         }
         catch (StudentServiceException studentServiceException)
         {
-            return InternalServerError(studentServiceException);
+            return InternalServerError(exception: studentServiceException);
         }
     }
 
@@ -62,35 +62,35 @@ public class StudentsController : RESTFulController
         try
         {
             Student modifiedStudent =
-                await _studentService.ModifyStudentAsync(student);
+                await _studentService.ModifyStudentAsync(student: student);
 
-            return Ok(modifiedStudent);
+            return Ok(value: modifiedStudent);
         }
         catch (StudentValidationException studentValidationException)
             when (studentValidationException.InnerException is NotFoundStudentException)
         {
-            return NotFound(studentValidationException.InnerException);
+            return NotFound(exception: studentValidationException.InnerException);
         }
         catch (StudentValidationException studentValidationException)
         {
-            return BadRequest(studentValidationException.InnerException);
+            return BadRequest(exception: studentValidationException.InnerException);
         }
         catch (StudentDependencyValidationException studentDependencyValidationException)
             when (studentDependencyValidationException.InnerException is LockedStudentException)
         {
-            return Conflict(studentDependencyValidationException.InnerException);
+            return Conflict(exception: studentDependencyValidationException.InnerException);
         }
         catch (StudentDependencyValidationException studentDependencyValidationException)
         {
-            return BadRequest(studentDependencyValidationException.InnerException);
+            return BadRequest(exception: studentDependencyValidationException.InnerException);
         }
         catch (StudentDependencyException studentDependencyException)
         {
-            return InternalServerError(studentDependencyException);
+            return InternalServerError(exception: studentDependencyException);
         }
         catch (StudentServiceException studentServiceException)
         {
-            return InternalServerError(studentServiceException);
+            return InternalServerError(exception: studentServiceException);
         }
     }
 

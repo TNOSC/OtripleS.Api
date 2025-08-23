@@ -8,9 +8,12 @@ using System;
 using NSubstitute;
 using RESTFulSense.Controllers;
 using Tnosc.OtripleS.Server.Api.Controllers;
+using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Tynamix.ObjectFiller;
+using Xeptions;
+using Xunit;
 
 namespace Tnosc.OtripleS.Server.Tests.Unit.Controllers.Students;
 
@@ -25,11 +28,31 @@ public partial class StudentsControllerTests : RESTFulController
         _studentsController = new StudentsController(_studentService);
     }
 
+    public static TheoryData<Xeption> ValidationExceptions()
+    {
+        var someInnerException = new Xeption();
+        string someMessage = GetRandomString();
+
+        return
+        [
+            new StudentValidationException(
+                message: someMessage,
+                innerException: someInnerException),
+
+            new StudentDependencyValidationException(
+                message: someMessage,
+                innerException: someInnerException)
+        ];
+    }
+
     private static Student CreateRandomStudent() =>
        CreateStudentFiller(date: DateTimeOffset.UtcNow).Create();
 
     private static DateTimeOffset GetRandomDateTime() =>
        new DateTimeRange(earliestDate: DateTime.UtcNow).GetValue();
+
+    private static string GetRandomString() =>
+            new MnemonicString().GetValue();
 
     private static Filler<Student> CreateStudentFiller(DateTimeOffset date)
     {

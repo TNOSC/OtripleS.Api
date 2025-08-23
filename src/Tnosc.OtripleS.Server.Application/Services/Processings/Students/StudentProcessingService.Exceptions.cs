@@ -48,6 +48,24 @@ public sealed partial class StudentProcessingService
         {
             throw CreateAndLogDependencyException(exception: studentServiceException);
         }
+        catch (Exception serviceException)
+        {
+            var failedStudentProcessingServiceException =
+                   new FailedStudentProcessingServiceException(
+                       message: "Failed student service occurred, please contact support.",
+                       innerException: serviceException);
+            throw CreateAndLogProcessingServicException(exception: failedStudentProcessingServiceException);
+        }
+    }
+
+    private StudentProcessingServiceException CreateAndLogProcessingServicException(Xeption exception)
+    {
+        var studentProcessingServiceException = new StudentProcessingServiceException(
+           message: "Student service processing error occurred, contact support.",
+           innerException: exception.InnerException!);
+        _loggingBroker.LogError(exception: studentProcessingServiceException);
+
+        return studentProcessingServiceException;
     }
 
     private StudentProcessingDependencyException CreateAndLogDependencyException(Xeption exception)

@@ -5,7 +5,6 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -86,24 +85,24 @@ public partial class StudentsControllerTests
         var someInnerException = new Exception();
         string someMessage = GetRandomString();
 
-        var alreadyExistsSourceException =
+        var alreadyExistsStudentException =
             new AlreadyExistsStudentException(
                 message: someMessage,
                 innerException: someInnerException);
 
-        var sourceDependencyValidationException =
+        var studentDependencyValidationException =
             new StudentDependencyValidationException(
                 message: someMessage,
-                innerException: alreadyExistsSourceException);
+                innerException: alreadyExistsStudentException);
 
         ConflictObjectResult expectedConflictObjectResult =
-            Conflict(alreadyExistsSourceException);
+            Conflict(alreadyExistsStudentException);
 
         var expectedActionResult =
             new ActionResult<Student>(expectedConflictObjectResult);
 
         _studentService.RegisterStudentAsync(someStudent)
-           .ThrowsAsync(sourceDependencyValidationException);
+           .ThrowsAsync(studentDependencyValidationException);
 
         // when
         ActionResult<Student> actualActionResult =

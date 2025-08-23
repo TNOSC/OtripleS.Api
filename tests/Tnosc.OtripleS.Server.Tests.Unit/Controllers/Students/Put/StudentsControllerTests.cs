@@ -41,7 +41,7 @@ public partial class StudentsControllerTests
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
-              expectedActionResult);
+             expectedActionResult);
 
         await _studentService.Received(1)
             .ModifyStudentAsync(inputStudent);

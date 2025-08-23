@@ -110,7 +110,46 @@ public partial class StudentsControllerTests
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
-        await _studentService.Received(1)
+        await _studentService.Received(requiredNumberOfCalls: 1)
+            .RemoveStudentByIdAsync(studentId: someStudentId);
+    }
+
+    [Fact]
+    public async Task ShouldReturnConflictOnDeleteIfLockedStudentErrorOccurredAsync()
+    {
+        // given
+        var someStudentId = Guid.NewGuid();
+        var someInnerException = new Exception();
+        string someMessage = GetRandomString();
+
+        var lockedStudentException =
+            new LockedStudentException(
+                message: someMessage,
+                innerException: someInnerException);
+
+        var studentDependencyValidationException =
+            new StudentDependencyValidationException(
+                message: someMessage,
+                innerException: lockedStudentException);
+
+        ConflictObjectResult expectedConflictObjectResult =
+            Conflict(exception: lockedStudentException);
+
+        var expectedActionResult =
+            new ActionResult<Student>(result: expectedConflictObjectResult);
+
+        _studentService.RemoveStudentByIdAsync(studentId: someStudentId)
+            .ThrowsAsync(ex: studentDependencyValidationException);
+
+        // when
+        ActionResult<Student> actualActionResult =
+            await _studentsController.DeleteStudentAsync(studentId: someStudentId);
+
+        // then
+        actualActionResult.ShouldBeEquivalentTo(
+            expected: expectedActionResult);
+
+        await _studentService.Received(requiredNumberOfCalls: 1)
             .RemoveStudentByIdAsync(studentId: someStudentId);
     }
 }

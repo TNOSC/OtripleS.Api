@@ -4,6 +4,7 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -80,6 +81,47 @@ public partial class StudentProcessingServiceTests
         _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
             .LogError(Arg.Is<Xeption>(actualException =>
                 actualException.SameExceptionAs(expectedStudentProcessingDependencyValidationException)));
+
+        await _studentServiceMock
+            .Received(requiredNumberOfCalls: 0)
+            .RegisterStudentAsync(student: someStudent);
+
+        await _studentServiceMock
+            .Received(requiredNumberOfCalls: 0)
+            .ModifyStudentAsync(student: someStudent);
+    }
+
+    [Fact]
+    public async Task ShouldThrowServiceExceptionOnUpsertIfServiceErrorOccursAndLogItAsync()
+    {
+        // given
+        Student someStudent = CreateRandomStudent();
+        var serviceExcpetion = new Exception();
+
+        var failedStudentProcessingServiceException =
+            new FailedStudentProcessingServiceException(
+                message: "Failed student service occurred, please contact support.",
+                innerException: serviceExcpetion);
+
+        var expectedStudentProcessingServiceException =
+            new StudentProcessingServiceException(
+                message: "Student service processing error occurred, contact support.",
+                innerException: serviceExcpetion);
+
+        _studentServiceMock.RetrieveStudentByIdAsync(studentId: someStudent.Id)
+            .ThrowsAsync(ex: serviceExcpetion);
+
+        // when
+        ValueTask<Student> upsertStudentTask =
+           _studentProcessingService.UpsertStudentAsync(student: someStudent);
+
+        // then
+        await Assert.ThrowsAsync<StudentProcessingServiceException>(() =>
+            upsertStudentTask.AsTask());
+
+        _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
+            .LogError(Arg.Is<Xeption>(actualException =>
+                actualException.SameExceptionAs(expectedStudentProcessingServiceException)));
 
         await _studentServiceMock
             .Received(requiredNumberOfCalls: 0)

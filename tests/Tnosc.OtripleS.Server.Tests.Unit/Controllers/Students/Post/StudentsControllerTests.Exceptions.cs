@@ -56,7 +56,7 @@ public partial class StudentsControllerTests
         Student someStudent = CreateRandomStudent();
 
         InternalServerErrorObjectResult expectedInternalServerErrorObjectResult =
-               InternalServerError(serverException.InnerException);
+               InternalServerError(serverException);
 
         var expectedActionResult =
                new ActionResult<Student>(expectedInternalServerErrorObjectResult);

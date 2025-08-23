@@ -104,6 +104,11 @@ public class StudentsController : RESTFulController
             return Ok(value: deletedStudent);
         }
         catch (StudentValidationException studentValidationException)
+           when (studentValidationException.InnerException is NotFoundStudentException)
+        {
+            return NotFound(exception: studentValidationException.InnerException);
+        }
+        catch (StudentValidationException studentValidationException)
         {
             return BadRequest(exception: studentValidationException.InnerException);
         }

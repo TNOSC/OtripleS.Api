@@ -113,6 +113,11 @@ public class StudentsController : RESTFulController
             return BadRequest(exception: studentValidationException.InnerException);
         }
         catch (StudentDependencyValidationException studentDependencyValidationException)
+            when (studentDependencyValidationException.InnerException is LockedStudentException)
+        {
+            return Conflict(exception: studentDependencyValidationException.InnerException);
+        }
+        catch (StudentDependencyValidationException studentDependencyValidationException)
         {
             return BadRequest(exception: studentDependencyValidationException.InnerException);
         }

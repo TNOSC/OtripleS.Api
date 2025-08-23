@@ -11,6 +11,7 @@ using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using RESTFulSense.Models;
 using Shouldly;
+using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xeptions;
 using Xunit;
@@ -73,6 +74,43 @@ public partial class StudentsControllerTests
             expected: expectedActionResult);
 
         await _studentService.Received(requiredNumberOfCalls: 1)
+            .RemoveStudentByIdAsync(studentId: someStudentId);
+    }
+
+    [Fact]
+    public async Task ShouldReturnNotFoundOnDeleteIfItemDoesNotExistAsync()
+    {
+        // given
+        var someStudentId = Guid.NewGuid();
+        string someMessage = GetRandomString();
+
+        var notFoundStudentException =
+            new NotFoundStudentException(
+                message: someMessage);
+
+        var studentValidationException =
+            new StudentValidationException(
+                message: someMessage,
+                innerException: notFoundStudentException);
+
+        NotFoundObjectResult expectedNotFoundObjectResult =
+            NotFound(exception: notFoundStudentException); 
+
+        var expectedActionResult =
+            new ActionResult<Student>(result: expectedNotFoundObjectResult);
+
+        _studentService.RemoveStudentByIdAsync(studentId: someStudentId)
+            .ThrowsAsync(ex: studentValidationException);
+
+        // when
+        ActionResult<Student> actualActionResult =
+            await _studentsController.DeleteStudentAsync(studentId: someStudentId);
+
+        // then
+        actualActionResult.ShouldBeEquivalentTo(
+            expected: expectedActionResult);
+
+        await _studentService.Received(1)
             .RemoveStudentByIdAsync(studentId: someStudentId);
     }
 }

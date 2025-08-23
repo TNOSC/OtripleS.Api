@@ -44,12 +44,12 @@ public partial class StudentProcessingServiceTests
         actualStudent.ShouldBeEquivalentTo(expected: expectedStudent);
 
         await _studentServiceMock
-         .Received(requiredNumberOfCalls: 1)
-         .RegisterStudentAsync(student: inputStudent);
+            .Received(requiredNumberOfCalls: 1)
+            .RegisterStudentAsync(student: inputStudent);
 
         await _studentServiceMock
-         .Received(requiredNumberOfCalls: 0)
-         .ModifyStudentAsync(student: inputStudent);
+            .Received(requiredNumberOfCalls: 0)
+            .ModifyStudentAsync(student: inputStudent);
 
         _loggingBrokerMock
             .ReceivedCalls()
@@ -67,11 +67,11 @@ public partial class StudentProcessingServiceTests
         Student expectedStudent = storageStudent.DeepClone();
         
         _studentServiceMock
-          .RetrieveStudentByIdAsync(studentId: inputStudent.Id)
-          .Returns(returnThis: registeredStudent);
+            .RetrieveStudentByIdAsync(studentId: inputStudent.Id)
+            .Returns(returnThis: registeredStudent);
 
         _studentServiceMock.ModifyStudentAsync(student: inputStudent)
-           .Returns(returnThis: storageStudent);
+            .Returns(returnThis: storageStudent);
 
         // when
         Student actualStudent =
@@ -81,12 +81,12 @@ public partial class StudentProcessingServiceTests
         actualStudent.ShouldBeEquivalentTo(expected: expectedStudent);
 
         await _studentServiceMock
-         .Received(requiredNumberOfCalls: 0)
-         .RegisterStudentAsync(student: inputStudent);
+            .Received(requiredNumberOfCalls: 0)
+            .RegisterStudentAsync(student: inputStudent);
 
         await _studentServiceMock
-         .Received(requiredNumberOfCalls: 1)
-         .ModifyStudentAsync(student: inputStudent);
+            .Received(requiredNumberOfCalls: 1)
+            .ModifyStudentAsync(student: inputStudent);
 
         _loggingBrokerMock
             .ReceivedCalls()

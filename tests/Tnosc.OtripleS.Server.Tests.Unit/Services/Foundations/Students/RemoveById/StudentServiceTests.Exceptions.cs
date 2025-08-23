@@ -85,7 +85,7 @@ public partial class StudentServiceTests
                 innerException: lockedStudentException);
 
         _storageBrokerMock.SelectStudentByIdAsync(studentId: studentId)
-           .Returns(returnThis: storageStudent);
+            .Returns(returnThis: storageStudent);
 
         _storageBrokerMock.DeleteStudentAsync(student: storageStudent)
             .ThrowsAsync(ex: lockedStudentException);

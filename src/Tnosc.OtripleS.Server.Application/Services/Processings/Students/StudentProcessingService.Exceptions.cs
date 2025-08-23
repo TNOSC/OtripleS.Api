@@ -61,8 +61,8 @@ public sealed partial class StudentProcessingService
     private StudentProcessingServiceException CreateAndLogProcessingServicException(Xeption exception)
     {
         var studentProcessingServiceException = new StudentProcessingServiceException(
-           message: "Student service processing error occurred, contact support.",
-           innerException: exception.InnerException!);
+            message: "Student service processing error occurred, contact support.",
+            innerException: exception.InnerException!);
         _loggingBroker.LogError(exception: studentProcessingServiceException);
 
         return studentProcessingServiceException;
@@ -71,8 +71,8 @@ public sealed partial class StudentProcessingService
     private StudentProcessingDependencyException CreateAndLogDependencyException(Xeption exception)
     {
         var studentProcessingDependencyException = new StudentProcessingDependencyException(
-           message: "Student processing dependency error occurred, please contact support.",
-           innerException: (exception.InnerException as Xeption)!);
+            message: "Student processing dependency error occurred, please contact support.",
+            innerException: (exception.InnerException as Xeption)!);
         _loggingBroker.LogError(exception: studentProcessingDependencyException);
 
         return studentProcessingDependencyException;
@@ -81,8 +81,8 @@ public sealed partial class StudentProcessingService
     private StudentProcessingDependencyValidationException CreateAndLogDependencyValidationException(Xeption exception)
     {
         var studentProcessingDependencyValidationException = new StudentProcessingDependencyValidationException(
-           message: "Student processing dependency validation error occurred, fix the errors and try again.",
-           innerException: (exception.InnerException as Xeption)!);
+            message: "Student processing dependency validation error occurred, fix the errors and try again.",
+            innerException: (exception.InnerException as Xeption)!);
         _loggingBroker.LogError(exception: studentProcessingDependencyValidationException);
 
         return studentProcessingDependencyValidationException;

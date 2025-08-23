@@ -35,8 +35,8 @@ public partial class StudentServiceTests
         actualStudent.ShouldBeEquivalentTo(expected: expectedStudent);
 
         await _storageBrokerMock
-           .Received(requiredNumberOfCalls: 1)
-           .SelectStudentByIdAsync(studentId: studentId);
+            .Received(requiredNumberOfCalls: 1)
+            .SelectStudentByIdAsync(studentId: studentId);
 
         _loggingBrokerMock
             .ReceivedCalls()

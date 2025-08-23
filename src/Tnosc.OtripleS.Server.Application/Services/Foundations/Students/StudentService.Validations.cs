@@ -67,9 +67,7 @@ public sealed partial class StudentService
         Condition = string.IsNullOrWhiteSpace(text),
         Message = "Text is required"
     };
-
-
-
+    
     private static dynamic IsInvalid(DateTimeOffset date) => new
     {
         Condition = date == default,
@@ -94,13 +92,13 @@ public sealed partial class StudentService
     }
 
     private static dynamic IsNotSame(
-          Guid firstId,
-          Guid secondId,
-          string secondIdName) => new
-          {
-              Condition = firstId != secondId,
-              Message = $"Id is not the same as {secondIdName}"
-          };
+        Guid firstId,
+        Guid secondId,
+        string secondIdName) => new
+        {
+            Condition = firstId != secondId,
+            Message = $"Id is not the same as {secondIdName}"
+        };
 
     private static dynamic IsNotSame(
         DateTimeOffset firstDate,

@@ -36,7 +36,7 @@ public sealed partial class StudentService : IStudentService
             ValidateStudentOnModify(student: student);
 
             Student maybeStudent =
-               await _storageBroker.SelectStudentByIdAsync(studentId: student.Id);
+                await _storageBroker.SelectStudentByIdAsync(studentId: student.Id);
 
             ValidateStorageStudent(
                 storageStudent: maybeStudent,
@@ -60,7 +60,7 @@ public sealed partial class StudentService : IStudentService
             ValidateStudentId(studentId);
 
             Student maybeStudent =
-                  await _storageBroker.SelectStudentByIdAsync(studentId: studentId);
+                await _storageBroker.SelectStudentByIdAsync(studentId: studentId);
 
             ValidateStorageStudent(maybeStudent, studentId);
 
@@ -76,7 +76,7 @@ public sealed partial class StudentService : IStudentService
             ValidateStudentId(studentId);
 
             Student maybeStudent =
-                  await _storageBroker.SelectStudentByIdAsync(studentId: studentId);
+                await _storageBroker.SelectStudentByIdAsync(studentId: studentId);
 
             ValidateStorageStudent(maybeStudent, studentId);
 

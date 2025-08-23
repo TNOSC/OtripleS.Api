@@ -32,7 +32,7 @@ public partial class StudentServiceTests
             .Returns(returnThis: randomDateTime);
 
         _storageBrokerMock.SelectStudentByIdAsync(studentId: inputStudent.Id)
-         .Returns(returnThis: beforeUpdateStorageStudent);
+            .Returns(returnThis: beforeUpdateStorageStudent);
 
         _storageBrokerMock.UpdateStudentAsync(student: inputStudent)
             .Returns(returnThis: storageStudent);
@@ -49,8 +49,8 @@ public partial class StudentServiceTests
             .UpdateStudentAsync(student: inputStudent);
 
         await _storageBrokerMock
-           .Received(requiredNumberOfCalls: 1)
-           .SelectStudentByIdAsync(studentId: inputStudent.Id);
+            .Received(requiredNumberOfCalls: 1)
+            .SelectStudentByIdAsync(studentId: inputStudent.Id);
 
         _loggingBrokerMock
             .ReceivedCalls()

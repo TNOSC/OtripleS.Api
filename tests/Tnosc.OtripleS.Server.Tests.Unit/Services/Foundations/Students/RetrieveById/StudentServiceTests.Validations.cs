@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
 using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
-using Tnosc.OtripleS.Server.Application.Exceptions.Processings.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xeptions;
 using Xunit;
@@ -25,7 +24,7 @@ public partial class StudentServiceTests
         Guid inputStudentId = Guid.Empty;
 
         var invalidStudentException =
-          new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
+            new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");
 
         invalidStudentException.AddData(
             key: nameof(Student.Id),
@@ -66,18 +65,18 @@ public partial class StudentServiceTests
             new NotFoundStudentException(message: $"Couldn't find student with id: {someStudentId}.");
 
         var expectedStudentValidationException =
-          new StudentValidationException(
-              message: "Invalid input, fix the errors and try again.",
-              innerException: notFoundStudentException);
+            new StudentValidationException(
+                message: "Invalid input, fix the errors and try again.",
+                innerException: notFoundStudentException);
 
 #pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
         _storageBrokerMock.SelectStudentByIdAsync(studentId: someStudentId)
-          .Returns(returnThis: noStudent);
+            .Returns(returnThis: noStudent);
 #pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
 
         //when
         ValueTask<Student> retrieveStudentTask =
-           _studentService.RetrieveStudentByIdAsync(studentId: someStudentId);
+            _studentService.RetrieveStudentByIdAsync(studentId: someStudentId);
 
         // then
         await Assert.ThrowsAsync<StudentValidationException>(() =>
@@ -88,7 +87,7 @@ public partial class StudentServiceTests
                 actualException.SameExceptionAs(expectedStudentValidationException)));
 
         await _storageBrokerMock
-          .Received(requiredNumberOfCalls: 1)
-          .SelectStudentByIdAsync(studentId: someStudentId);
+            .Received(requiredNumberOfCalls: 1)
+            .SelectStudentByIdAsync(studentId: someStudentId);
     }
 }

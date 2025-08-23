@@ -130,4 +130,9 @@ public class StudentsController : RESTFulController
             return InternalServerError(exception: studentServiceException);
         }
     }
+
+    [HttpGet("{studentId}")]
+    public ValueTask<ActionResult<Student>> GetStudentByIdAsync(Guid studentId) =>
+        throw new NotImplementedException();
+
 }

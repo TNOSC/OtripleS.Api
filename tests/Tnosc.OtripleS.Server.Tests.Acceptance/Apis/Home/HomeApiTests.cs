@@ -14,6 +14,6 @@ public partial class HomeApiTests
 {
     private readonly OtripleSApiBroker _otripleSpiBroker;
 
-    public HomeApiTests(OtripleSApiBroker sofeeApiBroker) =>
-        _otripleSpiBroker = sofeeApiBroker;
+    public HomeApiTests(OtripleSApiBroker otripleSpiBroker) =>
+        _otripleSpiBroker = otripleSpiBroker;
 }

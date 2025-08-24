@@ -9,14 +9,8 @@ using Tnosc.Lib.Domain;
 
 namespace Tnosc.OtripleS.Server.Domain.Students;
 
-public sealed class Student : Entity<StudentId>, IAuditable
+public sealed class Student : Entity<Guid>, IAuditable
 {
-    public Student()
-    { }
-    public Student(StudentId id)
-        :base(id)
-    { }
-
     public string UserId { get; set; } = null!;
     public string IdentityNumber { get; set; } = null!;
     public string FirstName { get; set; } = null!;

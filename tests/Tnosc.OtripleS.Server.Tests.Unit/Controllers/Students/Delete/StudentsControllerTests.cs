@@ -4,6 +4,7 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using Force.DeepCloner;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +22,7 @@ public partial class StudentsControllerTests
     {
         // given
         Student randomStudent = CreateRandomStudent();
-        StudentId studentId = randomStudent.Id;
+        Guid studentId = randomStudent.Id;
         Student storageStudent = randomStudent;
         Student expectedStudent = storageStudent.DeepClone();
 

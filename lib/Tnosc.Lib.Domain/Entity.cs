@@ -6,24 +6,15 @@
 
 namespace Tnosc.Lib.Domain;
 
-public abstract class Entity<TEntityId> : IEquatable<Entity<TEntityId>>
-    where TEntityId : class, IEntityId
+public abstract class Entity<TId> : IEquatable<Entity<TId>>
+    where TId : notnull
 {
-    protected Entity(TEntityId id)
-        : this() =>
-        Id = id ?? throw new ArgumentException("The entity identifier is required.", nameof(id));
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-    protected Entity()
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-    {
-    }
+    public required TId Id { get; init; }
 
-    public TEntityId Id { get; private init; }
+    public byte[] RowVersion { get; private set; } = null!;
 
-    public byte[] RowVersion { get; set; }
-
-    public static bool operator ==(Entity<TEntityId>? a, Entity<TEntityId>? b)
+    public static bool operator ==(Entity<TId>? a, Entity<TId>? b)
     {
         if (a is null && b is null)
         {
@@ -38,9 +29,9 @@ public abstract class Entity<TEntityId> : IEquatable<Entity<TEntityId>>
         return a.Equals(b);
     }
 
-    public static bool operator !=(Entity<TEntityId>? a, Entity<TEntityId>? b) => !(a == b);
+    public static bool operator !=(Entity<TId>? a, Entity<TId>? b) => !(a == b);
 
-    public virtual bool Equals(Entity<TEntityId>? other)
+    public virtual bool Equals(Entity<TId>? other)
     {
         if (other is null)
         {
@@ -52,7 +43,7 @@ public abstract class Entity<TEntityId> : IEquatable<Entity<TEntityId>>
             return false;
         }
 
-        return ReferenceEquals(this, other) || Id == other.Id;
+        return ReferenceEquals(this, other) || Id.Equals(other.Id);
     }
 
     public override bool Equals(object? obj)
@@ -67,13 +58,13 @@ public abstract class Entity<TEntityId> : IEquatable<Entity<TEntityId>>
             return true;
         }
 
-        if (obj is not Entity<TEntityId> other)
+        if (obj is not Entity<TId> other)
         {
             return false;
         }
 
-        return Id == other.Id;
+        return Id.Equals(other.Id);
     }
 
-    public override int GetHashCode() => Id.GetHashCode() * 41;
+    public override int GetHashCode() => HashCode.Combine(Id);
 }

@@ -19,9 +19,6 @@ internal sealed class StudentConfiguration : IEntityTypeConfiguration<Student>
         builder.HasKey(s => s.Id);
 
         builder.Property(s => s.Id)
-               .HasConversion(
-                   id => id.Value,
-                   value => new StudentId(value))
                .ValueGeneratedNever();
 
         builder.Property(s => s.RowVersion)

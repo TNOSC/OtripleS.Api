@@ -17,8 +17,13 @@ public partial class OtripleSApiBroker
     public async ValueTask<Student> PostStudentAsync(Student student) =>
         await _apiFactoryClient.PostContentAsync(StudentsRelativeUrl, student);
 
+    public async ValueTask<Student> PutStudentAsync(Student student) =>
+        await _apiFactoryClient.PutContentAsync(StudentsRelativeUrl, student);
 
     public async ValueTask<Student> DeleteStudentByIdAsync(Guid studentId) =>
-           await _apiFactoryClient.DeleteContentAsync<Student>($"{StudentsRelativeUrl}/{studentId}");
+        await _apiFactoryClient.DeleteContentAsync<Student>($"{StudentsRelativeUrl}/{studentId}");
+
+    public async ValueTask<Student> GetStudentByIdAsync(Guid studentId) =>
+        await _apiFactoryClient.GetContentAsync<Student>($"{StudentsRelativeUrl}/{studentId}");
 }
 

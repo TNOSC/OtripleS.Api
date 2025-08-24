@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Tnosc.OtripleS.Server.Tests.Acceptance.Brokers;
 using Tynamix.ObjectFiller;
@@ -10,10 +11,26 @@ namespace Tnosc.OtripleS.Server.Tests.Acceptance.Apis.Students;
 [Collection(nameof(ApiTestCollection))]
 public partial class StudentsApiTests
 {
-    private readonly OtripleSApiBroker _otripleSpiBroker;
+    private readonly OtripleSApiBroker _otripleSApiBroker;
 
-    public StudentsApiTests(OtripleSApiBroker otripleSpiBroker) =>
-        _otripleSpiBroker = otripleSpiBroker;
+    public StudentsApiTests(OtripleSApiBroker otripleSApiBroker) =>
+        _otripleSApiBroker = otripleSApiBroker;
+
+    private async ValueTask<Student> PostRandomStudentAsync()
+    {
+        Student randomStudent = CreateRandomStudent();
+        await _otripleSApiBroker.PostStudentAsync(randomStudent);
+
+        return randomStudent;
+    }
+
+    private static Student UpdateStudentRandom(Student student)
+    {
+        DateTimeOffset now = DateTimeOffset.UtcNow;
+        student.UpdatedDate = now;
+
+        return student;
+    }
 
     private static Student CreateRandomStudent() =>
            CreateRandomStudentFiller().Create();

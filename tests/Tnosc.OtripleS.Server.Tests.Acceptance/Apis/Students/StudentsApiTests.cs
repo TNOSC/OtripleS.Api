@@ -32,6 +32,9 @@ public partial class StudentsApiTests
         return student;
     }
 
+    private static IEnumerable<Student> GetRandomStudents() =>
+           CreateRandomStudentFiller().Create(GetRandomNumber());
+
     private static Student CreateRandomStudent() =>
            CreateRandomStudentFiller().Create();
 
@@ -50,6 +53,9 @@ public partial class StudentsApiTests
 
         return filler;
     }
+
+    private static int GetRandomNumber() => 
+        new IntRange(min: 2, max: 10).GetValue();
 
     private static DateTimeOffset GetRandomDateTime() =>
            new DateTimeRange(earliestDate: DateTime.UtcNow).GetValue();

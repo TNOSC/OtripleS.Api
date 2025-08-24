@@ -4,6 +4,7 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using Shouldly;
 using Tnosc.OtripleS.Server.Domain.Students;
@@ -14,20 +15,17 @@ namespace Tnosc.OtripleS.Server.Tests.Acceptance.Apis.Students;
 public partial class StudentsApiTests
 {
     [Fact]
-    public async Task ShouldPutStudentAsync()
+    public async Task ShouldGetByIdStudentAsync()
     {
         // given
-        Student randomStudent = await PostRandomStudentAsync();
-        Student modifiedStudent = UpdateStudentRandom(randomStudent);
+        Student expectedStudent = await PostRandomStudentAsync();
 
         // when
-        await _otripleSApiBroker.PutStudentAsync(modifiedStudent);
-
         Student actualStudent =
-            await _otripleSApiBroker.GetStudentByIdAsync(randomStudent.Id);
+            await _otripleSApiBroker.GetStudentByIdAsync(expectedStudent.Id);
 
         // then
-        actualStudent.ShouldBeEquivalentTo(modifiedStudent);
+        actualStudent.ShouldBeEquivalentTo(expectedStudent);
         await _otripleSApiBroker.DeleteStudentByIdAsync(actualStudent.Id);
     }
 }

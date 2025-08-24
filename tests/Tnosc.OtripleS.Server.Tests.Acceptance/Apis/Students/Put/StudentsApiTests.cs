@@ -5,6 +5,7 @@
 // ----------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
+using FluentAssertions;
 using Shouldly;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xunit;
@@ -14,19 +15,20 @@ namespace Tnosc.OtripleS.Server.Tests.Acceptance.Apis.Students;
 public partial class StudentsApiTests
 {
     [Fact]
-    public async Task ShouldPostStudentAsync()
+    public async Task ShouldPutStudentAsync()
     {
         // given
-        Student randomStudent = CreateRandomStudent();
-        Student inputStudent = randomStudent;
-        Student expectedStudent = inputStudent;
+        Student randomStudent = await PostRandomStudentAsync();
+        Student modifiedStudent = UpdateStudentRandom(randomStudent);
 
         // when
+        await _otripleSApiBroker.PutStudentAsync(modifiedStudent);
+
         Student actualStudent =
-            await _otripleSApiBroker.PostStudentAsync(student: inputStudent);
+            await _otripleSApiBroker.GetStudentByIdAsync(randomStudent.Id);
 
         // then
-        actualStudent.ShouldBeEquivalentTo(expected: expectedStudent);
+        actualStudent.Should().BeEquivalentTo(modifiedStudent);
         await _otripleSApiBroker.DeleteStudentByIdAsync(actualStudent.Id);
     }
 }

@@ -5,6 +5,8 @@
 // ----------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
+using FluentAssertions;
+using RESTFulSense.Exceptions;
 using Shouldly;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xunit;
@@ -14,20 +16,24 @@ namespace Tnosc.OtripleS.Server.Tests.Acceptance.Apis.Students;
 public partial class StudentsApiTests
 {
     [Fact]
-    public async Task ShouldPutStudentAsync()
+    public async Task ShouldDeleteStudentAsync()
     {
         // given
         Student randomStudent = await PostRandomStudentAsync();
-        Student modifiedStudent = UpdateStudentRandom(randomStudent);
+        Student inputStudent = randomStudent;
+        Student expectedStudent = inputStudent;
 
-        // when
-        await _otripleSApiBroker.PutStudentAsync(modifiedStudent);
+        // when 
+        Student deletedStudent =
+            await _otripleSApiBroker.DeleteStudentByIdAsync(inputStudent.Id);
 
-        Student actualStudent =
-            await _otripleSApiBroker.GetStudentByIdAsync(randomStudent.Id);
+        ValueTask<Student> getStudentByIdTask =
+            _otripleSApiBroker.GetStudentByIdAsync(inputStudent.Id);
 
         // then
-        actualStudent.ShouldBeEquivalentTo(modifiedStudent);
-        await _otripleSApiBroker.DeleteStudentByIdAsync(actualStudent.Id);
+        deletedStudent.ShouldBeEquivalentTo(expectedStudent);
+
+        await Assert.ThrowsAsync<HttpResponseNotFoundException>(() =>
+           getStudentByIdTask.AsTask());
     }
 }

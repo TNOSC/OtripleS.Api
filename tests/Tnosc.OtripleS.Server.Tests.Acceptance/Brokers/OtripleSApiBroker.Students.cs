@@ -5,6 +5,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tnosc.OtripleS.Server.Domain.Students;
 
@@ -25,5 +26,8 @@ public partial class OtripleSApiBroker
 
     public async ValueTask<Student> GetStudentByIdAsync(Guid studentId) =>
         await _apiFactoryClient.GetContentAsync<Student>($"{StudentsRelativeUrl}/{studentId}");
+
+    public async ValueTask<List<Student>> GetAllStudentsAsync() =>
+        await _apiFactoryClient.GetContentAsync<List<Student>>($"{StudentsRelativeUrl}/");
 }
 

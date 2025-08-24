@@ -95,7 +95,7 @@ public class StudentsController : RESTFulController
         }
     }
 
-    [HttpDelete]
+    [HttpDelete("{studentId}")]
     public async ValueTask<ActionResult<Student>> DeleteStudentAsync(Guid studentId)
     {
         try

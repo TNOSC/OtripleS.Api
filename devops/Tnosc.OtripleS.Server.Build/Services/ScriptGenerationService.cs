@@ -30,7 +30,7 @@ internal static class ScriptGenerationService
                 .OnPullRequest(branches: "main")
                     .AddJob(jobIdentifier: "build", configureJob: job => job
                     .WithName(name: "Build")
-                    .RunsOn(machine: BuildMachines.UbuntuLatest)
+                    .RunsOn(machine: BuildMachines.WindowsLatest)
                         .AddCheckoutStep(name: "Check out")
                         .AddSetupDotNetStep(version: "9.0.303")
                         .AddRestoreStep()

@@ -4,6 +4,8 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
+using System.Text.Json.Serialization;
+
 namespace Tnosc.Lib.Domain;
 
 public abstract class Entity<TId> : IEquatable<Entity<TId>>
@@ -11,8 +13,6 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>
 {
 
     public required TId Id { get; init; }
-
-    public byte[] RowVersion { get; private set; } = null!;
 
     public static bool operator ==(Entity<TId>? a, Entity<TId>? b)
     {

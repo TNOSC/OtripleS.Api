@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using EFxceptions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Tnosc.OtripleS.Server.Application.Brokers.Storages;
 
@@ -69,6 +70,7 @@ internal sealed partial class StorageBroker : EFxceptionsContext, IStorageBroker
         string connectionString = _configuration.GetConnectionString(name: "DefaultConnection")
             ?? throw new InvalidOperationException(message: "DefaultConnection is not configured");
         optionsBuilder.UseSqlServer(connectionString: connectionString);
+        optionsBuilder.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

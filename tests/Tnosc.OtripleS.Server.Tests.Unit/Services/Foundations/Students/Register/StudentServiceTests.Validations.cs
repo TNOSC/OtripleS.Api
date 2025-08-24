@@ -63,8 +63,9 @@ public partial class StudentServiceTests
     {
         // given
 #pragma warning disable CS8601 // Possible null reference assignment.
-        var invalidStudent = new Student(id: new StudentId(Guid.Empty))
+        var invalidStudent = new Student()
         {
+            Id = Guid.Empty,
             UserId = invalidText,
             IdentityNumber = invalidText,
             FirstName = invalidText,

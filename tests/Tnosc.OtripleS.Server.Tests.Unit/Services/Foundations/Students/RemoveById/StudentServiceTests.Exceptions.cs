@@ -23,7 +23,7 @@ public partial class StudentServiceTests
     {
         // given
         Student randomStudent = CreateRandomStudent();
-        StudentId studentId = randomStudent.Id;
+        Guid studentId = randomStudent.Id;
         Student storageStudent = randomStudent;
         var databaseUpdateException = new DbUpdateException();
 
@@ -70,7 +70,7 @@ public partial class StudentServiceTests
     {
         // given
         Student randomStudent = CreateRandomStudent();
-        StudentId studentId = randomStudent.Id;
+        Guid studentId = randomStudent.Id;
         Student storageStudent = randomStudent;
         var databaseUpdateConcurrencyException = new DbUpdateConcurrencyException();
 
@@ -116,7 +116,7 @@ public partial class StudentServiceTests
     {
         // given
         Student randomStudent = CreateRandomStudent();
-        StudentId studentId = randomStudent.Id;
+        Guid studentId = randomStudent.Id;
 
         var serviceException = new Exception();
 

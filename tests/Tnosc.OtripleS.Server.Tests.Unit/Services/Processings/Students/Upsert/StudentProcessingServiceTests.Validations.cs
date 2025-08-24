@@ -55,7 +55,7 @@ public partial class StudentProcessingServiceTests
     public async Task ShouldThrowValidationExceptionOnUpsertIfStudentIdIsInvalidAndLogItAsync()
     {
         // given
-        var invalidStudent = new Student(id: new StudentId(Guid.Empty));
+        var invalidStudent = new Student() { Id = Guid.Empty };
 
         var invalidStudentProcessingException =
             new InvalidStudentProcessingException(message: "Invalid student. Please fix the errors and try again.");

@@ -23,7 +23,7 @@ public partial class StudentServiceTests
     {
         // given
         Student randomStudent = CreateRandomStudent();
-        StudentId studentId = randomStudent.Id;
+        Guid studentId = randomStudent.Id;
         var databaseUpdateException = new DbUpdateException();
 
         var failedStudentStorageException =
@@ -61,7 +61,7 @@ public partial class StudentServiceTests
     {
         // given
         Student randomStudent = CreateRandomStudent();
-        StudentId studentId = randomStudent.Id;
+        Guid studentId = randomStudent.Id;
 
         var serviceException = new Exception();
 

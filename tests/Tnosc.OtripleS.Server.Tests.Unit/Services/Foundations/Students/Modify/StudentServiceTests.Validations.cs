@@ -63,8 +63,9 @@ public partial class StudentServiceTests
     {
         // given
 #pragma warning disable CS8601 // Possible null reference assignment.
-        var invalidStudent = new Student(id: new StudentId(Guid.Empty))
+        var invalidStudent = new Student
         {
+            Id = Guid.Empty,
             UserId = invalidText,
             IdentityNumber = invalidText,
             FirstName = invalidText,
@@ -264,7 +265,7 @@ public partial class StudentServiceTests
         Student noStudent = null;
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
         var notFoundStudentException =
-            new NotFoundStudentException(message: $"Couldn't find student with id: {nonExistentStudent.Id.Value}.");
+            new NotFoundStudentException(message: $"Couldn't find student with id: {nonExistentStudent.Id}.");
 
         var expectedStudentValidationException =
             new StudentValidationException(
@@ -314,7 +315,7 @@ public partial class StudentServiceTests
         invalidStudent.CreatedDate = storageStudent.CreatedDate.AddDays(randomNumber);
         invalidStudent.UpdatedDate = randomDateTime;
         invalidStudent.CreatedBy = invalidCreatedBy;
-        StudentId studentId = invalidStudent.Id;
+        Guid studentId = invalidStudent.Id;
 
         var invalidStudentException =
             new InvalidStudentException(message: "Invalid student. Please fix the errors and try again.");

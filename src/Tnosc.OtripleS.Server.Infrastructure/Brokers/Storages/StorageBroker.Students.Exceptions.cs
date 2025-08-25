@@ -4,7 +4,7 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using EFxceptions.Models.Exceptions;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +16,7 @@ namespace Tnosc.OtripleS.Server.Infrastructure.Brokers.Storages;
 internal partial class StorageBroker
 {
     private delegate ValueTask<Student> ReturningStudentFunction();
-    private delegate ValueTask<IEnumerable<Student>> ReturningStudentsFunction();
+    private delegate IQueryable<Student> ReturningStudentsFunction();
 
     private static async ValueTask<Student> TryCatch(ReturningStudentFunction returningStudentFunction)
     {
@@ -53,11 +53,11 @@ internal partial class StorageBroker
         }
     }
 
-    private static async ValueTask<IEnumerable<Student>> TryCatch(ReturningStudentsFunction returningStudentsFunction)
+    private static IQueryable<Student>TryCatch(ReturningStudentsFunction returningStudentsFunction)
     {
         try
         {
-            return await returningStudentsFunction();
+            return  returningStudentsFunction();
         }
         catch (DbUpdateException dbUpdateException)
         {

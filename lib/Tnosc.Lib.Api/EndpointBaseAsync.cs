@@ -14,7 +14,7 @@ public static class EndpointBaseAsync
     {
         public abstract class WithActionResult<TResponse> : EndpointBase
         {
-            public abstract ActionResult<TResponse> HandleAsync(TRequest request);
+            public abstract ActionResult<TResponse> Handle(TRequest request);
         }
 
         public abstract class WithActionResultValueTask<TResponse> : EndpointBase
@@ -24,7 +24,7 @@ public static class EndpointBaseAsync
 
         public abstract class WithActionResult : EndpointBase
         {
-            public abstract ActionResult HandleAsync(TRequest request);
+            public abstract ActionResult Handle(TRequest request);
         }
 
         public abstract class WithActionResultValueTask : EndpointBase
@@ -37,7 +37,7 @@ public static class EndpointBaseAsync
     {
         public abstract class WithActionResult<TResponse> : EndpointBase
         {
-            public abstract ActionResult<TResponse> HandleAsync();
+            public abstract ActionResult<TResponse> Handle();
         }
         public abstract class WithActionResultValueTask<TResponse> : EndpointBase
         {
@@ -46,7 +46,7 @@ public static class EndpointBaseAsync
 
         public abstract class WithActionResult : EndpointBase
         {
-            public abstract ActionResult HandleAsync();
+            public abstract ActionResult Handle();
         }
 
         public abstract class WithActionResultValueTask : EndpointBase

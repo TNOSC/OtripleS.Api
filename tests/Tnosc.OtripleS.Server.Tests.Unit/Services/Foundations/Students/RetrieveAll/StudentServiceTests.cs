@@ -4,8 +4,7 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 using Force.DeepCloner;
 using NSubstitute;
 using Shouldly;
@@ -17,26 +16,26 @@ namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.Students;
 public partial class StudentServiceTests
 {
     [Fact]
-    public async Task ShouldRetrieveAllStudentsAsync()
+    public void ShouldRetrieveAllStudents()
     {
         // given
-        IEnumerable<Student> randomStudents = CreateRandomStudents();
-        IEnumerable<Student> storageStudents = randomStudents;
-        IEnumerable<Student> expectedStudents = storageStudents.DeepClone();
+        IQueryable<Student> randomStudents = CreateRandomStudents();
+        IQueryable<Student> storageStudents = randomStudents;
+        IQueryable<Student> expectedStudents = storageStudents.DeepClone();
 
-        _storageBrokerMock.SelectAllStudentsAsync()
+        _storageBrokerMock.SelectAllStudents()
             .Returns(returnThis: storageStudents);
 
         // when
-        IEnumerable<Student> actualStudents =
-            await _studentService.RetrieveAllStudentsAsync();
+        IQueryable<Student> actualStudents =
+            _studentService.RetrieveAllStudents();
 
         // then
         actualStudents.ShouldBeEquivalentTo(expected: expectedStudents);
 
-        await _storageBrokerMock
+        _storageBrokerMock
             .Received(requiredNumberOfCalls: 1)
-            .SelectAllStudentsAsync();
+            .SelectAllStudents();
 
         _loggingBrokerMock
             .ReceivedCalls()

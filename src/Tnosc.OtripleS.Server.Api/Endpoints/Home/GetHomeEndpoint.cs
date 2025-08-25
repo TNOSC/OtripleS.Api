@@ -15,6 +15,6 @@ public class GetHomeEndpoint : EndpointBaseAsync
     .WithActionResult<string>
 {
     [HttpGet(HomeRoutes.Get, Name = nameof(GetHomeEndpoint))]
-    public override ActionResult<string> HandleAsync() =>
+    public override ActionResult<string> Handle() =>
         Ok("Hello Mario, the princess is in another castle.");
 }

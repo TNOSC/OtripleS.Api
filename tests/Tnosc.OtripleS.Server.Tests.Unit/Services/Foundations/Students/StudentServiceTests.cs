@@ -5,7 +5,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using NSubstitute;
 using Tnosc.OtripleS.Server.Application.Brokers.DateTimes;
 using Tnosc.OtripleS.Server.Application.Brokers.Loggings;
@@ -48,9 +48,9 @@ public partial class StudentServiceTests
         };
     }
 
-    private static IEnumerable<Student> CreateRandomStudents() =>
+    private static IQueryable<Student> CreateRandomStudents() =>
         CreateStudentFiller(date: GetRandomDateTime())
-            .Create(count: GetRandomNumber());
+            .Create(count: GetRandomNumber()).AsQueryable();
 
     private static DateTimeOffset GetRandomDateTime() =>
         new DateTimeRange(earliestDate: DateTime.UtcNow).GetValue();

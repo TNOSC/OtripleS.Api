@@ -5,8 +5,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -20,7 +19,7 @@ namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.Students;
 public partial class StudentServiceTests
 {
     [Fact]
-    public async Task ShouldThrowDependencyExceptionOnRetrieveAllStudentsIfDatabaseUpdateErrorOccursAndLogItAsync()
+    public void ShouldThrowDependencyExceptionOnRetrieveAllStudentsIfDatabaseUpdateErrorOccursAndLogIt()
     {
         // given
         var databaseUpdateException = new DbUpdateException();
@@ -35,28 +34,28 @@ public partial class StudentServiceTests
                 message: "Student dependency error occurred, contact support.",
                 innerException: failedStudentStorageException);
 
-        _storageBrokerMock.SelectAllStudentsAsync()
-            .ThrowsAsync(ex: failedStudentStorageException);
+        _storageBrokerMock.SelectAllStudents()
+            .Throws(ex: failedStudentStorageException);
 
         // when
-        ValueTask<IEnumerable<Student>> retrieveAllStudentsTask =
-            _studentService.RetrieveAllStudentsAsync();
+        Action retrieveAllStudentsAction = () =>
+           _studentService.RetrieveAllStudents();
 
         // then
-        await Assert.ThrowsAsync<StudentDependencyException>(() =>
-            retrieveAllStudentsTask.AsTask());
+        Assert.Throws<StudentDependencyException>(() =>
+            retrieveAllStudentsAction());
 
         _loggingBrokerMock.Received(1)
             .LogCritical(Arg.Is<Xeption>(actualException =>
               actualException.SameExceptionAs(expectedStudentDependencyException)));
 
-        await _storageBrokerMock
+        _storageBrokerMock
             .Received(requiredNumberOfCalls: 1)
-            .SelectAllStudentsAsync();
+            .SelectAllStudents();
     }
 
     [Fact]
-    public async Task ShouldThrowServiceExceptionOnRetrieveAllStudentsIfExceptionOccursAndLogItAsync()
+    public void ShouldThrowServiceExceptionOnRetrieveAllStudentsIfExceptionOccursAndLogIt()
     {
         // given
         var serviceException = new Exception();
@@ -71,23 +70,23 @@ public partial class StudentServiceTests
                 message: "Service error occurred, contact support.",
                 innerException: failedStudentServiceException);
 
-        _storageBrokerMock.SelectAllStudentsAsync()
-            .ThrowsAsync(ex: serviceException);
+        _storageBrokerMock.SelectAllStudents()
+            .Throws(ex: serviceException);
 
         // when
-        ValueTask<IEnumerable<Student>> retrieveAllStudentTask =
-             _studentService.RetrieveAllStudentsAsync();
+        Action retrieveAllStudentsAction = () =>
+            _studentService.RetrieveAllStudents();
 
         // then
-        await Assert.ThrowsAsync<StudentServiceException>(() =>
-            retrieveAllStudentTask.AsTask());
+        Assert.Throws<StudentServiceException>(() =>
+            retrieveAllStudentsAction());
 
         _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
             .LogError(Arg.Is<Xeption>(actualException =>
               actualException.SameExceptionAs(expectedStudentServiceException)));
 
-        await _storageBrokerMock
+        _storageBrokerMock
             .Received(requiredNumberOfCalls: 1)
-            .SelectAllStudentsAsync();
+            .SelectAllStudents();
     }
 }

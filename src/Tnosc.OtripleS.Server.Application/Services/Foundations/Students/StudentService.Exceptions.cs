@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
@@ -16,7 +17,7 @@ namespace Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 public sealed partial class StudentService
 {
     private delegate ValueTask<Student> ReturningStudentFunction();
-    private delegate ValueTask<IEnumerable<Student>> ReturningStudentsFunction();
+    private delegate IQueryable<Student> ReturningStudentsFunction();
     private async ValueTask<Student> TryCatch(ReturningStudentFunction returningStudentFunction)
     {
         try
@@ -58,11 +59,11 @@ public sealed partial class StudentService
         }
     }
 
-    private async ValueTask<IEnumerable<Student>> TryCatch(ReturningStudentsFunction returningStudentsFunction)
+    private IQueryable<Student> TryCatch(ReturningStudentsFunction returningStudentsFunction)
     {
         try
         {
-            return await returningStudentsFunction();
+            return returningStudentsFunction();
         }
         catch (FailedStudentStorageException failedStudentStorageException)
         {

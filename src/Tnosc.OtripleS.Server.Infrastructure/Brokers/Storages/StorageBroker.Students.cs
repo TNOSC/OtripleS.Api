@@ -5,7 +5,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Tnosc.OtripleS.Server.Domain.Students;
@@ -19,8 +19,8 @@ internal partial class StorageBroker
     public async ValueTask<Student> InsertStudentAsync(Student student) =>
          await TryCatch(async () => await InsertAsync(@object: student));
 
-    public async ValueTask<IEnumerable<Student>> SelectAllStudentsAsync() =>
-        await TryCatch(SelectAllAsync<Student>);
+    public IQueryable<Student> SelectAllStudents() =>
+         TryCatch(SelectAll<Student>);
 
     public async ValueTask<Student> SelectStudentByIdAsync(Guid studentId) =>
         await TryCatch(async () => await SelectAsync<Student>(objectIds: studentId));

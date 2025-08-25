@@ -4,8 +4,7 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Tnosc.Lib.Api;
@@ -18,7 +17,7 @@ namespace Tnosc.OtripleS.Server.Api.Endpoints.Students;
 
 public class GetStudentsEndpoint : EndpointBaseAsync
     .WithoutRequest
-    .WithActionResultValueTask<IEnumerable<Student>>
+    .WithActionResult<IQueryable<Student>>
 {
     private readonly IStudentService _studentService;
 
@@ -28,12 +27,12 @@ public class GetStudentsEndpoint : EndpointBaseAsync
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [HttpGet(StudentsRoutes.Get, Name = nameof(GetStudentsEndpoint))]
-    public override async ValueTask<ActionResult<IEnumerable<Student>>> HandleAsync()
+    public override ActionResult<IQueryable<Student>> Handle()
     {
         try
         {
-            IEnumerable<Student> retrievedAllStudents = await _studentService
-                .RetrieveAllStudentsAsync();
+            IQueryable<Student> retrievedAllStudents = _studentService
+                .RetrieveAllStudents();
 
             return Ok(value: retrievedAllStudents);
         }

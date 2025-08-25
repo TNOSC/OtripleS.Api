@@ -5,6 +5,7 @@
 // ----------------------------------------------------------------------------------
 
 using Microsoft.Extensions.DependencyInjection;
+using Tnosc.OtripleS.Server.Api.Swagger;
 
 namespace Tnosc.OtripleS.Server.Api;
 
@@ -13,6 +14,8 @@ internal static class ServiceCollectionExtensions
     internal static void AddEndpoints(this IServiceCollection services)
     {
         services.AddControllers();
-        services.AddOpenApi();
+        services.ConfigureOptions<SwaggerGenOptionsSetup>();
+        services.ConfigureOptions<SwaggerUiOptionsSetup>();
+        services.AddSwaggerGen();
     }
 }

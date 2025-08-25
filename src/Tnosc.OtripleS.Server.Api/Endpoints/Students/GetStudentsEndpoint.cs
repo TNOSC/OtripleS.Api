@@ -7,6 +7,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using Tnosc.Lib.Api;
 using Tnosc.OtripleS.Server.Api.Routes;
 using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
@@ -24,9 +25,13 @@ public class GetStudentsEndpoint : EndpointBaseAsync
     public GetStudentsEndpoint(IStudentService studentService) =>
         _studentService = studentService;
 
+    [HttpGet(StudentsRoutes.Get, Name = nameof(GetStudentsEndpoint))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [HttpGet(StudentsRoutes.Get, Name = nameof(GetStudentsEndpoint))]
+    [SwaggerOperation(
+        Summary = "Get all students.",
+        Description = "Retrieves all students from the system.",
+        Tags = new[] { StudentsRoutes.Tag })]
     public override ActionResult<IQueryable<Student>> Handle()
     {
         try

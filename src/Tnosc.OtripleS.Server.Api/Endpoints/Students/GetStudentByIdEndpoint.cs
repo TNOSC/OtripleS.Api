@@ -8,6 +8,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using Tnosc.Lib.Api;
 using Tnosc.OtripleS.Server.Api.Routes;
 using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
@@ -25,11 +26,15 @@ public class GetStudentByIdEndpoint : EndpointBaseAsync
     public GetStudentByIdEndpoint(IStudentService studentService) =>
         _studentService = studentService;
 
+    [HttpGet(StudentsRoutes.GetById, Name = nameof(GetStudentByIdEndpoint))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [HttpGet(StudentsRoutes.GetById, Name = nameof(GetStudentByIdEndpoint))]
+    [SwaggerOperation(
+        Summary = "Get a student by ID.",
+        Description = "Retrieve the student with the specified identifier from the system.",
+        Tags = new[] { StudentsRoutes.Tag })]
     public override async ValueTask<ActionResult<Student>> HandleAsync(
         [FromRoute(Name = StudentsRoutes.ResourceId)] Guid studentId)
     {

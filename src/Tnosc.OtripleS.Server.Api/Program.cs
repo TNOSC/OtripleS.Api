@@ -17,17 +17,19 @@ builder.Services.AddApplicationServices();
 builder.Services.AddBrokers();
 
 
-WebApplication app = builder.Build();
+WebApplication webApplication = builder.Build();
 
-if (app.Environment.IsDevelopment())
+if (webApplication.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    webApplication
+        .UseSwagger()
+        .UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+webApplication.UseHttpsRedirection();
 
-app.UseAuthorization();
+webApplication.UseAuthorization();
 
-app.MapControllers();
+webApplication.MapControllers();
 
-await app.RunAsync();
+await webApplication.RunAsync();

@@ -16,9 +16,9 @@ using Tnosc.OtripleS.Server.Domain.Students;
 using Xeptions;
 using Xunit;
 
-namespace Tnosc.OtripleS.Server.Tests.Unit.Controllers.Students;
+namespace Tnosc.OtripleS.Server.Tests.Unit.Enpoints.Students.Post;
 
-public partial class StudentsControllerTests
+public partial class PostStudentEndpointTests
 {
     [Theory]
     [MemberData(nameof(ValidationExceptions))]
@@ -38,7 +38,7 @@ public partial class StudentsControllerTests
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.PostStudentAsync(student: someStudent);
+            await _postStudentEndpoint.HandleAsync(student: someStudent);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
@@ -67,7 +67,7 @@ public partial class StudentsControllerTests
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.PostStudentAsync(student: someStudent);
+            await _postStudentEndpoint.HandleAsync(student: someStudent);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
@@ -106,7 +106,7 @@ public partial class StudentsControllerTests
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.PostStudentAsync(student: someStudent);
+            await _postStudentEndpoint.HandleAsync(student: someStudent);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(

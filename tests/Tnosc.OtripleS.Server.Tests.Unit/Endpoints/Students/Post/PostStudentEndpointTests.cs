@@ -5,12 +5,10 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using NSubstitute;
 using RESTFulSense.Controllers;
-using Tnosc.OtripleS.Server.Api.Controllers;
+using Tnosc.OtripleS.Server.Api.Endpoints.Students;
 using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
@@ -18,17 +16,18 @@ using Tynamix.ObjectFiller;
 using Xeptions;
 using Xunit;
 
-namespace Tnosc.OtripleS.Server.Tests.Unit.Controllers.Students;
 
-public partial class StudentsControllerTests : RESTFulController
+namespace Tnosc.OtripleS.Server.Tests.Unit.Enpoints.Students.Post;
+
+public partial class PostStudentEndpointTests : RESTFulController
 {
     private readonly IStudentService _studentService;
-    private readonly StudentsController _studentsController;
+    private readonly PostStudentEndpoint _postStudentEndpoint;
 
-    public StudentsControllerTests()
+    public PostStudentEndpointTests()
     {
         _studentService = Substitute.For<IStudentService>();
-        _studentsController = new StudentsController(studentService: _studentService);
+        _postStudentEndpoint = new PostStudentEndpoint(studentService: _studentService);
     }
 
     public static TheoryData<Xeption> ValidationExceptions()
@@ -54,23 +53,16 @@ public partial class StudentsControllerTests : RESTFulController
         string someMessage = GetRandomString();
 
         return
-            [
-                new StudentDependencyException(
-                    message: someMessage,
-                    innerException: someInnerException),
+        [
+            new StudentDependencyException(
+                message: someMessage,
+                innerException: someInnerException),
 
-                new StudentServiceException(
-                    message: someMessage,
-                    innerException: someInnerException)
-            ];
+            new StudentServiceException(
+                message: someMessage,
+                innerException: someInnerException)
+        ];
     }
-
-    private static IEnumerable<Student> CreateRandomStudents() =>
-      CreateStudentFiller(date: GetRandomDateTime())
-          .Create(count: GetRandomNumber());
-
-    private static int GetRandomNumber() =>
-          new IntRange(min: 2, max: 10).GetValue();
 
     private static Student CreateRandomStudent() =>
        CreateStudentFiller(date: DateTimeOffset.UtcNow).Create();

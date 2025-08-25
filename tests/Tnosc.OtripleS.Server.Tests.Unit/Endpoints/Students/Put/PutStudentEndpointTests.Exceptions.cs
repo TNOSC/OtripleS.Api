@@ -16,16 +16,16 @@ using Tnosc.OtripleS.Server.Domain.Students;
 using Xeptions;
 using Xunit;
 
-namespace Tnosc.OtripleS.Server.Tests.Unit.Controllers.Students;
+namespace Tnosc.OtripleS.Server.Tests.Unit.Enpoints.Students.Put;
 
-public partial class StudentsControllerTests
+public partial class PutStudentEndpointTests
 {
     [Theory]
     [MemberData(nameof(ValidationExceptions))]
-    public async Task ShouldReturnBadRequestOnDeleteIfValidationErrorOccurredAsync(Xeption validationException)
+    public async Task ShouldReturnBadRequestOnPutIfValidationErrorOccurredAsync(Xeption validationException)
     {
         // given
-        var someStudentId = Guid.NewGuid();
+        Student someStudent = CreateRandomStudent();
 
         BadRequestObjectResult expectedBadRequestObjectResult =
             BadRequest(exception: validationException.InnerException);
@@ -33,28 +33,28 @@ public partial class StudentsControllerTests
         var expectedActionResult =
             new ActionResult<Student>(result: expectedBadRequestObjectResult);
 
-        _studentService.RemoveStudentByIdAsync(studentId: someStudentId)
+        _studentService.ModifyStudentAsync(student: someStudent)
             .ThrowsAsync(ex: validationException);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.DeleteStudentAsync(studentId: someStudentId);
+            await _putStudentEndpoint.HandleAsync(student: someStudent);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
         await _studentService.Received(requiredNumberOfCalls: 1)
-            .RemoveStudentByIdAsync(studentId: someStudentId);
+            .ModifyStudentAsync(student: someStudent);
     }
 
     [Theory]
     [MemberData(nameof(ServerExceptions))]
-    public async Task ShouldReturnInternalServerErrorOnDeleteIfServerErrorOccurredAsync(
+    public async Task ShouldReturnInternalServerErrorOnPutIfServerErrorOccurredAsync(
            Xeption serverException)
     {
         // given
-        var someStudentId = Guid.NewGuid();
+        Student someStudent = CreateRandomStudent();
 
         InternalServerErrorObjectResult expectedInternalServerErrorObjectResult =
             InternalServerError(exception: serverException);
@@ -62,26 +62,26 @@ public partial class StudentsControllerTests
         var expectedActionResult =
             new ActionResult<Student>(result: expectedInternalServerErrorObjectResult);
 
-        _studentService.RemoveStudentByIdAsync(studentId: someStudentId)
+        _studentService.ModifyStudentAsync(student: someStudent)
             .ThrowsAsync(ex: serverException);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.DeleteStudentAsync(studentId: someStudentId);
+            await _putStudentEndpoint.HandleAsync(student: someStudent);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
         await _studentService.Received(requiredNumberOfCalls: 1)
-            .RemoveStudentByIdAsync(studentId: someStudentId);
+            .ModifyStudentAsync(student: someStudent);
     }
 
     [Fact]
-    public async Task ShouldReturnNotFoundOnDeleteIfItemDoesNotExistAsync()
+    public async Task ShouldReturnNotFoundOnPutIfItemDoesNotExistAsync()
     {
         // given
-        var someStudentId = Guid.NewGuid();
+        Student someStudent = CreateRandomStudent();
         string someMessage = GetRandomString();
 
         var notFoundStudentException =
@@ -94,31 +94,31 @@ public partial class StudentsControllerTests
                 innerException: notFoundStudentException);
 
         NotFoundObjectResult expectedNotFoundObjectResult =
-            NotFound(exception: notFoundStudentException); 
+            NotFound(exception: notFoundStudentException);
 
         var expectedActionResult =
             new ActionResult<Student>(result: expectedNotFoundObjectResult);
 
-        _studentService.RemoveStudentByIdAsync(studentId: someStudentId)
+        _studentService.ModifyStudentAsync(student: someStudent)
             .ThrowsAsync(ex: studentValidationException);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.DeleteStudentAsync(studentId: someStudentId);
+            await _putStudentEndpoint.HandleAsync(student: someStudent);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
         await _studentService.Received(requiredNumberOfCalls: 1)
-            .RemoveStudentByIdAsync(studentId: someStudentId);
+            .ModifyStudentAsync(student: someStudent);
     }
 
     [Fact]
-    public async Task ShouldReturnConflictOnDeleteIfLockedStudentErrorOccurredAsync()
+    public async Task ShouldReturnConflictOnPutIfLockedStudentErrorOccurredAsync()
     {
         // given
-        var someStudentId = Guid.NewGuid();
+        Student someStudent = CreateRandomStudent();
         var someInnerException = new Exception();
         string someMessage = GetRandomString();
 
@@ -138,18 +138,18 @@ public partial class StudentsControllerTests
         var expectedActionResult =
             new ActionResult<Student>(result: expectedConflictObjectResult);
 
-        _studentService.RemoveStudentByIdAsync(studentId: someStudentId)
+        _studentService.ModifyStudentAsync(student: someStudent)
             .ThrowsAsync(ex: studentDependencyValidationException);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.DeleteStudentAsync(studentId: someStudentId);
+            await _putStudentEndpoint.HandleAsync(student: someStudent);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
         await _studentService.Received(requiredNumberOfCalls: 1)
-            .RemoveStudentByIdAsync(studentId: someStudentId);
+            .ModifyStudentAsync(student: someStudent);
     }
 }

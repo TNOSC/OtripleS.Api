@@ -16,13 +16,13 @@ using Tnosc.OtripleS.Server.Domain.Students;
 using Xeptions;
 using Xunit;
 
-namespace Tnosc.OtripleS.Server.Tests.Unit.Controllers.Students;
+namespace Tnosc.OtripleS.Server.Tests.Unit.Enpoints.Students.Delete;
 
-public partial class StudentsControllerTests
+public partial class DeleteStudentEndpointTests
 {
     [Theory]
     [MemberData(nameof(ValidationExceptions))]
-    public async Task ShouldReturnBadRequestOnGetByIdIfValidationErrorOccurredAsync(Xeption validationException)
+    public async Task ShouldReturnBadRequestOnDeleteIfValidationErrorOccurredAsync(Xeption validationException)
     {
         // given
         var someStudentId = Guid.NewGuid();
@@ -33,24 +33,24 @@ public partial class StudentsControllerTests
         var expectedActionResult =
             new ActionResult<Student>(result: expectedBadRequestObjectResult);
 
-        _studentService.RetrieveStudentByIdAsync(studentId: someStudentId)
+        _studentService.RemoveStudentByIdAsync(studentId: someStudentId)
             .ThrowsAsync(ex: validationException);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.GetStudentByIdAsync(studentId: someStudentId);
+             await _deleteStudentEndpoint.HandleAsync(studentId: someStudentId);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
         await _studentService.Received(requiredNumberOfCalls: 1)
-            .RetrieveStudentByIdAsync(studentId: someStudentId);
+            .RemoveStudentByIdAsync(studentId: someStudentId);
     }
 
     [Theory]
     [MemberData(nameof(ServerExceptions))]
-    public async Task ShouldReturnInternalServerErrorOnGetByIdIfServerErrorOccurredAsync(
+    public async Task ShouldReturnInternalServerErrorOnDeleteIfServerErrorOccurredAsync(
            Xeption serverException)
     {
         // given
@@ -62,23 +62,23 @@ public partial class StudentsControllerTests
         var expectedActionResult =
             new ActionResult<Student>(result: expectedInternalServerErrorObjectResult);
 
-        _studentService.RetrieveStudentByIdAsync(studentId: someStudentId)
+        _studentService.RemoveStudentByIdAsync(studentId: someStudentId)
             .ThrowsAsync(ex: serverException);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.GetStudentByIdAsync(studentId: someStudentId);
+            await _deleteStudentEndpoint.HandleAsync(studentId: someStudentId);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
         await _studentService.Received(requiredNumberOfCalls: 1)
-            .RetrieveStudentByIdAsync(studentId: someStudentId);
+            .RemoveStudentByIdAsync(studentId: someStudentId);
     }
 
     [Fact]
-    public async Task ShouldReturnNotFoundOnGetByIdIfItemDoesNotExistAsync()
+    public async Task ShouldReturnNotFoundOnDeleteIfItemDoesNotExistAsync()
     {
         // given
         var someStudentId = Guid.NewGuid();
@@ -99,18 +99,57 @@ public partial class StudentsControllerTests
         var expectedActionResult =
             new ActionResult<Student>(result: expectedNotFoundObjectResult);
 
-        _studentService.RetrieveStudentByIdAsync(studentId: someStudentId)
+        _studentService.RemoveStudentByIdAsync(studentId: someStudentId)
             .ThrowsAsync(ex: studentValidationException);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.GetStudentByIdAsync(studentId: someStudentId);
+            await _deleteStudentEndpoint.HandleAsync(studentId: someStudentId);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
         await _studentService.Received(requiredNumberOfCalls: 1)
-            .RetrieveStudentByIdAsync(studentId: someStudentId);
+            .RemoveStudentByIdAsync(studentId: someStudentId);
+    }
+
+    [Fact]
+    public async Task ShouldReturnConflictOnDeleteIfLockedStudentErrorOccurredAsync()
+    {
+        // given
+        var someStudentId = Guid.NewGuid();
+        var someInnerException = new Exception();
+        string someMessage = GetRandomString();
+
+        var lockedStudentException =
+            new LockedStudentException(
+                message: someMessage,
+                innerException: someInnerException);
+
+        var studentDependencyValidationException =
+            new StudentDependencyValidationException(
+                message: someMessage,
+                innerException: lockedStudentException);
+
+        ConflictObjectResult expectedConflictObjectResult =
+            Conflict(exception: lockedStudentException);
+
+        var expectedActionResult =
+            new ActionResult<Student>(result: expectedConflictObjectResult);
+
+        _studentService.RemoveStudentByIdAsync(studentId: someStudentId)
+            .ThrowsAsync(ex: studentDependencyValidationException);
+
+        // when
+        ActionResult<Student> actualActionResult =
+            await _deleteStudentEndpoint.HandleAsync(studentId: someStudentId);
+
+        // then
+        actualActionResult.ShouldBeEquivalentTo(
+            expected: expectedActionResult);
+
+        await _studentService.Received(requiredNumberOfCalls: 1)
+            .RemoveStudentByIdAsync(studentId: someStudentId);
     }
 }

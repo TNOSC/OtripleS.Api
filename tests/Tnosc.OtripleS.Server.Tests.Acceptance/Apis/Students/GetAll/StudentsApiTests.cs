@@ -7,7 +7,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Shouldly;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xunit;
@@ -31,7 +30,7 @@ public partial class StudentsApiTests
         var expectedStudents = inputStudents.ToList();
 
         // when
-        List<Student> actualStudents = await _otripleSApiBroker.GetAllStudentsAsync();
+        IEnumerable<Student> actualStudents = await _otripleSApiBroker.GetAllStudentsAsync();
 
         // then
         foreach (Student expectedStudent in expectedStudents)

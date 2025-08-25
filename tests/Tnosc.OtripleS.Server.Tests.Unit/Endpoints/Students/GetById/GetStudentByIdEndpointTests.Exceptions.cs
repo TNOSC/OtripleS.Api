@@ -16,16 +16,16 @@ using Tnosc.OtripleS.Server.Domain.Students;
 using Xeptions;
 using Xunit;
 
-namespace Tnosc.OtripleS.Server.Tests.Unit.Controllers.Students;
+namespace Tnosc.OtripleS.Server.Tests.Unit.Enpoints.Students.GetById;
 
-public partial class StudentsControllerTests
+public partial class GetStudentByIdEndpointTests
 {
     [Theory]
     [MemberData(nameof(ValidationExceptions))]
-    public async Task ShouldReturnBadRequestOnPutIfValidationErrorOccurredAsync(Xeption validationException)
+    public async Task ShouldReturnBadRequestOnGetByIdIfValidationErrorOccurredAsync(Xeption validationException)
     {
         // given
-        Student someStudent = CreateRandomStudent();
+        var someStudentId = Guid.NewGuid();
 
         BadRequestObjectResult expectedBadRequestObjectResult =
             BadRequest(exception: validationException.InnerException);
@@ -33,28 +33,28 @@ public partial class StudentsControllerTests
         var expectedActionResult =
             new ActionResult<Student>(result: expectedBadRequestObjectResult);
 
-        _studentService.ModifyStudentAsync(student: someStudent)
+        _studentService.RetrieveStudentByIdAsync(studentId: someStudentId)
             .ThrowsAsync(ex: validationException);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.PutStudentAsync(student: someStudent);
+            await _getStudentByIdEndpoint.HandleAsync(studentId: someStudentId);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
         await _studentService.Received(requiredNumberOfCalls: 1)
-            .ModifyStudentAsync(student: someStudent);
+            .RetrieveStudentByIdAsync(studentId: someStudentId);
     }
 
     [Theory]
     [MemberData(nameof(ServerExceptions))]
-    public async Task ShouldReturnInternalServerErrorOnPutIfServerErrorOccurredAsync(
+    public async Task ShouldReturnInternalServerErrorOnGetByIdIfServerErrorOccurredAsync(
            Xeption serverException)
     {
         // given
-        Student someStudent = CreateRandomStudent();
+        var someStudentId = Guid.NewGuid();
 
         InternalServerErrorObjectResult expectedInternalServerErrorObjectResult =
             InternalServerError(exception: serverException);
@@ -62,26 +62,26 @@ public partial class StudentsControllerTests
         var expectedActionResult =
             new ActionResult<Student>(result: expectedInternalServerErrorObjectResult);
 
-        _studentService.ModifyStudentAsync(student: someStudent)
+        _studentService.RetrieveStudentByIdAsync(studentId: someStudentId)
             .ThrowsAsync(ex: serverException);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.PutStudentAsync(student: someStudent);
+            await _getStudentByIdEndpoint.HandleAsync(studentId: someStudentId);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
         await _studentService.Received(requiredNumberOfCalls: 1)
-            .ModifyStudentAsync(student: someStudent);
+            .RetrieveStudentByIdAsync(studentId: someStudentId);
     }
 
     [Fact]
-    public async Task ShouldReturnNotFoundOnPutIfItemDoesNotExistAsync()
+    public async Task ShouldReturnNotFoundOnGetByIdIfItemDoesNotExistAsync()
     {
         // given
-        Student someStudent = CreateRandomStudent();
+        var someStudentId = Guid.NewGuid();
         string someMessage = GetRandomString();
 
         var notFoundStudentException =
@@ -99,57 +99,18 @@ public partial class StudentsControllerTests
         var expectedActionResult =
             new ActionResult<Student>(result: expectedNotFoundObjectResult);
 
-        _studentService.ModifyStudentAsync(student: someStudent)
+        _studentService.RetrieveStudentByIdAsync(studentId: someStudentId)
             .ThrowsAsync(ex: studentValidationException);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.PutStudentAsync(student: someStudent);
+            await _getStudentByIdEndpoint.HandleAsync(studentId: someStudentId);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
         await _studentService.Received(requiredNumberOfCalls: 1)
-            .ModifyStudentAsync(student: someStudent);
-    }
-
-    [Fact]
-    public async Task ShouldReturnConflictOnPutIfLockedStudentErrorOccurredAsync()
-    {
-        // given
-        Student someStudent = CreateRandomStudent();
-        var someInnerException = new Exception();
-        string someMessage = GetRandomString();
-
-        var lockedStudentException =
-            new LockedStudentException(
-                message: someMessage,
-                innerException: someInnerException);
-
-        var studentDependencyValidationException =
-            new StudentDependencyValidationException(
-                message: someMessage,
-                innerException: lockedStudentException);
-
-        ConflictObjectResult expectedConflictObjectResult =
-            Conflict(exception: lockedStudentException);
-
-        var expectedActionResult =
-            new ActionResult<Student>(result: expectedConflictObjectResult);
-
-        _studentService.ModifyStudentAsync(student: someStudent)
-            .ThrowsAsync(ex: studentDependencyValidationException);
-
-        // when
-        ActionResult<Student> actualActionResult =
-            await _studentsController.PutStudentAsync(student: someStudent);
-
-        // then
-        actualActionResult.ShouldBeEquivalentTo(
-            expected: expectedActionResult);
-
-        await _studentService.Received(requiredNumberOfCalls: 1)
-            .ModifyStudentAsync(student: someStudent);
+            .RetrieveStudentByIdAsync(studentId: someStudentId);
     }
 }

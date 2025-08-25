@@ -4,6 +4,7 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -14,9 +15,9 @@ using Tnosc.OtripleS.Server.Domain.Students;
 using Xeptions;
 using Xunit;
 
-namespace Tnosc.OtripleS.Server.Tests.Unit.Controllers.Students;
+namespace Tnosc.OtripleS.Server.Tests.Unit.Enpoints.Students.GetAll;
 
-public partial class StudentsControllerTests
+public partial class GetStudentsEndpointTests
 {
     [Theory]
     [MemberData(nameof(ServerExceptions))]
@@ -28,14 +29,14 @@ public partial class StudentsControllerTests
             InternalServerError(exception: serverException);
 
         var expectedActionResult =
-            new ActionResult<Student>(result: expectedInternalServerErrorObjectResult);
+            new ActionResult<IEnumerable<Student>>(result: expectedInternalServerErrorObjectResult);
 
         _studentService.RetrieveAllStudentsAsync()
             .ThrowsAsync(ex: serverException);
 
         // when
-        ActionResult<Student> actualActionResult =
-            await _studentsController.GetAllStudentsAsync();
+        ActionResult<IEnumerable<Student>> actualActionResult =
+            await _getStudentsEndpoint.HandleAsync();
 
         // then
         actualActionResult.ShouldBeEquivalentTo(

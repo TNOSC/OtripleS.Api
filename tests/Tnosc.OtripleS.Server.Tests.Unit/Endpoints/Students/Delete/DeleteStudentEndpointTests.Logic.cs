@@ -4,6 +4,7 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using Force.DeepCloner;
 using Microsoft.AspNetCore.Mvc;
@@ -12,18 +13,18 @@ using Shouldly;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xunit;
 
-namespace Tnosc.OtripleS.Server.Tests.Unit.Controllers.Students;
+namespace Tnosc.OtripleS.Server.Tests.Unit.Enpoints.Students.Delete;
 
-public partial class StudentsControllerTests
+public partial class DeleteStudentEndpointTests
 {
     [Fact]
-    public async Task ShouldReturnOkOnPutAsync()
+    public async Task ShouldReturnOkOnDeleteByIdAsync()
     {
         // given
         Student randomStudent = CreateRandomStudent();
-        Student inputStudent = randomStudent;
-        Student updatedStudent = inputStudent;
-        Student expectedStudent = inputStudent.DeepClone();
+        Guid studentId = randomStudent.Id;
+        Student storageStudent = randomStudent;
+        Student expectedStudent = storageStudent.DeepClone();
 
         var expectedObjectResult =
             new OkObjectResult(value: expectedStudent);
@@ -31,18 +32,18 @@ public partial class StudentsControllerTests
         var expectedActionResult =
             new ActionResult<Student>(result: expectedObjectResult);
 
-        _studentService.ModifyStudentAsync(student: inputStudent)
-            .Returns(returnThis: updatedStudent);
+        _studentService.RemoveStudentByIdAsync(studentId:studentId)
+            .Returns(returnThis: expectedStudent);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.PutStudentAsync(student: inputStudent);
+            await _deleteStudentEndpoint.HandleAsync(studentId: studentId);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
         await _studentService.Received(requiredNumberOfCalls: 1)
-            .ModifyStudentAsync(student: inputStudent);
+            .RemoveStudentByIdAsync(studentId: studentId);
     }
 }

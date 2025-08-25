@@ -8,6 +8,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using Tnosc.Lib.Api;
 using Tnosc.OtripleS.Server.Api.Routes;
 using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
@@ -25,12 +26,16 @@ public class DeleteStudentEndpoint : EndpointBaseAsync
     public DeleteStudentEndpoint(IStudentService studentService) =>
         _studentService = studentService;
 
+    [HttpDelete(StudentsRoutes.Delete, Name = nameof(DeleteStudentEndpoint))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [HttpDelete(StudentsRoutes.Delete, Name = nameof(DeleteStudentEndpoint))]
+    [SwaggerOperation(
+        Summary = "Deletes a student by ID.",
+        Description = "Removes the student with the specified identifier from the system.",
+        Tags = new[] { StudentsRoutes.Tag })]
     public override async ValueTask<ActionResult<Student>> HandleAsync(
         [FromRoute(Name = StudentsRoutes.ResourceId)] Guid studentId)
     {

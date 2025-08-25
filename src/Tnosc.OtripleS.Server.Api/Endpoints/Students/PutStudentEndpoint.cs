@@ -7,6 +7,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using Tnosc.Lib.Api;
 using Tnosc.OtripleS.Server.Api.Routes;
 using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
@@ -24,12 +25,16 @@ public class PutStudentEndpoint : EndpointBaseAsync
     public PutStudentEndpoint(IStudentService studentService) =>
         _studentService = studentService;
 
+    [HttpPut(StudentsRoutes.Put, Name = nameof(PutStudentEndpoint))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [HttpPut(StudentsRoutes.Put, Name = nameof(PutStudentEndpoint))]
+    [SwaggerOperation(
+        Summary = "Update a student.",
+        Description = "Updates the details of an existing student in the system.",
+        Tags = new[] { StudentsRoutes.Tag })]
     public override async ValueTask<ActionResult<Student>> HandleAsync(Student student)
     {
         try

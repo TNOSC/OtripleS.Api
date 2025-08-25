@@ -5,6 +5,7 @@
 // ----------------------------------------------------------------------------------
 
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using Tnosc.Lib.Api;
 using Tnosc.OtripleS.Server.Api.Routes;
 
@@ -15,6 +16,10 @@ public class GetHomeEndpoint : EndpointBaseAsync
     .WithActionResult<string>
 {
     [HttpGet(HomeRoutes.Get, Name = nameof(GetHomeEndpoint))]
+    [SwaggerOperation(
+        Summary = "Test endpoint.",
+        Description = "Returns a sample greeting message for testing purposes.",
+        Tags = new[] { HomeRoutes.Tag })]
     public override ActionResult<string> Handle() =>
         Ok("Hello Mario, the princess is in another castle.");
 }

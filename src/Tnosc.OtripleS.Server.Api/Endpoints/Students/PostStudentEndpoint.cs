@@ -7,6 +7,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using Tnosc.Lib.Api;
 using Tnosc.OtripleS.Server.Api.Routes;
 using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
@@ -24,11 +25,15 @@ public class PostStudentEndpoint : EndpointBaseAsync
     public PostStudentEndpoint(IStudentService studentService) =>
         _studentService = studentService;
 
+    [HttpPost(StudentsRoutes.Post, Name = nameof(PostStudentEndpoint))]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [HttpPost(StudentsRoutes.Post, Name = nameof(PostStudentEndpoint))]
+    [SwaggerOperation(
+        Summary = "Register a new student.",
+        Description = "Creates a new student in the system with the provided details.",
+        Tags = new[] { StudentsRoutes.Tag })]
     public override async ValueTask<ActionResult<Student>> HandleAsync(Student student)
     {
         try

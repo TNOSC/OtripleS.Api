@@ -4,13 +4,14 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-namespace Tnosc.OtripleS.Server.Api.Routes;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
-internal static class HomeRoutes
+namespace Tnosc.OtripleS.Server.Api.Swagger;
+
+internal sealed class SwaggerUiOptionsSetup : IConfigureOptions<SwaggerUIOptions>
 {
-    internal const string Tag = "Home";
-
-    internal const string BaseUri = "api/home";
-
-    internal const string Get = $"{BaseUri}";
+    public void Configure(SwaggerUIOptions options) => 
+        options.DisplayRequestDuration();
 }

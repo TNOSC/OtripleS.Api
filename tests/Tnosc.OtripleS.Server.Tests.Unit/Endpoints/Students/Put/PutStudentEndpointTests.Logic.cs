@@ -4,7 +4,6 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using System;
 using System.Threading.Tasks;
 using Force.DeepCloner;
 using Microsoft.AspNetCore.Mvc;
@@ -13,18 +12,18 @@ using Shouldly;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xunit;
 
-namespace Tnosc.OtripleS.Server.Tests.Unit.Controllers.Students;
+namespace Tnosc.OtripleS.Server.Tests.Unit.Enpoints.Students.Put;
 
-public partial class StudentsControllerTests
+public partial class PutStudentEndpointTests
 {
     [Fact]
-    public async Task ShouldReturnOkOnGetByIdAsync()
+    public async Task ShouldReturnOkOnPutAsync()
     {
         // given
         Student randomStudent = CreateRandomStudent();
-        Guid studentId = randomStudent.Id;
-        Student storageStudent = randomStudent;
-        Student expectedStudent = storageStudent.DeepClone();
+        Student inputStudent = randomStudent;
+        Student updatedStudent = inputStudent;
+        Student expectedStudent = inputStudent.DeepClone();
 
         var expectedObjectResult =
             new OkObjectResult(value: expectedStudent);
@@ -32,18 +31,18 @@ public partial class StudentsControllerTests
         var expectedActionResult =
             new ActionResult<Student>(result: expectedObjectResult);
 
-        _studentService.RetrieveStudentByIdAsync(studentId: studentId)
-            .Returns(returnThis: storageStudent);
+        _studentService.ModifyStudentAsync(student: inputStudent)
+            .Returns(returnThis: updatedStudent);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.GetStudentByIdAsync(studentId: studentId);
+            await _putStudentEndpoint.HandleAsync(student: inputStudent);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
         await _studentService.Received(requiredNumberOfCalls: 1)
-            .RetrieveStudentByIdAsync(studentId: studentId);
+            .ModifyStudentAsync(student: inputStudent);
     }
 }

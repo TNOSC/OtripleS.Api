@@ -27,7 +27,7 @@ public partial class OtripleSApiBroker
     public async ValueTask<Student> GetStudentByIdAsync(Guid studentId) =>
         await _apiFactoryClient.GetContentAsync<Student>($"{StudentsRelativeUrl}/{studentId}");
 
-    public async ValueTask<List<Student>> GetAllStudentsAsync() =>
-        await _apiFactoryClient.GetContentAsync<List<Student>>($"{StudentsRelativeUrl}/");
+    public async ValueTask<IEnumerable<Student>> GetAllStudentsAsync() =>
+        await _apiFactoryClient.GetContentAsync<IEnumerable<Student>>($"{StudentsRelativeUrl}/");
 }
 

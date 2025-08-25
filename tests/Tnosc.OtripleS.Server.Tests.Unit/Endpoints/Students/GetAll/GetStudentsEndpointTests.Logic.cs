@@ -13,9 +13,9 @@ using Shouldly;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xunit;
 
-namespace Tnosc.OtripleS.Server.Tests.Unit.Controllers.Students;
+namespace Tnosc.OtripleS.Server.Tests.Unit.Enpoints.Students.GetAll;
 
-public partial class StudentsControllerTests
+public partial class GetStudentsEndpointTests
 {
     [Fact]
     public async Task ShouldReturnOkOnGetAsync()
@@ -29,14 +29,14 @@ public partial class StudentsControllerTests
             new OkObjectResult(value: expectedStudents);
 
         var expectedActionResult =
-            new ActionResult<Student>(result: expectedObjectResult);
+            new ActionResult<IEnumerable<Student>>(result: expectedObjectResult);
 
         _studentService.RetrieveAllStudentsAsync()
             .Returns(returnThis: storageStudents);
 
         // when
-        ActionResult<Student> actualActionResult =
-            await _studentsController.GetAllStudentsAsync();
+        ActionResult<IEnumerable<Student>> actualActionResult =
+            await _getStudentsEndpoint.HandleAsync();
 
         // then
         actualActionResult.ShouldBeEquivalentTo(

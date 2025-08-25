@@ -11,6 +11,5 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Maintainability", "CA1515:Consider making public types internal", Justification = "<Pending>", Scope = "type", Target = "~T:Tnosc.OtripleS.Server.Api.AssemblyReference")]
-[assembly: SuppressMessage("Maintainability", "CA1515:Consider making public types internal", Justification = "<Pending>", Scope = "namespaceanddescendants", Target = "~N:Tnosc.OtripleS.Server.Api.Controllers")]
-[assembly: SuppressMessage("Maintainability", "CA1515:Consider making public types internal", Justification = "<Pending>", Scope = "namespaceanddescendants", Target = "~N:Tnosc.OtripleS.Server.Api.Endpoints")]
+[assembly: SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "<Pending>", Scope = "type", Target = "~T:Tnosc.Lib.Api.EndpointBaseAsync.WithRequest`1")]
+[assembly: SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "<Pending>", Scope = "type", Target = "~T:Tnosc.Lib.Api.EndpointBaseAsync.WithoutRequest")]

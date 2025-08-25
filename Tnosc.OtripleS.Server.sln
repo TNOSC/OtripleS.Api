@@ -42,6 +42,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tnosc.OtripleS.Server.Provi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tnosc.Lib.Domain", "lib\Tnosc.Lib.Domain\Tnosc.Lib.Domain.csproj", "{00DD5FA5-722E-497C-83DA-2CB0D98C4B57}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tnosc.Lib.Api", "lib\Tnosc.Lib.Api\Tnosc.Lib.Api.csproj", "{73015E64-6820-4F51-A0DE-B24F6E24FA8A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -88,6 +90,10 @@ Global
 		{00DD5FA5-722E-497C-83DA-2CB0D98C4B57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00DD5FA5-722E-497C-83DA-2CB0D98C4B57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00DD5FA5-722E-497C-83DA-2CB0D98C4B57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73015E64-6820-4F51-A0DE-B24F6E24FA8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73015E64-6820-4F51-A0DE-B24F6E24FA8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73015E64-6820-4F51-A0DE-B24F6E24FA8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73015E64-6820-4F51-A0DE-B24F6E24FA8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,6 +111,7 @@ Global
 		{3856543F-DDD4-4D03-AAFD-3818BF1C7C52} = {6FA33AFE-6551-4230-A4F2-6E6CE6864C2D}
 		{BA85B3C6-E98F-4316-B0E0-F3810A8C2E8D} = {6FA33AFE-6551-4230-A4F2-6E6CE6864C2D}
 		{00DD5FA5-722E-497C-83DA-2CB0D98C4B57} = {8444D709-C0FF-4707-A83F-7908FABD9BA8}
+		{73015E64-6820-4F51-A0DE-B24F6E24FA8A} = {8444D709-C0FF-4707-A83F-7908FABD9BA8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5607264D-7851-4749-A9E9-2D5B22F210CA}

@@ -13,9 +13,8 @@ using Shouldly;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xunit;
 
-namespace Tnosc.OtripleS.Server.Tests.Unit.Controllers.Students;
-
-public partial class StudentsControllerTests
+namespace Tnosc.OtripleS.Server.Tests.Unit.Enpoints.Students.Post;
+public partial class PostStudentEndpointTests
 {
     [Fact]
     public async Task ShouldReturnCreatedOnPostAsync()
@@ -37,7 +36,7 @@ public partial class StudentsControllerTests
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.PostStudentAsync(student: inputStudent);
+            await _postStudentEndpoint.HandleAsync(student: inputStudent);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(

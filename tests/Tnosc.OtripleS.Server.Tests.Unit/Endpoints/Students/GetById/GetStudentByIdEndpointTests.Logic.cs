@@ -13,12 +13,12 @@ using Shouldly;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xunit;
 
-namespace Tnosc.OtripleS.Server.Tests.Unit.Controllers.Students;
+namespace Tnosc.OtripleS.Server.Tests.Unit.Enpoints.Students.GetById;
 
-public partial class StudentsControllerTests
+public partial class GetStudentByIdEndpointTests
 {
     [Fact]
-    public async Task ShouldReturnOkOnDeleteByIdAsync()
+    public async Task ShouldReturnOkOnGetByIdAsync()
     {
         // given
         Student randomStudent = CreateRandomStudent();
@@ -32,18 +32,18 @@ public partial class StudentsControllerTests
         var expectedActionResult =
             new ActionResult<Student>(result: expectedObjectResult);
 
-        _studentService.RemoveStudentByIdAsync(studentId:studentId)
-            .Returns(returnThis: expectedStudent);
+        _studentService.RetrieveStudentByIdAsync(studentId: studentId)
+            .Returns(returnThis: storageStudent);
 
         // when
         ActionResult<Student> actualActionResult =
-            await _studentsController.DeleteStudentAsync(studentId: studentId);
+            await _getStudentByIdEndpoint.HandleAsync(studentId: studentId);
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
         await _studentService.Received(requiredNumberOfCalls: 1)
-            .RemoveStudentByIdAsync(studentId: studentId);
+            .RetrieveStudentByIdAsync(studentId: studentId);
     }
 }

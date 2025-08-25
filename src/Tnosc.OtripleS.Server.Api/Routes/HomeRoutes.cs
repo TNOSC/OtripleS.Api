@@ -4,15 +4,11 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using Microsoft.AspNetCore.Mvc;
+namespace Tnosc.OtripleS.Server.Api.Routes;
 
-namespace Tnosc.OtripleS.Server.Api.Controllers;
-
-[Route("api/[controller]")]
-[ApiController]
-public class HomeController : ControllerBase
+internal static class HomeRoutes
 {
-    [HttpGet]
-    public ActionResult<string> Get() =>
-        Ok("Hello Mario, the princess is in another castle.");
+    internal const string BaseUri = "api/home";
+
+    internal const string Get = $"{BaseUri}";
 }

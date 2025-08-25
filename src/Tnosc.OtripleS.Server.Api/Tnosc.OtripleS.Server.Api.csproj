@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\lib\Tnosc.Lib.Api\Tnosc.Lib.Api.csproj" />
     <ProjectReference Include="..\Tnosc.OtripleS.Server.Infrastructure\Tnosc.OtripleS.Server.Infrastructure.csproj" />
   </ItemGroup>
 

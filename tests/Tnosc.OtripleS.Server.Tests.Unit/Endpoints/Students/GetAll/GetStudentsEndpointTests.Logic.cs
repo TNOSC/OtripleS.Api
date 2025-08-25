@@ -5,7 +5,7 @@
 // ----------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 using Force.DeepCloner;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -18,31 +18,31 @@ namespace Tnosc.OtripleS.Server.Tests.Unit.Enpoints.Students.GetAll;
 public partial class GetStudentsEndpointTests
 {
     [Fact]
-    public async Task ShouldReturnOkOnGetAsync()
+    public void ShouldReturnOkOnGet()
     {
         // given
-        IEnumerable<Student> randomStudents = CreateRandomStudents();
-        IEnumerable<Student> storageStudents = randomStudents.DeepClone();
-        IEnumerable<Student> expectedStudents = storageStudents.DeepClone();
+        IQueryable<Student> randomStudents = CreateRandomStudents();
+        IQueryable<Student> storageStudents = randomStudents.DeepClone();
+        IQueryable<Student> expectedStudents = storageStudents.DeepClone();
 
         var expectedObjectResult =
             new OkObjectResult(value: expectedStudents);
 
         var expectedActionResult =
-            new ActionResult<IEnumerable<Student>>(result: expectedObjectResult);
+            new ActionResult<IQueryable<Student>>(result: expectedObjectResult);
 
-        _studentService.RetrieveAllStudentsAsync()
+        _studentService.RetrieveAllStudents()
             .Returns(returnThis: storageStudents);
 
         // when
-        ActionResult<IEnumerable<Student>> actualActionResult =
-            await _getStudentsEndpoint.HandleAsync();
+        ActionResult<IQueryable<Student>> actualActionResult =
+             _getStudentsEndpoint.Handle();
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
-        await _studentService.Received(requiredNumberOfCalls: 1)
-            .RetrieveAllStudentsAsync();
+        _studentService.Received(requiredNumberOfCalls: 1)
+            .RetrieveAllStudents();
     }
 }

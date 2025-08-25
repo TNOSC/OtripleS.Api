@@ -4,8 +4,7 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -21,7 +20,7 @@ public partial class GetStudentsEndpointTests
 {
     [Theory]
     [MemberData(nameof(ServerExceptions))]
-    public async Task ShouldReturnInternalServerErrorOnGetIfServerErrorOccurredAsync(
+    public void ShouldReturnInternalServerErrorOnGetIfServerErrorOccurred(
            Xeption serverException)
     {
         // given
@@ -29,20 +28,20 @@ public partial class GetStudentsEndpointTests
             InternalServerError(exception: serverException);
 
         var expectedActionResult =
-            new ActionResult<IEnumerable<Student>>(result: expectedInternalServerErrorObjectResult);
+            new ActionResult<IQueryable<Student>>(result: expectedInternalServerErrorObjectResult);
 
-        _studentService.RetrieveAllStudentsAsync()
-            .ThrowsAsync(ex: serverException);
+        _studentService.RetrieveAllStudents()
+            .Throws(ex: serverException);
 
         // when
-        ActionResult<IEnumerable<Student>> actualActionResult =
-            await _getStudentsEndpoint.HandleAsync();
+        ActionResult<IQueryable<Student>> actualActionResult =
+            _getStudentsEndpoint.Handle();
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
-        await _studentService.Received(requiredNumberOfCalls: 1)
-            .RetrieveAllStudentsAsync();
+        _studentService.Received(requiredNumberOfCalls: 1)
+           .RetrieveAllStudents();
     }
 }

@@ -5,7 +5,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Tnosc.OtripleS.Server.Domain.Students;
 
@@ -14,7 +14,7 @@ namespace Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 public interface IStudentService
 {
     ValueTask<Student> RegisterStudentAsync(Student student);
-    ValueTask<IEnumerable<Student>> RetrieveAllStudentsAsync();
+    IQueryable<Student> RetrieveAllStudents();
     ValueTask<Student> RetrieveStudentByIdAsync(Guid studentId);
     ValueTask<Student> ModifyStudentAsync(Student student);
     ValueTask<Student> RemoveStudentByIdAsync(Guid studentId);

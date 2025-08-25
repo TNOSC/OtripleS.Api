@@ -5,7 +5,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using EFxceptions;
 using Microsoft.EntityFrameworkCore;
@@ -41,8 +41,9 @@ internal sealed partial class StorageBroker : EFxceptionsContext, IStorageBroker
         await FindAsync<T>(objectIds);
 #pragma warning restore CS8603 // Possible null reference return.
 
-    private async ValueTask<IEnumerable<T>> SelectAllAsync<T>() where T : class =>
-        await Set<T>().ToListAsync();
+#pragma warning disable CA1859 // Use concrete types when possible for improved performance
+    private IQueryable<T> SelectAll<T>() where T : class => Set<T>();
+#pragma warning restore CA1859 // Use concrete types when possible for improved performance
 
     private async ValueTask<T> UpdateAsync<T>(T @object)
     {

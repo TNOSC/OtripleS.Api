@@ -5,7 +5,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Tnosc.OtripleS.Server.Application.Brokers.DateTimes;
 using Tnosc.OtripleS.Server.Application.Brokers.Loggings;
@@ -31,55 +31,55 @@ public sealed partial class StudentService : IStudentService
     }
 
     public async ValueTask<Student> ModifyStudentAsync(Student student) =>
-        await TryCatch(async () =>
-        {
-            ValidateStudentOnModify(student: student);
+    await TryCatch(async () =>
+    {
+        ValidateStudentOnModify(student: student);
 
-            Student maybeStudent =
-                await _storageBroker.SelectStudentByIdAsync(studentId: student.Id);
+        Student maybeStudent =
+            await _storageBroker.SelectStudentByIdAsync(studentId: student.Id);
 
-            ValidateStorageStudent(
-                storageStudent: maybeStudent,
-                studentId: student.Id);
+        ValidateStorageStudent(
+            storageStudent: maybeStudent,
+            studentId: student.Id);
 
-            ValidateAgainstStorageStudentOnModify(inputStudent: student, storageStudent: maybeStudent);
+        ValidateAgainstStorageStudentOnModify(inputStudent: student, storageStudent: maybeStudent);
 
-            return await _storageBroker.UpdateStudentAsync(student: student);
-        });
+        return await _storageBroker.UpdateStudentAsync(student: student);
+    });
 
     public async ValueTask<Student> RegisterStudentAsync(Student student) =>
-        await TryCatch(async () =>
-        {
-            ValidateStudentOnRegister(student: student);
-            return await _storageBroker.InsertStudentAsync(student: student);
-        });
+    await TryCatch(async () =>
+    {
+        ValidateStudentOnRegister(student: student);
+        return await _storageBroker.InsertStudentAsync(student: student);
+    });
 
     public async ValueTask<Student> RemoveStudentByIdAsync(Guid studentId) =>
-        await TryCatch(async () =>
-        {
-            ValidateStudentId(studentId);
+    await TryCatch(async () =>
+    {
+        ValidateStudentId(studentId);
 
-            Student maybeStudent =
-                await _storageBroker.SelectStudentByIdAsync(studentId: studentId);
+        Student maybeStudent =
+            await _storageBroker.SelectStudentByIdAsync(studentId: studentId);
 
-            ValidateStorageStudent(maybeStudent, studentId);
+        ValidateStorageStudent(maybeStudent, studentId);
 
-            return await _storageBroker.DeleteStudentAsync(student: maybeStudent);
-        });
+        return await _storageBroker.DeleteStudentAsync(student: maybeStudent);
+    });
 
-    public async ValueTask<IEnumerable<Student>> RetrieveAllStudentsAsync() =>
-        await TryCatch(_storageBroker.SelectAllStudentsAsync);
+    public IQueryable<Student> RetrieveAllStudents() =>
+    TryCatch(_storageBroker.SelectAllStudents);
 
     public async ValueTask<Student> RetrieveStudentByIdAsync(Guid studentId) =>
-        await TryCatch(async () =>
-        {
-            ValidateStudentId(studentId);
+    await TryCatch(async () =>
+    {
+        ValidateStudentId(studentId);
 
-            Student maybeStudent =
-                await _storageBroker.SelectStudentByIdAsync(studentId: studentId);
+        Student maybeStudent =
+            await _storageBroker.SelectStudentByIdAsync(studentId: studentId);
 
-            ValidateStorageStudent(maybeStudent, studentId);
+        ValidateStorageStudent(maybeStudent, studentId);
 
-            return maybeStudent;
-        });
+        return maybeStudent;
+    });
 }

@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Tnosc.OtripleS.Server.Api\Tnosc.OtripleS.Server.Api.csproj" />
-    <ProjectReference Include="..\..\src\Tnosc.OtripleS.Server.Application\Tnosc.OtripleS.Server.Application.csproj" />
   </ItemGroup>
 
 </Project>

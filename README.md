@@ -13,9 +13,10 @@ This repo is mainly for learning, experimenting, and contributing to the Standar
 - **Layered Projects**  
   Each layer (API, Application/Services, Domain, Infrastructure) is placed in a **separate project** within the solution. This enforces strict boundaries between layers and keeps dependencies flowing in the right direction.
 
-- **Handling Exceptions in Brokers**  
-  To maintain strict layer separation, brokers in this project handle exceptions, which slightly deviates from [Hassan Habib’s standards](https://github.com/hassanhabib/The-Standard/blob/master/1.%20Brokers/1.%20Brokers.md#122-no-exception-handling).  
-  This ensures the application layer is not exposed to native broker exceptions, keeping it decoupled while mapping errors to local exceptions.
+- **Handling Exceptions in Brokers** 
+
+  In this project, brokers handle exceptison by mapping external exceptions to local exceptions.  
+  This approach slightly deviates from [Hassan Habib’s standards](https://github.com/hassanhabib/The-Standard/blob/master/1.%20Brokers/1.%20Brokers.md#122-no-exception-handling) but ensures that the application layer remains decoupled from external dependencies by only dealing with local exceptions.
 
 - **Request-Response Pattern (REPR)**  
   This project follows the **Request-Response (REPR) pattern**, where each endpoint handles a single request and returns a response.  

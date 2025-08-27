@@ -110,7 +110,7 @@ The project includes several configuration files that help standardize developme
 
 ## 📝 TODO / Next Steps
 
-- Implement**Cul-de-Sac Pattern** to routes incoming requests into queues or events for deferred processing.  
+- Implement **Cul-de-Sac Pattern** to routes incoming requests into queues or events for deferred processing.  
 - Implement **Authentication & Authorization** for securing endpoints.  
 - Implement **Tracing** using **OpenTelemetry** to improve observability and monitoring.  
 

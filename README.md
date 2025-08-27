@@ -1,8 +1,9 @@
 # Otriples.Server
 
 ![.NET](https://img.shields.io/badge/.NET-9.0-blueviolet?logo=dotnet)
-![Build](https://img.shields.io/github/actions/workflow/status/TNOSC/OtripleS.Api/build.yml?branch=main&label=build&logo=github)
+![Build](https://img.shields.io/github/actions/workflow/status/TNOSC/OtripleS.Api/dotnet.yml?branch=main&label=build&logo=github)
 ![License](https://img.shields.io/github/license/TNOSC/OtripleS.Api?color=green)
+
 
 
 I created this repository as a hands-on exercise to apply and practice [the standards proposed by Hassan Habib](https://github.com/hassanhabib/The-Standard).
@@ -107,6 +108,11 @@ The project includes several configuration files that help standardize developme
   - Ensures consistent package versions across all projects
   - Simplifies version updates by changing them in a single location
 
+## 📝 TODO / Next Steps
+
+- Add support for the **Cul-de-Sac Pattern** to routes incoming requests into queues or events for deferred processing.  
+- Implement **Authentication & Authorization** for securing endpoints.  
+- Integrate **Tracing** using **OpenTelemetry** to improve observability and monitoring.  
 
 ## 📖 References
 

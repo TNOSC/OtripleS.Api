@@ -1,5 +1,10 @@
 # Otriples.Server
 
+![.NET](https://img.shields.io/badge/.NET-9.0-blueviolet?logo=dotnet)
+![Build](https://img.shields.io/github/actions/workflow/status/TNOSC/OtripleS.Api/build.yml?branch=main&label=build&logo=github)
+![License](https://img.shields.io/github/license/TNOSC/OtripleS.Api?color=green)
+
+
 I created this repository as a hands-on exercise to apply and practice [the standards proposed by Hassan Habib](https://github.com/hassanhabib/The-Standard).
 The goal is to rewrite the [OtripleS](https://github.com/hassanhabib/OtripleS) project while following the latest version of the Standards, since the original project is no longer actively updated.
 
@@ -103,7 +108,7 @@ The project includes several configuration files that help standardize developme
   - Simplifies version updates by changing them in a single location
 
 
-## 📖 Inspiration
+## 📖 References
 
 This project is heavily inspired by:
 

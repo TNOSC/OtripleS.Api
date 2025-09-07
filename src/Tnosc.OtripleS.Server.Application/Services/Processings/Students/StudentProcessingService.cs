@@ -26,18 +26,18 @@ public sealed partial class StudentProcessingService : IStudentProcessingService
     }
 
     public async ValueTask<Student> UpsertStudentAsync(Student student) =>
-        await TryCatch(async () =>
+    await TryCatch(async () =>
+    {
+        ValidateStudentOnUpsert(student: student);
+
+        Student mayBeStudent = await _studentService
+            .RetrieveStudentByIdAsync(studentId: student.Id);
+
+        return mayBeStudent switch
         {
-            ValidateStudentOnUpsert(student: student);
-
-            Student mayBeStudent = await _studentService
-                .RetrieveStudentByIdAsync(studentId: student.Id);
-
-            return mayBeStudent switch
-            {
-                null => await _studentService.RegisterStudentAsync(student: student),
-                _ => await _studentService.ModifyStudentAsync(student: student)
-            };
-        });
+            null => await _studentService.RegisterStudentAsync(student: student),
+            _ => await _studentService.ModifyStudentAsync(student: student)
+        };
+    });
 }
 

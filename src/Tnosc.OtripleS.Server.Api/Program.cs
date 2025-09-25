@@ -26,10 +26,6 @@ if (webApplication.Environment.IsDevelopment())
         .UseSwaggerUI();
 }
 
-webApplication.UseHttpsRedirection();
-
-webApplication.UseAuthorization();
-
 webApplication.MapControllers();
 
 await webApplication.RunAsync();

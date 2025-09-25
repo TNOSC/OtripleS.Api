@@ -109,7 +109,7 @@ public sealed partial class StudentService
             Message = $"Date is not the same as {secondDateName}"
         };
 
-    private static dynamic IsInvalidLength(string text, int maxLength) => new
+    private static dynamic IsInvalidLength(string? text, int maxLength) => new
     {
         Condition = !string.IsNullOrWhiteSpace(text) && text.Length > maxLength,
         Message = $"Text cannot be longer than {maxLength} characters"
@@ -131,7 +131,6 @@ public sealed partial class StudentService
 
         invalidStudentException.ThrowIfContainsErrors();
     }
-
 
     private void ValidateStudentOnModify(Student student)
     {

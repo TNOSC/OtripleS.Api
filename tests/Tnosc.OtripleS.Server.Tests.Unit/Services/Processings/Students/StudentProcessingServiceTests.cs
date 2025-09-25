@@ -31,32 +31,6 @@ public partial class StudentProcessingServiceTests
             loggingBroker: _loggingBrokerMock);
     }
 
-    private static Student CreateRandomStudent() =>
-         CreateStudentFiller(date: DateTimeOffset.UtcNow).Create();
-
-    private static Filler<Student> CreateStudentFiller(DateTimeOffset date)
-    {
-        var filler = new Filler<Student>();
-        var createdById = Guid.NewGuid();
-
-        filler.Setup()
-            .OnProperty(student => student.BirthDate).Use(valueToUse: GetRandomDateTime())
-            .OnProperty(student => student.CreatedDate).Use(valueToUse: date)
-            .OnProperty(student => student.UpdatedDate).Use(valueToUse: date)
-            .OnProperty(student => student.CreatedBy).Use(valueToUse: createdById)
-            .OnProperty(student => student.UpdatedBy).Use(valueToUse: createdById);
-
-        return filler;
-    }
-
-    private static DateTimeOffset GetRandomDateTime() =>
-          new DateTimeRange(earliestDate: DateTime.UtcNow).GetValue();
-
-    private static string GetRandomMessage() =>
-            new MnemonicString(wordCount: GetRandomNumber()).GetValue();
-    private static int GetRandomNumber() =>
-          new IntRange(min: 2, max: 10).GetValue();
-
     public static TheoryData DependencyValidationExceptions()
     {
         string randomMessage = GetRandomMessage();
@@ -90,4 +64,30 @@ public partial class StudentProcessingServiceTests
                 innerException: innerException)
         };
     }
+
+    private static Student CreateRandomStudent() =>
+         CreateStudentFiller(date: DateTimeOffset.UtcNow).Create();
+
+    private static Filler<Student> CreateStudentFiller(DateTimeOffset date)
+    {
+        var filler = new Filler<Student>();
+        var createdById = Guid.NewGuid();
+
+        filler.Setup()
+            .OnProperty(student => student.BirthDate).Use(valueToUse: GetRandomDateTime())
+            .OnProperty(student => student.CreatedDate).Use(valueToUse: date)
+            .OnProperty(student => student.UpdatedDate).Use(valueToUse: date)
+            .OnProperty(student => student.CreatedBy).Use(valueToUse: createdById)
+            .OnProperty(student => student.UpdatedBy).Use(valueToUse: createdById);
+
+        return filler;
+    }
+
+    private static DateTimeOffset GetRandomDateTime() =>
+          new DateTimeRange(earliestDate: DateTime.UtcNow).GetValue();
+
+    private static string GetRandomMessage() =>
+            new MnemonicString(wordCount: GetRandomNumber()).GetValue();
+    private static int GetRandomNumber() =>
+          new IntRange(min: 2, max: 10).GetValue();
 }

@@ -94,5 +94,7 @@ public sealed partial class StudentService : IStudentService
         ValidateStorageStudent(maybeStudent, studentId);
 
         return maybeStudent;
-    });
+    },
+    withTracing: AddTraceOnGetById(studentId),
+    withRetryOn: GetRetryableExceptions());
 }

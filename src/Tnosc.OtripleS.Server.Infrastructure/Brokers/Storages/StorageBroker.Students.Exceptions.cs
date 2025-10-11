@@ -7,6 +7,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using EFxceptions.Models.Exceptions;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
@@ -24,6 +25,15 @@ internal partial class StorageBroker
         {
             return await returningStudentFunction();
         }
+        catch (SqlException sqlException)
+        {
+            var failedStudentStorageException =
+                new FailedStudentStorageException(
+                    message: "Failed student storage error occurred, contact support.",
+                    innerException: sqlException);
+
+            throw failedStudentStorageException;
+        }
         catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
         {
             var lockedStudentException =
@@ -33,15 +43,6 @@ internal partial class StorageBroker
 
             throw lockedStudentException;
         }
-        catch (DbUpdateException dbUpdateException)
-        {
-            var failedStudentStorageException =
-                new FailedStudentStorageException(
-                    message: "Failed student storage error occurred, contact support.",
-                    innerException: dbUpdateException);
-
-            throw failedStudentStorageException;
-        }
         catch (DuplicateKeyException duplicateKeyException)
         {
             var alreadyExistsStudentException =
@@ -50,6 +51,15 @@ internal partial class StorageBroker
                     innerException: duplicateKeyException);
 
             throw alreadyExistsStudentException;
+        }
+        catch (DbUpdateException dbUpdateException)
+        {
+            var failedStudentStorageException =
+                new FailedStudentStorageException(
+                    message: "Failed student storage error occurred, contact support.",
+                    innerException: dbUpdateException);
+
+            throw failedStudentStorageException;
         }
     }
 

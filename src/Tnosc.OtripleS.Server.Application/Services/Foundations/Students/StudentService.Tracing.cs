@@ -100,6 +100,16 @@ public partial class StudentService
            ]
        };
 
+    private static TracingActivity AddTraceOnGetById(Guid studentId) =>
+     new()
+     {
+         ActivityName = nameof(RetrieveStudentByIdAsync),
+         Tags =
+         [
+             new KeyValuePair<string, object?>(nameof(studentId),studentId),
+         ]
+     };
+
     private static TracingActivity AddTraceOnGetAll() =>
        new()
        {

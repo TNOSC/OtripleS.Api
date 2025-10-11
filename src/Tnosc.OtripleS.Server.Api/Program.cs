@@ -7,24 +7,21 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using Tnosc.OtripleS.Server.Api;
+using Tnosc.OtripleS.Server.Api.Extensions;
 using Tnosc.OtripleS.Server.Application;
 using Tnosc.OtripleS.Server.Infrastructure;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+builder.ConfigureOpenTelemetry();
+builder.AddServiceDefaults();
 builder.Services.AddEndpoints();
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddBrokers();
 
-
 WebApplication webApplication = builder.Build();
 
-if (webApplication.Environment.IsDevelopment())
-{
-    webApplication
-        .UseSwagger()
-        .UseSwaggerUI();
-}
+webApplication.MapDefaultEndpoints();
 
 webApplication.MapControllers();
 

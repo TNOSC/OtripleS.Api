@@ -15,8 +15,6 @@ using Tnosc.OtripleS.Server.Domain.Students;
 
 namespace Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 
-
-
 public sealed partial class StudentService : IStudentService
 {
     private readonly IStorageBroker _storageBroker;
@@ -51,7 +49,9 @@ public sealed partial class StudentService : IStudentService
         ValidateAgainstStorageStudentOnModify(inputStudent: student, storageStudent: maybeStudent);
 
         return await _storageBroker.UpdateStudentAsync(student: student);
-    });
+    },
+    withTracing: AddTraceOnModify(student),
+    withRetryOn: GetRetryableExceptions());
 
     public async ValueTask<Student> RegisterStudentAsync(Student student) =>
     await TryCatch(async () =>

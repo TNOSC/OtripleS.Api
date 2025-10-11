@@ -48,4 +48,24 @@ public partial class StudentService
                 new KeyValuePair<string, object?>(nameof(student.CreatedDate), student?.CreatedDate),
             ]
         };
+
+    private static TracingActivity AddTraceOnModify(Student student) =>
+        new()
+        {
+            ActivityName = nameof(ModifyStudentAsync),
+            Tags =
+            [
+                new KeyValuePair<string, object?>(nameof(student.Id), student?.Id),
+                new KeyValuePair<string, object?>(nameof(student.IdentityNumber), student?.IdentityNumber),
+                new KeyValuePair<string, object?>(nameof(student.FirstName), student?.FirstName),
+                new KeyValuePair<string, object?>(nameof(student.MiddleName), student?.MiddleName),
+                new KeyValuePair<string, object?>(nameof(student.LastName), student?.LastName),
+                new KeyValuePair<string, object?>(nameof(student.Gender), student?.Gender),
+                new KeyValuePair<string, object?>(nameof(student.BirthDate), student?.BirthDate),
+                new KeyValuePair<string, object?>(nameof(student.CreatedBy), student?.CreatedBy),
+                new KeyValuePair<string, object?>(nameof(student.CreatedDate), student?.CreatedDate),
+                new KeyValuePair<string, object?>(nameof(student.UpdatedBy), student?.UpdatedBy),
+                new KeyValuePair<string, object?>(nameof(student.UpdatedDate), student?.UpdatedDate),
+            ]
+        };
 }

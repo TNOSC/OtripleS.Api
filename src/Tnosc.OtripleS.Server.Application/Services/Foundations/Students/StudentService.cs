@@ -73,7 +73,9 @@ public sealed partial class StudentService : IStudentService
         ValidateStorageStudent(maybeStudent, studentId);
 
         return await _storageBroker.DeleteStudentAsync(student: maybeStudent);
-    });
+    },
+    withTracing: AddTraceOnRemove(studentId),
+    withRetryOn: GetRetryableExceptions());
 
     public IQueryable<Student> RetrieveAllStudents() =>
     TryCatch(_storageBroker.SelectAllStudents);

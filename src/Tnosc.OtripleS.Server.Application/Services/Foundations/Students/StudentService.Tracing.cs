@@ -68,4 +68,14 @@ public partial class StudentService
                 new KeyValuePair<string, object?>(nameof(student.UpdatedDate), student?.UpdatedDate),
             ]
         };
+
+    private static TracingActivity AddTraceOnRemove(Guid studentId) =>
+       new()
+       {
+           ActivityName = nameof(RemoveStudentByIdAsync),
+           Tags =
+           [
+               new KeyValuePair<string, object?>(nameof(studentId),studentId),
+           ]
+       };
 }

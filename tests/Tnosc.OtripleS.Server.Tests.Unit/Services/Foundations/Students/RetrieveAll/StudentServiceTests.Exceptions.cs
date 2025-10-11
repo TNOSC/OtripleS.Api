@@ -6,6 +6,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -19,7 +20,7 @@ namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.Students;
 public partial class StudentServiceTests
 {
     [Fact]
-    public void ShouldThrowDependencyExceptionOnRetrieveAllStudentsIfDatabaseUpdateErrorOccursAndLogIt()
+    public async Task ShouldThrowDependencyExceptionOnRetrieveAllStudentsIfDatabaseUpdateErrorOccursAndLogIt()
     {
         // given
         var databaseUpdateException = new DbUpdateException();
@@ -38,12 +39,12 @@ public partial class StudentServiceTests
             .Throws(ex: failedStudentStorageException);
 
         // when
-        Action retrieveAllStudentsAction = () =>
-           _studentService.RetrieveAllStudents();
+        ValueTask<IQueryable<Student>> retrieveAllStudentsTask =
+           _studentService.RetrieveAllStudentsAsync();
 
         // then
-        Assert.Throws<StudentDependencyException>(() =>
-            retrieveAllStudentsAction());
+        await Assert.ThrowsAsync<StudentDependencyException>(() =>
+            retrieveAllStudentsTask.AsTask());
 
         _loggingBrokerMock.Received(1)
             .LogCritical(Arg.Is<Xeption>(actualException =>
@@ -55,7 +56,7 @@ public partial class StudentServiceTests
     }
 
     [Fact]
-    public void ShouldThrowServiceExceptionOnRetrieveAllStudentsIfExceptionOccursAndLogIt()
+    public async Task ShouldThrowServiceExceptionOnRetrieveAllStudentsIfExceptionOccursAndLogIt()
     {
         // given
         var serviceException = new Exception();
@@ -74,12 +75,12 @@ public partial class StudentServiceTests
             .Throws(ex: serviceException);
 
         // when
-        Action retrieveAllStudentsAction = () =>
-            _studentService.RetrieveAllStudents();
+        ValueTask<IQueryable<Student>> retrieveAllStudentsTask =
+            _studentService.RetrieveAllStudentsAsync();
 
         // then
-        Assert.Throws<StudentServiceException>(() =>
-            retrieveAllStudentsAction());
+        await Assert.ThrowsAsync<StudentServiceException>(() =>
+            retrieveAllStudentsTask.AsTask());
 
         _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
             .LogError(Arg.Is<Xeption>(actualException =>

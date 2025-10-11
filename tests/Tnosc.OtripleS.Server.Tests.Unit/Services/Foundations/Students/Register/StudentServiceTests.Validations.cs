@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
 using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
-using Tnosc.OtripleS.Server.Application.Exceptions.Processings.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xeptions;
 using Xunit;

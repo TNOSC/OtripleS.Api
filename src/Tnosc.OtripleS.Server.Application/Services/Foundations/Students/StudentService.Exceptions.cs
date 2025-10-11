@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Tnosc.Lib.Application.Observabilities;
 using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xeptions;
@@ -17,12 +18,28 @@ namespace Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 public sealed partial class StudentService
 {
     private delegate ValueTask<Student> ReturningStudentFunction();
-    private delegate IQueryable<Student> ReturningStudentsFunction();
-    private async ValueTask<Student> TryCatch(ReturningStudentFunction returningStudentFunction)
+    private delegate ValueTask<IQueryable<Student>> ReturningStudentsFunction();
+    private async ValueTask<Student> TryCatch(
+        ReturningStudentFunction returningStudentFunction,
+        IEnumerable<Type>? withRetryOn = null,
+        TracingActivity? withTracing = null)
     {
         try
         {
-            return await returningStudentFunction();
+            ReturningStudentFunction composedFunction = returningStudentFunction;
+
+            if (withRetryOn is not null)
+            {
+                composedFunction = () => WithRetry(returningStudentFunction, withRetryOn);
+            }
+
+            if (withTracing is not null)
+            {
+                ReturningStudentFunction previous = composedFunction;
+                composedFunction = () => WithTracing(previous, withTracing);
+            }
+
+            return await composedFunction();
         }
         catch (NullStudentException nullStudentException)
         {
@@ -48,7 +65,7 @@ public sealed partial class StudentService
         {
             throw CreateAndLogDependencyValidationException(alreadyExistsStudentException);
         }
-        catch(Exception exception)
+        catch (Exception exception)
         {
             var failedStudentServiceException =
                    new FailedStudentServiceException(
@@ -59,11 +76,27 @@ public sealed partial class StudentService
         }
     }
 
-    private IQueryable<Student> TryCatch(ReturningStudentsFunction returningStudentsFunction)
+    private async ValueTask<IQueryable<Student>> TryCatch(
+        ReturningStudentsFunction returningStudentsFunction,
+        IEnumerable<Type>? withRetryOn = null,
+        TracingActivity? withTracing = null)
     {
         try
         {
-            return returningStudentsFunction();
+            ReturningStudentsFunction composedFunction = returningStudentsFunction;
+
+            if (withRetryOn is not null)
+            {
+                composedFunction = () => WithRetry(returningStudentsFunction, withRetryOn);
+            }
+
+            if (withTracing is not null)
+            {
+                ReturningStudentsFunction previous = composedFunction;
+                composedFunction = () => WithTracing(previous, withTracing);
+            }
+
+            return await composedFunction();
         }
         catch (FailedStudentStorageException failedStudentStorageException)
         {

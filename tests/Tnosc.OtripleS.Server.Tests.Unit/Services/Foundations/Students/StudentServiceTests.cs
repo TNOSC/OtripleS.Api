@@ -7,6 +7,7 @@
 using System;
 using System.Linq;
 using NSubstitute;
+using Tnosc.Lib.Application.Configurations;
 using Tnosc.OtripleS.Server.Application.Brokers.DateTimes;
 using Tnosc.OtripleS.Server.Application.Brokers.Loggings;
 using Tnosc.OtripleS.Server.Application.Brokers.Storages;
@@ -22,6 +23,7 @@ public partial class StudentServiceTests
     private readonly IStorageBroker _storageBrokerMock;
     private readonly IDateTimeBroker _dateTimeBrokerMock;
     private readonly ILoggingBroker _loggingBrokerMock;
+    private readonly IRetryConfig _retryConfig;
     private readonly StudentService _studentService;
 
     public StudentServiceTests()
@@ -30,10 +32,15 @@ public partial class StudentServiceTests
         _dateTimeBrokerMock = Substitute.For<IDateTimeBroker>();
         _loggingBrokerMock = Substitute.For<ILoggingBroker>();
 
+        _retryConfig = Substitute.For<IRetryConfig>();
+        _retryConfig.MaxRetryAttempts.Returns(1);
+        _retryConfig.DelayBetweenFailures.Returns(TimeSpan.FromMilliseconds(300));
+
         _studentService = new StudentService(
             storageBroker: _storageBrokerMock,
             dateTimeBroker: _dateTimeBrokerMock,
-            loggingBroker: _loggingBrokerMock);
+            loggingBroker: _loggingBrokerMock,
+            retryConfig: _retryConfig);
     }
 
     public static TheoryData InvalidMinuteCases()

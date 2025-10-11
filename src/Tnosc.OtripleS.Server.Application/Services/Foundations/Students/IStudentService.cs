@@ -14,7 +14,7 @@ namespace Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 public interface IStudentService
 {
     ValueTask<Student> RegisterStudentAsync(Student student);
-    IQueryable<Student> RetrieveAllStudents();
+    ValueTask<IQueryable<Student>> RetrieveAllStudentsAsync();
     ValueTask<Student> RetrieveStudentByIdAsync(Guid studentId);
     ValueTask<Student> ModifyStudentAsync(Student student);
     ValueTask<Student> RemoveStudentByIdAsync(Guid studentId);

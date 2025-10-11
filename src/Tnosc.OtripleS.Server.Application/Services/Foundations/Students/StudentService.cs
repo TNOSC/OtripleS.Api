@@ -7,6 +7,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Tnosc.Lib.Application.Configurations;
 using Tnosc.OtripleS.Server.Application.Brokers.DateTimes;
 using Tnosc.OtripleS.Server.Application.Brokers.Loggings;
 using Tnosc.OtripleS.Server.Application.Brokers.Storages;
@@ -19,15 +20,18 @@ public sealed partial class StudentService : IStudentService
     private readonly IStorageBroker _storageBroker;
     private readonly IDateTimeBroker _dateTimeBroker;
     private readonly ILoggingBroker _loggingBroker;
+    private readonly IRetryConfig _retryConfig;
 
     public StudentService(
         IStorageBroker storageBroker,
         IDateTimeBroker dateTimeBroker,
-        ILoggingBroker loggingBroker)
+        ILoggingBroker loggingBroker,
+        IRetryConfig retryConfig)
     {
         _storageBroker = storageBroker;
         _dateTimeBroker = dateTimeBroker;
         _loggingBroker = loggingBroker;
+        _retryConfig = retryConfig;
     }
 
     public async ValueTask<Student> ModifyStudentAsync(Student student) =>
@@ -45,14 +49,18 @@ public sealed partial class StudentService : IStudentService
         ValidateAgainstStorageStudentOnModify(inputStudent: student, storageStudent: maybeStudent);
 
         return await _storageBroker.UpdateStudentAsync(student: student);
-    });
+    },
+    withTracing: AddTraceOnModify(student),
+    withRetryOn: GetRetryableExceptions());
 
     public async ValueTask<Student> RegisterStudentAsync(Student student) =>
     await TryCatch(async () =>
     {
         ValidateStudentOnRegister(student: student);
         return await _storageBroker.InsertStudentAsync(student: student);
-    });
+    },
+    withTracing: AddTraceOnRegister(student),
+    withRetryOn: GetRetryableExceptions());
 
     public async ValueTask<Student> RemoveStudentByIdAsync(Guid studentId) =>
     await TryCatch(async () =>
@@ -65,10 +73,15 @@ public sealed partial class StudentService : IStudentService
         ValidateStorageStudent(maybeStudent, studentId);
 
         return await _storageBroker.DeleteStudentAsync(student: maybeStudent);
-    });
+    },
+    withTracing: AddTraceOnRemove(studentId),
+    withRetryOn: GetRetryableExceptions());
 
-    public IQueryable<Student> RetrieveAllStudents() =>
-    TryCatch(_storageBroker.SelectAllStudents);
+    public async ValueTask<IQueryable<Student>> RetrieveAllStudentsAsync() =>
+    await TryCatch(() => ValueTask.FromResult(_storageBroker.SelectAllStudents()),
+    withTracing: AddTraceOnGetAll(),
+    withRetryOn: GetRetryableExceptions());
+
 
     public async ValueTask<Student> RetrieveStudentByIdAsync(Guid studentId) =>
     await TryCatch(async () =>

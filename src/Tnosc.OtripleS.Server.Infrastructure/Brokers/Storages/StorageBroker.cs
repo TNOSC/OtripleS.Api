@@ -19,8 +19,11 @@ internal sealed partial class StorageBroker : EFxceptionsContext, IStorageBroker
 {
     private readonly IConfiguration _configuration;
 
-    public StorageBroker(IConfiguration configuration) 
-        => _configuration = configuration;
+    public StorageBroker(IConfiguration configuration)
+    {
+        _configuration = configuration;
+        Database.Migrate();
+    }
 
     private async ValueTask<T> InsertAsync<T>(T @object)
     {

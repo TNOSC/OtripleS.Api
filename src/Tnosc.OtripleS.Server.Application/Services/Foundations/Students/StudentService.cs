@@ -7,6 +7,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Tnosc.Lib.Application.Configurations;
 using Tnosc.OtripleS.Server.Application.Brokers.DateTimes;
 using Tnosc.OtripleS.Server.Application.Brokers.Loggings;
 using Tnosc.OtripleS.Server.Application.Brokers.Storages;
@@ -14,20 +15,25 @@ using Tnosc.OtripleS.Server.Domain.Students;
 
 namespace Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 
+
+
 public sealed partial class StudentService : IStudentService
 {
     private readonly IStorageBroker _storageBroker;
     private readonly IDateTimeBroker _dateTimeBroker;
     private readonly ILoggingBroker _loggingBroker;
+    private readonly IRetryConfig _retryConfig;
 
     public StudentService(
         IStorageBroker storageBroker,
         IDateTimeBroker dateTimeBroker,
-        ILoggingBroker loggingBroker)
+        ILoggingBroker loggingBroker,
+        IRetryConfig retryConfig)
     {
         _storageBroker = storageBroker;
         _dateTimeBroker = dateTimeBroker;
         _loggingBroker = loggingBroker;
+        _retryConfig = retryConfig;
     }
 
     public async ValueTask<Student> ModifyStudentAsync(Student student) =>
@@ -52,7 +58,9 @@ public sealed partial class StudentService : IStudentService
     {
         ValidateStudentOnRegister(student: student);
         return await _storageBroker.InsertStudentAsync(student: student);
-    });
+    },
+    withTracing: AddTraceOnRegister(student),
+    withRetryOn: GetRetryableExceptions());
 
     public async ValueTask<Student> RemoveStudentByIdAsync(Guid studentId) =>
     await TryCatch(async () =>

@@ -1,9 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+	<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+	<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
     <PackageReference Include="Xeption" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\lib\Tnosc.Lib.Application\Tnosc.Lib.Application.csproj" />
     <ProjectReference Include="..\Tnosc.OtripleS.Server.Domain\Tnosc.OtripleS.Server.Domain.csproj" />
   </ItemGroup>
 </Project>

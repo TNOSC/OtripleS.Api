@@ -18,7 +18,7 @@ namespace Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 public sealed partial class StudentService
 {
     private delegate ValueTask<Student> ReturningStudentFunction();
-    private delegate IQueryable<Student> ReturningStudentsFunction();
+    private delegate ValueTask<IQueryable<Student>> ReturningStudentsFunction();
     private async ValueTask<Student> TryCatch(
         ReturningStudentFunction returningStudentFunction,
         IEnumerable<Type>? withRetryOn = null,
@@ -76,11 +76,27 @@ public sealed partial class StudentService
         }
     }
 
-    private IQueryable<Student> TryCatch(ReturningStudentsFunction returningStudentsFunction)
+    private async ValueTask<IQueryable<Student>> TryCatch(
+        ReturningStudentsFunction returningStudentsFunction,
+        IEnumerable<Type>? withRetryOn = null,
+        TracingActivity? withTracing = null)
     {
         try
         {
-            return returningStudentsFunction();
+            ReturningStudentsFunction composedFunction = returningStudentsFunction;
+
+            if (withRetryOn is not null)
+            {
+                composedFunction = () => WithRetry(returningStudentsFunction, withRetryOn);
+            }
+
+            if (withTracing is not null)
+            {
+                ReturningStudentsFunction previous = composedFunction;
+                composedFunction = () => WithTracing(previous, withTracing);
+            }
+
+            return await composedFunction();
         }
         catch (FailedStudentStorageException failedStudentStorageException)
         {

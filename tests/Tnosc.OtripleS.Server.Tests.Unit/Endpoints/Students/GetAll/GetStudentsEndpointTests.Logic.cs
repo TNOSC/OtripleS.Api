@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Force.DeepCloner;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -18,7 +19,7 @@ namespace Tnosc.OtripleS.Server.Tests.Unit.Enpoints.Students.GetAll;
 public partial class GetStudentsEndpointTests
 {
     [Fact]
-    public void ShouldReturnOkOnGet()
+    public async Task ShouldReturnOkOnGet()
     {
         // given
         IQueryable<Student> randomStudents = CreateRandomStudents();
@@ -31,18 +32,18 @@ public partial class GetStudentsEndpointTests
         var expectedActionResult =
             new ActionResult<IQueryable<Student>>(result: expectedObjectResult);
 
-        _studentService.RetrieveAllStudents()
+        _studentService.RetrieveAllStudentsAsync()
             .Returns(returnThis: storageStudents);
 
         // when
         ActionResult<IQueryable<Student>> actualActionResult =
-             _getStudentsEndpoint.Handle();
+            await _getStudentsEndpoint.HandleAsync();
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
-        _studentService.Received(requiredNumberOfCalls: 1)
-            .RetrieveAllStudents();
+        await _studentService.Received(requiredNumberOfCalls: 1)
+            .RetrieveAllStudentsAsync();
     }
 }

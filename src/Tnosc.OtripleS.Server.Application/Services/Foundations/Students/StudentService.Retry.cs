@@ -54,4 +54,41 @@ public partial class StudentService
             }
         }
     }
+
+    private async ValueTask<IQueryable<Student>> WithRetry(
+          ReturningStudentsFunction returningStudentsFunction,
+          IEnumerable<Type> retryExceptionTypes)
+    {
+        int attempts = 0;
+
+        while (true)
+        {
+            try
+            {
+                attempts++;
+                return await returningStudentsFunction();
+            }
+            catch (Exception ex)
+            {
+                if (retryExceptionTypes.Any(exceptionType => exceptionType == ex.GetType()))
+                {
+                    _loggingBroker
+                        .LogInformation(
+                            $"Error found. Retry attempt {attempts}/{_retryConfig.MaxRetryAttempts}. " +
+                                $"Exception: {ex.Message}");
+
+                    if (attempts == _retryConfig.MaxRetryAttempts)
+                    {
+                        throw;
+                    }
+
+                    await Task.Delay(_retryConfig.DelayBetweenFailures);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+    }
 }

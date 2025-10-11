@@ -5,6 +5,7 @@
 // ----------------------------------------------------------------------------------
 
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -18,7 +19,7 @@ namespace Tnosc.OtripleS.Server.Api.Endpoints.Students;
 
 public class GetStudentsEndpoint : EndpointBaseAsync
     .WithoutRequest
-    .WithActionResult<IQueryable<Student>>
+    .WithActionResultValueTask<IQueryable<Student>>
 {
     private readonly IStudentService _studentService;
 
@@ -32,12 +33,12 @@ public class GetStudentsEndpoint : EndpointBaseAsync
         Summary = "Get all students.",
         Description = "Retrieves all students from the system.",
         Tags = new[] { StudentsRoutes.Tag })]
-    public override ActionResult<IQueryable<Student>> Handle()
+    public override async ValueTask<ActionResult<IQueryable<Student>>> HandleAsync()
     {
         try
         {
-            IQueryable<Student> retrievedAllStudents = _studentService
-                .RetrieveAllStudents();
+            IQueryable<Student> retrievedAllStudents = await _studentService
+                .RetrieveAllStudentsAsync();
 
             return Ok(value: retrievedAllStudents);
         }

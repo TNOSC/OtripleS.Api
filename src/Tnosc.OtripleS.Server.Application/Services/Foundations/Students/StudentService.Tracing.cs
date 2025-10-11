@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Tnosc.Lib.Application.Observabilities;
 using Tnosc.OtripleS.Server.Domain.Students;
@@ -21,6 +22,26 @@ public partial class StudentService
         try
         {
             Student result = await returningStudentFunction();
+            activity?.SetStatus(ActivityStatusCode.Ok);
+            return result;
+        }
+        catch (Exception ex)
+        {
+            activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
+            throw;
+        }
+    }
+
+    private static async ValueTask<IQueryable<Student>> WithTracing(ReturningStudentsFunction returningStudentsFunction, TracingActivity tracing)
+    {
+        using Activity? activity = source.StartActivity(
+            tracing.ActivityName,
+            ActivityKind.Internal,
+            Activity.Current?.Context ?? new ActivityContext(),
+            tracing.Tags);
+        try
+        {
+            IQueryable<Student> result = await returningStudentsFunction();
             activity?.SetStatus(ActivityStatusCode.Ok);
             return result;
         }
@@ -77,5 +98,11 @@ public partial class StudentService
            [
                new KeyValuePair<string, object?>(nameof(studentId),studentId),
            ]
+       };
+
+    private static TracingActivity AddTraceOnGetAll() =>
+       new()
+       {
+           ActivityName = nameof(RetrieveAllStudentsAsync),
        };
 }

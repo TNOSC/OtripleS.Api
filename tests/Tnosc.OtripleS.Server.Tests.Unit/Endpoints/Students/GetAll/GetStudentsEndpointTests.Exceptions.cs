@@ -5,6 +5,7 @@
 // ----------------------------------------------------------------------------------
 
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -20,7 +21,7 @@ public partial class GetStudentsEndpointTests
 {
     [Theory]
     [MemberData(nameof(ServerExceptions))]
-    public void ShouldReturnInternalServerErrorOnGetIfServerErrorOccurred(
+    public async Task ShouldReturnInternalServerErrorOnGetIfServerErrorOccurred(
            Xeption serverException)
     {
         // given
@@ -30,18 +31,18 @@ public partial class GetStudentsEndpointTests
         var expectedActionResult =
             new ActionResult<IQueryable<Student>>(result: expectedInternalServerErrorObjectResult);
 
-        _studentService.RetrieveAllStudents()
-            .Throws(ex: serverException);
+        _studentService.RetrieveAllStudentsAsync()
+            .ThrowsAsync(ex: serverException);
 
         // when
         ActionResult<IQueryable<Student>> actualActionResult =
-            _getStudentsEndpoint.Handle();
+            await _getStudentsEndpoint.HandleAsync();
 
         // then
         actualActionResult.ShouldBeEquivalentTo(
             expected: expectedActionResult);
 
-        _studentService.Received(requiredNumberOfCalls: 1)
-           .RetrieveAllStudents();
+        await _studentService.Received(requiredNumberOfCalls: 1)
+           .RetrieveAllStudentsAsync();
     }
 }

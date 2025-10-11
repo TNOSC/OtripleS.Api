@@ -77,8 +77,11 @@ public sealed partial class StudentService : IStudentService
     withTracing: AddTraceOnRemove(studentId),
     withRetryOn: GetRetryableExceptions());
 
-    public IQueryable<Student> RetrieveAllStudents() =>
-    TryCatch(_storageBroker.SelectAllStudents);
+    public async ValueTask<IQueryable<Student>> RetrieveAllStudentsAsync() =>
+    await TryCatch(() => ValueTask.FromResult(_storageBroker.SelectAllStudents()),
+    withTracing: AddTraceOnGetAll(),
+    withRetryOn: GetRetryableExceptions());
+
 
     public async ValueTask<Student> RetrieveStudentByIdAsync(Guid studentId) =>
     await TryCatch(async () =>

@@ -5,6 +5,7 @@
 // ----------------------------------------------------------------------------------
 
 using System.Linq;
+using System.Threading.Tasks;
 using Force.DeepCloner;
 using NSubstitute;
 using Shouldly;
@@ -16,7 +17,7 @@ namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.Students;
 public partial class StudentServiceTests
 {
     [Fact]
-    public void ShouldRetrieveAllStudents()
+    public async Task ShouldRetrieveAllStudentsAsync()
     {
         // given
         IQueryable<Student> randomStudents = CreateRandomStudents();
@@ -28,7 +29,7 @@ public partial class StudentServiceTests
 
         // when
         IQueryable<Student> actualStudents =
-            _studentService.RetrieveAllStudents();
+            await _studentService.RetrieveAllStudentsAsync();
 
         // then
         actualStudents.ShouldBeEquivalentTo(expected: expectedStudents);

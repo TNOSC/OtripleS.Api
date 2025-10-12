@@ -4,17 +4,16 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Tnosc.Lib.Application.Observabilities;
+using Tnosc.OtripleS.Server.Application.Observabilities;
 using Tnosc.OtripleS.Server.Domain.Students;
 
 namespace Tnosc.OtripleS.Server.Api.Endpoints.Students;
 
 public partial class PostStudentEndpoint
 {
-    private static readonly ActivitySource source = new(nameof(PostStudentEndpoint));
-
     private static async ValueTask<ActionResult<Student>> WithTracing(ReturningActionResult returningActionResult, TracingActivity tracing)
     {
-        using Activity? activity = source.StartActivity(
+        using Activity? activity = DiagnosticsConfig.ActivitySource.StartActivity(
             tracing.ActivityName,
             ActivityKind.Internal,
             Activity.Current?.Context ?? new ActivityContext(),

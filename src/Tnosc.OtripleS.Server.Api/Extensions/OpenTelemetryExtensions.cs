@@ -12,6 +12,7 @@ using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Tnosc.OtripleS.Server.Api.Endpoints.Students;
 using Tnosc.OtripleS.Server.Application.Observabilities;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 
@@ -31,7 +32,6 @@ internal static class OpenTelemetryExtensions
            .WithTracing(tracing =>
            {
                tracing.AddSource(DiagnosticsConfig.ServiceName);
-               tracing.AddSource(nameof(StudentService));
                tracing.AddAspNetCoreInstrumentation(tracing =>
                     tracing.Filter = context =>
                         !context.Request.Path.StartsWithSegments(HealthEndpointPath, StringComparison.InvariantCulture)

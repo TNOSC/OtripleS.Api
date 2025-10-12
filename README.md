@@ -77,6 +77,20 @@ Once the application is running, you can explore and test all available endpoint
 ```bash
 http://localhost:5000/swagger
 ```
+You can access the .NET Aspire Dashboard using the following URL:
+
+```bash
+http://localhost:18888
+```
+
+![Aspire Dashboard](docs/Otel.png "Aspire Dashboard")
+
+When you first access the dashboard, you will be prompted for an access token.
+You can retrieve this token from the Aspire Dashboard container logs by running:
+
+```bash
+docker logs aspire-dashboard
+```
 
 ## 📦 NuGet Packages
 

@@ -15,9 +15,3 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=OtripleSDb;User=sa;Password=Your_Strong_Password123!;TrustServerCertificate=True;MultipleActiveResultSets=true
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://aspire-dashboard:18889
-    networks:
-      - tnosc_network
-
-networks:
-  tnosc_network:
-    driver: bridge

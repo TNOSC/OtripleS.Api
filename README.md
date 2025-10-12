@@ -59,6 +59,8 @@ To run the project locally:
 
 ```bash
 git clone https://github.com/TNOSC/OtripleS.Api.git
+cd OtripleS.Api/infra
+docker-compose up -d
 cd OtripleS.Api/src
 dotnet restore
 dotnet run
@@ -69,7 +71,7 @@ Alternatively, you can run the project using Docker Compose:
 ```bash
 git clone https://github.com/TNOSC/OtripleS.Api.git
 cd OtripleS.Api
-docker-compose -f docker-compose.yml -p tnosc-otriples-server up -d
+docker-compose -f docker-compose.yml -f infra/docker-compose.yml -p tnosc-otriples up -d
 ```
 Once the application is running, you can explore and test all available endpoints via Swagger at:
 ```bash

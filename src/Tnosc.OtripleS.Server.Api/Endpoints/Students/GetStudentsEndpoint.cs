@@ -12,13 +12,12 @@ using Microsoft.AspNetCore.OData.Query;
 using Swashbuckle.AspNetCore.Annotations;
 using Tnosc.Lib.Api;
 using Tnosc.OtripleS.Server.Api.Routes;
-using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.Students;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
 
 namespace Tnosc.OtripleS.Server.Api.Endpoints.Students;
 
-public class GetStudentsEndpoint : EndpointBaseAsync
+public partial class GetStudentsEndpoint : EndpointBaseAsync
     .WithoutRequest
     .WithActionResultValueTask<IQueryable<Student>>
 {
@@ -35,22 +34,13 @@ public class GetStudentsEndpoint : EndpointBaseAsync
         Summary = "Get all students.",
         Description = "Retrieves all students from the system.",
         Tags = new[] { StudentsRoutes.Tag })]
-    public override async ValueTask<ActionResult<IQueryable<Student>>> HandleAsync()
-    {
-        try
+    public override async ValueTask<ActionResult<IQueryable<Student>>> HandleAsync() =>
+        await TryCatch(async () =>
         {
             IQueryable<Student> retrievedAllStudents = await _studentService
-                .RetrieveAllStudentsAsync();
+                 .RetrieveAllStudentsAsync();
 
             return Ok(value: retrievedAllStudents);
-        }
-        catch (StudentDependencyException studentDependencyException)
-        {
-            return InternalServerError(exception: studentDependencyException);
-        }
-        catch (StudentServiceException studentServiceException)
-        {
-            return InternalServerError(exception: studentServiceException);
-        }
-    }
+        },
+        withTracing: AddTrace());
 }

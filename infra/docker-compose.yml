@@ -8,3 +8,25 @@ services:
       - "18888:18888"
       - "4317:18889"
     restart: unless-stopped
+    networks:
+      - tnosc_network
+
+  sqlserver:
+      image: mcr.microsoft.com/mssql/server:2025-latest
+      container_name: sqlserver
+      environment:
+        - ACCEPT_EULA=Y
+        - SA_PASSWORD=Your_Strong_Password123!
+      ports:
+        - "1433:1433"
+      volumes:
+        - sql_data:/var/opt/mssql
+      networks:
+      - tnosc_network
+
+volumes:
+  sql_data:
+
+networks:
+  tnosc_network:
+    driver: bridge

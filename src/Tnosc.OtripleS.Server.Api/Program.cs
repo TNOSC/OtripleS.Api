@@ -21,6 +21,4 @@ WebApplication webApplication = builder.Build();
 
 webApplication.MapDefaultEndpoints();
 
-webApplication.MapControllers();
-
 await webApplication.RunAsync();

@@ -14,6 +14,7 @@ internal static class WebApplicationExtensions
 {
     private const string HealthEndpointPath = "/health";
     private const string AlivenessEndpointPath = "/alive";
+
     internal static WebApplication MapDefaultEndpoints(this WebApplication app)
     {
         if (app.Environment.IsDevelopment())
@@ -27,6 +28,7 @@ internal static class WebApplicationExtensions
                 Predicate = r => r.Tags.Contains("live")
             });
         }
+        app.MapControllers();
 
         return app;
     }

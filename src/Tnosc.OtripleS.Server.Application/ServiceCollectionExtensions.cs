@@ -15,7 +15,9 @@ namespace Tnosc.OtripleS.Server.Application;
 
 public static class ServiceCollectionExtensions
 {
-    public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
+    public static void AddApplicationServices(
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
         services.AddTransient<IStudentService, StudentService>();
         services.AddTransient<IStudentProcessingService, StudentProcessingService>();

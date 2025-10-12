@@ -9,6 +9,7 @@ using Tnosc.OtripleS.Server.Application.Brokers.DateTimes;
 using Tnosc.OtripleS.Server.Application.Brokers.Loggings;
 using Tnosc.OtripleS.Server.Application.Brokers.Storages;
 using Tnosc.OtripleS.Server.Infrastructure.Brokers.DateTimes;
+using Tnosc.OtripleS.Server.Infrastructure.Brokers.Jobs;
 using Tnosc.OtripleS.Server.Infrastructure.Brokers.Loggings;
 using Tnosc.OtripleS.Server.Infrastructure.Brokers.Storages;
 
@@ -23,5 +24,7 @@ public static class ServiceCollectionExtensions
 
         services.AddTransient<IDateTimeBroker, DateTimeBroker>();
         services.AddTransient<ILoggingBroker, LoggingBroker>();
+
+        services.AddHostedService<DbMigrationHostedService>();
     }
 }

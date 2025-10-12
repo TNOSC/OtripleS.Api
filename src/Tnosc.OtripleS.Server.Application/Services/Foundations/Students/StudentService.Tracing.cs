@@ -4,17 +4,16 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Tnosc.Lib.Application.Observabilities;
+using Tnosc.OtripleS.Server.Application.Observabilities;
 using Tnosc.OtripleS.Server.Domain.Students;
 
 namespace Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 
 public partial class StudentService
 {
-    private static readonly ActivitySource source = new(nameof(StudentService));
-
     private static async ValueTask<Student> WithTracing(ReturningStudentFunction returningStudentFunction, TracingActivity tracing)
     {
-        using Activity? activity = source.StartActivity(
+        using Activity? activity = DiagnosticsConfig.ActivitySource.StartActivity(
             tracing.ActivityName,
             ActivityKind.Internal,
             Activity.Current?.Context ?? new ActivityContext(),
@@ -34,7 +33,7 @@ public partial class StudentService
 
     private static async ValueTask<IQueryable<Student>> WithTracing(ReturningStudentsFunction returningStudentsFunction, TracingActivity tracing)
     {
-        using Activity? activity = source.StartActivity(
+        using Activity? activity = DiagnosticsConfig.ActivitySource.StartActivity(
             tracing.ActivityName,
             ActivityKind.Internal,
             Activity.Current?.Context ?? new ActivityContext(),

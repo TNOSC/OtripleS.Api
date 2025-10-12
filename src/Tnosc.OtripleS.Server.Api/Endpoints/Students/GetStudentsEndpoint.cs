@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 using Swashbuckle.AspNetCore.Annotations;
 using Tnosc.Lib.Api;
 using Tnosc.OtripleS.Server.Api.Routes;
@@ -26,6 +27,7 @@ public class GetStudentsEndpoint : EndpointBaseAsync
     public GetStudentsEndpoint(IStudentService studentService) =>
         _studentService = studentService;
 
+    [EnableQuery]
     [HttpGet(StudentsRoutes.Get, Name = nameof(GetStudentsEndpoint))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

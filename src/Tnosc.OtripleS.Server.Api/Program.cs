@@ -5,8 +5,6 @@
 // ----------------------------------------------------------------------------------
 
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Hosting;
-using Tnosc.OtripleS.Server.Api;
 using Tnosc.OtripleS.Server.Api.Extensions;
 using Tnosc.OtripleS.Server.Application;
 using Tnosc.OtripleS.Server.Infrastructure;

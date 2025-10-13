@@ -18,6 +18,6 @@ public class StudentEventService : IStudentEventService
     public StudentEventService(IQueueBroker queueBroker) =>
         _queueBroker = queueBroker;
 
-    public void ListenToStudentEvent(Func<StudentMessage, ValueTask> studentEventHandler) =>
-      throw new NotImplementedException();
+    public async Task ListenToStudentEventAsync(Func<StudentMessage, ValueTask> studentEventHandler) =>
+        await _queueBroker.ListenToStudentQueueAsync(studentEventHandler);
 }

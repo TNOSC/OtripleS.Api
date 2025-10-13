@@ -12,5 +12,5 @@ namespace Tnosc.OtripleS.Server.Application.Services.Foundations.StudentEvents;
 
 public interface IStudentEventService
 {
-    void ListenToStudentEvent(Func<StudentMessage, ValueTask> studentEventHandler);
+    Task ListenToStudentEventAsync(Func<StudentMessage, ValueTask> studentEventHandler);
 }

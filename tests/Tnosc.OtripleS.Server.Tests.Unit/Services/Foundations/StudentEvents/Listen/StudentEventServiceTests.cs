@@ -7,7 +7,6 @@
 using System;
 using System.Threading.Tasks;
 using NSubstitute;
-using Shouldly;
 using Tnosc.OtripleS.Server.Application.Brokers.Queues.Messages;
 using Xunit;
 
@@ -19,22 +18,22 @@ public partial class StudentEventServiceTests
     public async Task ShouldListenToStudentQueueAsync()
     {
         // given
-        Func<StudentMessage, ValueTask> studentEventHandlerMock = 
-            Substitute.For<Func<StudentMessage,ValueTask>>();
+        Func<StudentMessage, ValueTask> studentEventHandlerMock =
+            Substitute.For<Func<StudentMessage, ValueTask>>();
 
         StudentMessage randomStudentMessage = CreateRandomStudentMessage();
         StudentMessage incomingStudentMessage = randomStudentMessage;
 
-         _queueBroker.When(async broker =>
-            await broker.ListenToStudentQueueAsync(
-                Arg.Any<Func<StudentMessage, ValueTask>>()))
-                .Do(async callback =>
-                    await callback.Arg<Func<StudentMessage, ValueTask>>()(
-                        incomingStudentMessage));
+        _queueBroker.When(async broker =>
+           await broker.ListenToStudentQueueAsync(
+               Arg.Any<Func<StudentMessage, ValueTask>>()))
+               .Do(async callback =>
+                   await callback.Arg<Func<StudentMessage, ValueTask>>()(
+                       incomingStudentMessage));
 
         // when
-        _studentEventService.ListenToStudentEvent(
-            studentEventHandler: studentEventHandlerMock);
+        await _studentEventService.ListenToStudentEventAsync(
+             studentEventHandler: studentEventHandlerMock);
 
         // then
 
@@ -46,6 +45,5 @@ public partial class StudentEventServiceTests
             .Received(requiredNumberOfCalls: 1)
             .ListenToStudentQueueAsync(Arg.Is<Func<StudentMessage, ValueTask>>(handler =>
                 handler == studentEventHandlerMock));
-      
     }
 }

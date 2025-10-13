@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Tnosc.Lib.Application.Configurations;
+using Tnosc.OtripleS.Server.Application.Services.Foundations.StudentEvents;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 using Tnosc.OtripleS.Server.Application.Services.Processings.Students;
 
@@ -19,6 +20,7 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        services.AddTransient<IStudentEventService, StudentEventService>();
         services.AddTransient<IStudentService, StudentService>();
         services.AddTransient<IStudentProcessingService, StudentProcessingService>();
 

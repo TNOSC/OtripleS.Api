@@ -8,9 +8,9 @@ using System;
 using System.Threading.Tasks;
 using Tnosc.OtripleS.Server.Application.Brokers.Queues.Messages;
 
-namespace Tnosc.OtripleS.Server.Application.Brokers.Queues;
+namespace Tnosc.OtripleS.Server.Application.Services.Foundations.StudentEvents;
 
-public partial interface IQueueBroker
+public interface IStudentEventService
 {
-    ValueTask ListenToStudentQueueAsync(Func<StudentMessage, ValueTask> messageHandler);
+    void ListenToStudentEvent(Func<StudentMessage, ValueTask> studentEventHandler);
 }

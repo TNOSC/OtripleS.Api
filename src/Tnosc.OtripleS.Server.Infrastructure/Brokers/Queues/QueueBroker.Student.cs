@@ -13,10 +13,10 @@ namespace Tnosc.OtripleS.Server.Infrastructure.Brokers.Queues;
 
 public partial class QueueBroker
 {
-    private Func<StudentMessage, Task>? _studentMessageHandler;
+    private Func<StudentMessage, ValueTask>? _studentMessageHandler;
     public ServiceBusProcessor StudentsQueue { get; set; } = null!;
 
-    public async Task ListenToStudentQueueAsync(Func<StudentMessage, Task> messageHandler)
+    public async ValueTask ListenToStudentQueueAsync(Func<StudentMessage, ValueTask> messageHandler)
     {
         _studentMessageHandler = messageHandler ?? throw new ArgumentNullException(nameof(messageHandler));
 

@@ -6,11 +6,18 @@
 
 using System;
 using System.Threading.Tasks;
+using Tnosc.OtripleS.Server.Application.Brokers.Queues;
 using Tnosc.OtripleS.Server.Application.Brokers.Queues.Messages;
 
-namespace Tnosc.OtripleS.Server.Application.Brokers.Queues;
+namespace Tnosc.OtripleS.Server.Application.Services.Foundations.StudentEvents;
 
-public partial interface IQueueBroker
+public class StudentEventService : IStudentEventService
 {
-    ValueTask ListenToStudentQueueAsync(Func<StudentMessage, ValueTask> messageHandler);
+    private readonly IQueueBroker _queueBroker;
+
+    public StudentEventService(IQueueBroker queueBroker) =>
+        _queueBroker = queueBroker;
+
+    public void ListenToStudentEvent(Func<StudentMessage, ValueTask> studentEventHandler) =>
+      throw new NotImplementedException();
 }

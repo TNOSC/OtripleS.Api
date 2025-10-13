@@ -20,7 +20,7 @@ public partial class StudentEventServiceTests
     public StudentEventServiceTests()
     {
         _queueBroker = Substitute.For<IQueueBroker>();
-        _studentEventService = new StudentEventService(_queueBroker);
+        _studentEventService = new StudentEventService(queueBroker: _queueBroker);
     }
 
     private static StudentMessage CreateRandomStudentMessage() =>
@@ -28,5 +28,4 @@ public partial class StudentEventServiceTests
 
     private static Filler<StudentMessage> CreateStudentFiller() =>
         new Filler<StudentMessage>();
-
 }

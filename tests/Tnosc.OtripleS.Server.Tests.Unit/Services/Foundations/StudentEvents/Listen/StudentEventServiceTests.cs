@@ -5,8 +5,10 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using NSubstitute;
+using Shouldly;
 using Tnosc.OtripleS.Server.Application.Brokers.Queues.Messages;
 using Xunit;
 
@@ -38,12 +40,15 @@ public partial class StudentEventServiceTests
         // then
 
         await studentEventHandlerMock
-         .Received(requiredNumberOfCalls: 1)
-         .Invoke(arg: incomingStudentMessage);
+             .Received(requiredNumberOfCalls: 1)
+             .Invoke(arg: incomingStudentMessage);
 
         await _queueBroker
             .Received(requiredNumberOfCalls: 1)
             .ListenToStudentQueueAsync(Arg.Is<Func<StudentMessage, ValueTask>>(handler =>
                 handler == studentEventHandlerMock));
+
+        studentEventHandlerMock.ReceivedCalls().Count().ShouldBe(1);
+        _queueBroker.ReceivedCalls().Count().ShouldBe(1);
     }
 }

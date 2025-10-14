@@ -9,7 +9,7 @@ using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Tnosc.OtripleS.Server.Application.Exceptions.Foundations.LibraryAccounts;
-using Tnosc.OtripleS.Server.Domain.Libraries;
+using Tnosc.OtripleS.Server.Domain.LibraryAccounts;
 
 namespace Tnosc.OtripleS.Server.Infrastructure.Brokers.Storages;
 

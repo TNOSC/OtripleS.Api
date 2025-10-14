@@ -7,7 +7,7 @@
 using System;
 using Tnosc.OtripleS.Server.Domain.Students;
 
-namespace Tnosc.OtripleS.Server.Domain.Libraries;
+namespace Tnosc.OtripleS.Server.Domain.LibraryAccounts;
 
 public sealed class LibraryAccount
 {

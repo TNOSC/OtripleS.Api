@@ -167,7 +167,7 @@ public partial class StudentServiceTests
 
         _loggingBrokerMock.Received(requiredNumberOfCalls: 1)
             .LogError(Arg.Is<Xeption>(actualException =>
-              actualException.SameExceptionAs(expectedStudentServiceException)));
+             actualException.SameExceptionAs(expectedStudentServiceException)));
 
         _storageBrokerMock
             .ReceivedCalls()

@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\Foundations\StudentEvents\StudentEventServiceTests.Logic.Listen.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Services\Foundations\StudentEvents\Listen\StudentEventServiceTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="coverlet.collector" />
     <PackageReference Include="DeepCloner" />
     <PackageReference Include="EFxceptions" />

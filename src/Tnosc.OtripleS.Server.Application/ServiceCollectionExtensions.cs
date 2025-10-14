@@ -8,7 +8,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Tnosc.Lib.Application.Configurations;
+using Tnosc.OtripleS.Server.Application.Services.Foundations.StudentEvents;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
+using Tnosc.OtripleS.Server.Application.Services.Orchestrations;
 using Tnosc.OtripleS.Server.Application.Services.Processings.Students;
 
 namespace Tnosc.OtripleS.Server.Application;
@@ -19,8 +21,10 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddTransient<IStudentService, StudentService>();
-        services.AddTransient<IStudentProcessingService, StudentProcessingService>();
+        services.AddScoped<IStudentService, StudentService>();
+        services.AddScoped<IStudentProcessingService, StudentProcessingService>();
+        services.AddScoped<IStudentEventService, StudentEventService>();
+        services.AddScoped<IStudentEventOrchestrationService, StudentEventOrchestrationService>();
 
         services.Configure<RetryConfig>(
             configuration.GetSection("RetryConfig"));

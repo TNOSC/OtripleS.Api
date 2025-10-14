@@ -21,10 +21,10 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddTransient<IStudentEventService, StudentEventService>();
-        services.AddTransient<IStudentService, StudentService>();
-        services.AddTransient<IStudentProcessingService, StudentProcessingService>();
-        services.AddTransient<IStudentEventOrchestrationService, StudentEventOrchestrationService>();
+        services.AddScoped<IStudentService, StudentService>();
+        services.AddScoped<IStudentProcessingService, StudentProcessingService>();
+        services.AddScoped<IStudentEventService, StudentEventService>();
+        services.AddScoped<IStudentEventOrchestrationService, StudentEventOrchestrationService>();
 
         services.Configure<RetryConfig>(
             configuration.GetSection("RetryConfig"));

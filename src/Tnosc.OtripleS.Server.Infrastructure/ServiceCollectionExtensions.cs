@@ -27,5 +27,6 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IDateTimeBroker, DateTimeBroker>();
         services.AddTransient<ILoggingBroker, LoggingBroker>();
         services.AddHostedService<DbMigrationHostedService>();
+        services.AddHostedService<EventListenerHostedService>();
     }
 }

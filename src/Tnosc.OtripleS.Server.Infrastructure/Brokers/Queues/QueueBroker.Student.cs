@@ -18,21 +18,30 @@ public partial class QueueBroker
 
     public async ValueTask ListenToStudentQueueAsync(Func<StudentMessage, ValueTask> messageHandler)
     {
-        _studentMessageHandler = messageHandler ?? throw new ArgumentNullException(nameof(messageHandler));
+
+        _studentMessageHandler = messageHandler;
 
         StudentsQueue.ProcessMessageAsync += CompleteStudentQueueMessageAsync;
-      
+
         await StudentsQueue.StartProcessingAsync();
     }
 
     private async Task CompleteStudentQueueMessageAsync(ProcessMessageEventArgs args)
     {
-        StudentMessage? message = args.Message.Body.ToObjectFromJson<StudentMessage>();
-
-        if (message is not null && _studentMessageHandler is not null)
+        try
         {
-            await _studentMessageHandler(message);
-            await args.CompleteMessageAsync(args.Message);
+            StudentMessage? message = args.Message.Body.ToObjectFromJson<StudentMessage>();
+
+            if (message is not null && _studentMessageHandler is not null)
+            {
+                await _studentMessageHandler(message);
+                await args.CompleteMessageAsync(args.Message);
+            }
+        }
+        catch (Exception)
+        {
+            await args.AbandonMessageAsync(args.Message);
+            throw;
         }
     }
 }

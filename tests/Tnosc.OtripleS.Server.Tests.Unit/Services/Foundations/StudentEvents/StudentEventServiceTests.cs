@@ -4,10 +4,12 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
+using System;
 using NSubstitute;
 using Tnosc.OtripleS.Server.Application.Brokers.Queues;
 using Tnosc.OtripleS.Server.Application.Brokers.Queues.Messages;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.StudentEvents;
+using Tnosc.OtripleS.Server.Domain.Students;
 using Tynamix.ObjectFiller;
 
 namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.StudentEvents;
@@ -26,6 +28,16 @@ public partial class StudentEventServiceTests
     private static StudentMessage CreateRandomStudentMessage() =>
         CreateStudentFiller().Create();
 
-    private static Filler<StudentMessage> CreateStudentFiller() =>
-        new Filler<StudentMessage>();
+    private static Filler<StudentMessage> CreateStudentFiller()
+    {
+        var filler = new Filler<StudentMessage>();
+
+        filler.Setup()
+            .OnProperty(student => student.BirthDate).Use(valueToUse: GetRandomDateTime());
+
+        return filler;
+    }
+
+    private static DateTimeOffset GetRandomDateTime() =>
+        new DateTimeRange(earliestDate: DateTime.UtcNow).GetValue();
 }

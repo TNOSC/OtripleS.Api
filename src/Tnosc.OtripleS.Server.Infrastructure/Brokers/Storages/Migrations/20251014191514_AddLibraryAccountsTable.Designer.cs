@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tnosc.OtripleS.Server.Infrastructure.Brokers.Storages;
 
@@ -11,9 +12,11 @@ using Tnosc.OtripleS.Server.Infrastructure.Brokers.Storages;
 namespace Tnosc.OtripleS.Server.Infrastructure.Brokers.Storages.Migrations
 {
     [DbContext(typeof(StorageBroker))]
-    partial class StorageBrokerModelSnapshot : ModelSnapshot
+    [Migration("20251014191514_AddLibraryAccountsTable")]
+    partial class AddLibraryAccountsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

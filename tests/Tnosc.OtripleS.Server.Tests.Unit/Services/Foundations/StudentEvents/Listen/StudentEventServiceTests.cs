@@ -31,7 +31,7 @@ public partial class StudentEventServiceTests
                Arg.Any<Func<StudentMessage, ValueTask>>()))
                .Do(async callback =>
                    await callback.Arg<Func<StudentMessage, ValueTask>>()(
-                       incomingStudentMessage));
+                       arg: incomingStudentMessage));
 
         // when
         await _studentEventService.ListenToStudentEventAsync(
@@ -48,7 +48,7 @@ public partial class StudentEventServiceTests
             .ListenToStudentQueueAsync(Arg.Is<Func<StudentMessage, ValueTask>>(handler =>
                 handler == studentEventHandlerMock));
 
-        studentEventHandlerMock.ReceivedCalls().Count().ShouldBe(1);
-        _queueBroker.ReceivedCalls().Count().ShouldBe(1);
+        studentEventHandlerMock.ReceivedCalls().Count().ShouldBe(expected: 1);
+        _queueBroker.ReceivedCalls().Count().ShouldBe(expected: 1);
     }
 }

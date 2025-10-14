@@ -4,11 +4,10 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
+namespace Tnosc.OtripleS.Server.Application.Brokers.Queues.Messages;
 
-namespace Tnosc.OtripleS.Server.Application.Services.Orchestrations;
-
-public interface IStudentEventOrchestrationService
+public enum StudentGenderMessage
 {
-    Task ListenToStudentEventsAsync();
+    Female,
+    Male
 }

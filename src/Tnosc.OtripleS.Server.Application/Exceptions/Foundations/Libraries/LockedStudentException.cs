@@ -4,12 +4,19 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using Tnosc.OtripleS.Server.Domain.Libraries;
+using System;
+using Xeptions;
 
-namespace Tnosc.OtripleS.Server.Application.Brokers.Storages;
+namespace Tnosc.OtripleS.Server.Application.Exceptions.Foundations.LibraryAccounts;
 
-public partial interface IStorage
+public sealed class LockedLibraryAccountException : Xeption
 {
-    ValueTask<LibraryAccount> InsertLibraryAccountAsync(LibraryAccount libraryAccount);
+    public LockedLibraryAccountException(
+        string message, 
+        Exception innerException)
+        : base(
+            message: message,
+            innerException: innerException)
+    { }
 }
+

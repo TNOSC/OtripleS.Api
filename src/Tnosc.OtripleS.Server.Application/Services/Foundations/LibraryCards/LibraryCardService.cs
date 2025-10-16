@@ -17,6 +17,6 @@ public class LibraryCardService : ILibraryCardService
     public LibraryCardService(IStorageBroker storageBroker) =>
         _storageBroker = storageBroker;
 
-    public ValueTask<LibraryCard> AddLibraryCardAsync(LibraryCard libraryCard) =>
-        throw new System.NotImplementedException();
+    public async ValueTask<LibraryCard> AddLibraryCardAsync(LibraryCard libraryCard) =>
+        await _storageBroker.InsertLibraryCardAsync(libraryCard: libraryCard);
 }

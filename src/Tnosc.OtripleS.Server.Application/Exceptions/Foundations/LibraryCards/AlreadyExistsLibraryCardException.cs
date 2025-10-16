@@ -4,12 +4,18 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using Tnosc.OtripleS.Server.Domain.LibraryCards;
+using System;
+using Xeptions;
 
-namespace Tnosc.OtripleS.Server.Application.Brokers.Storages;
+namespace Tnosc.OtripleS.Server.Application.Exceptions.Foundations.LibraryCards;
 
-public partial interface IStorageBroker
+public sealed class AlreadyExistsLibraryCardException : Xeption
 {
-    ValueTask<LibraryCard> InsertLibraryCardAsync(LibraryCard libraryCard);
+    public AlreadyExistsLibraryCardException(
+        string message,
+        Exception innerException)
+        : base(
+            message: message,
+            innerException: innerException)
+    { }
 }

@@ -15,10 +15,8 @@ namespace Tnosc.OtripleS.Server.Application.Services.Orchestrations.LibraryAccou
 
 public class LibraryAccountOrchestrationService : ILibraryAccountOrchestrationService
 {
-#pragma warning disable S4487 // Unread "private" fields should be removed
     private readonly ILibraryAccountService _libraryAccountService;
     private readonly ILibraryCardService _libraryCardService;
-#pragma warning restore S4487 // Unread "private" fields should be removed
 
     public LibraryAccountOrchestrationService(
         ILibraryAccountService libraryAccountService,

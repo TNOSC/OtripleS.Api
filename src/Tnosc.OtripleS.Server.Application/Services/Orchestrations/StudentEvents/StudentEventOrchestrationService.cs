@@ -30,12 +30,12 @@ public class StudentEventOrchestrationService : IStudentEventOrchestrationServic
         _dateTimeBroker = dateTimeBroker;
     }
 
-    public async Task ListenToStudentEventsAsync(Func<Student, ValueTask> studentEventHandler) =>
+    public async Task ListenToStudentEventsAsync(Func<StudentMessage, ValueTask> studentEventHandler) =>
         await _studentEventService.ListenToStudentEventAsync(async studentMessage =>
         {
             Student student = MapToStudent(studentMessage: studentMessage);
             await _studentService.RegisterStudentAsync(student: student);
-            await studentEventHandler(arg: student);
+            await studentEventHandler(arg: studentMessage);
         });
 
     private Student MapToStudent(StudentMessage studentMessage)

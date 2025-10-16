@@ -10,15 +10,16 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
 using Tnosc.OtripleS.Server.Application.Brokers.Queues.Messages;
+using Tnosc.OtripleS.Server.Domain.LibraryAccounts;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Xunit;
 
-namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Orchestrations.StudentEvents;
+namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Coordinations.StudentEvents;
 
-public partial class StudentEventOrchestrationServiceTests
+public partial class StudentEventCoordinationServiceTests
 {
     [Fact]
-    public async Task ShouldListenAndAddStudentAsync()
+    public async Task ShouldListenToStudentEventsAsync()
     {
         // given
         var randomUserId = Guid.NewGuid();
@@ -59,52 +60,40 @@ public partial class StudentEventOrchestrationServiceTests
         };
         Student expectedInputStudent = randomStudent;
 
-        Func<StudentMessage, ValueTask> studentEventHandlerMock =
-            Substitute.For<Func<StudentMessage, ValueTask>>();
+        var expectedInputLibraryAccount = new LibraryAccount
+        {
+            Id = Guid.NewGuid(),
+            StudentId = expectedInputStudent.Id
+        };
 
-        _studentEventServiceMock.When(service =>
-            service.ListenToStudentEventAsync(
+       _studentEventOrchestrationServiceMock.When(service =>
+            service.ListenToStudentEventsAsync(
                 Arg.Any<Func<StudentMessage, ValueTask>>()))
             .Do(async callback =>
                 await callback.Arg<Func<StudentMessage, ValueTask>>()(
                     arg: incomingStudentMessage));
 
-        _dateTimeBrokerMock
-           .GetCurrentDateTime()
-               .Returns(returnThis: randomDateTime);
         // when
-        await _studentEventOrchestrationService.ListenToStudentEventsAsync(
-            studentEventHandler: studentEventHandlerMock);
+       await _studentEventCoordinationService.ListenToStudentEventsAsync();
 
         // then
-        await _studentEventServiceMock
-            .Received(requiredNumberOfCalls: 1)
-                .ListenToStudentEventAsync(
-                    Arg.Any<Func<StudentMessage, ValueTask>>());
+        await _studentEventOrchestrationServiceMock
+          .Received(requiredNumberOfCalls: 1)
+              .ListenToStudentEventsAsync(
+                  Arg.Any<Func<StudentMessage, ValueTask>>());
 
-        await _studentServiceMock.Received(requiredNumberOfCalls: 1)
-               .RegisterStudentAsync(Arg.Is<Student>(student =>
-                     SameStudentAs(student, expectedInputStudent)));
+        await _libraryAccountOrchestrationServiceMock
+                 .Received(requiredNumberOfCalls: 1)
+                     .CreateLibraryAccountAsync(
+                         Arg.Is(SameLibraryAccountAs(
+                            expectedInputLibraryAccount)));
 
-        await studentEventHandlerMock
-           .Received(requiredNumberOfCalls: 1)
-               .Invoke(arg: Arg.Any<StudentMessage>());
-
-        Received.InOrder(async () =>
-        {
-            await _studentServiceMock.RegisterStudentAsync(
-                student: Arg.Any<Student>());
-
-            await studentEventHandlerMock.Invoke(
-                arg: Arg.Any<StudentMessage>());
-        });
-
-        _studentEventServiceMock
+        _studentEventOrchestrationServiceMock
             .ReceivedCalls()
                 .Count()
                     .ShouldBe(expected: 1);
 
-        _studentServiceMock
+        _libraryAccountOrchestrationServiceMock
             .ReceivedCalls()
                 .Count()
                     .ShouldBe(expected: 1);

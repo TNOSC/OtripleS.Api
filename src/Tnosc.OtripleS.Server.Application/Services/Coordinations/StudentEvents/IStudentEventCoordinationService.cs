@@ -4,13 +4,11 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using System;
 using System.Threading.Tasks;
-using Tnosc.OtripleS.Server.Application.Brokers.Queues.Messages;
 
-namespace Tnosc.OtripleS.Server.Application.Services.Orchestrations.StudentEvents;
+namespace Tnosc.OtripleS.Server.Application.Services.Coordinations.StudentEvents;
 
-public interface IStudentEventOrchestrationService
+public interface IStudentEventCoordinationService
 {
-    Task ListenToStudentEventsAsync(Func<StudentMessage, ValueTask> studentEventHandler);
+    Task ListenToStudentEventsAsync();
 }

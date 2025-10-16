@@ -5,44 +5,49 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.Linq.Expressions;
 using NSubstitute;
-using Tnosc.OtripleS.Server.Application.Brokers.DateTimes;
 using Tnosc.OtripleS.Server.Application.Brokers.Queues.Messages;
-using Tnosc.OtripleS.Server.Application.Services.Foundations.StudentEvents;
-using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
+using Tnosc.OtripleS.Server.Application.Services.Coordinations.StudentEvents;
+using Tnosc.OtripleS.Server.Application.Services.Orchestrations.LibraryAccounts;
 using Tnosc.OtripleS.Server.Application.Services.Orchestrations.StudentEvents;
+using Tnosc.OtripleS.Server.Domain.LibraryAccounts;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Tynamix.ObjectFiller;
 
-namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Orchestrations.StudentEvents;
+namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Coordinations.StudentEvents;
 
-public partial class StudentEventOrchestrationServiceTests
+public partial class StudentEventCoordinationServiceTests
 {
-    private readonly IStudentService _studentServiceMock;
-    private readonly IStudentEventService _studentEventServiceMock;
-    private readonly IDateTimeBroker _dateTimeBrokerMock;
-    private readonly IStudentEventOrchestrationService _studentEventOrchestrationService;
+    private readonly IStudentEventOrchestrationService _studentEventOrchestrationServiceMock;
+    private readonly ILibraryAccountOrchestrationService _libraryAccountOrchestrationServiceMock;
+    private readonly IStudentEventCoordinationService _studentEventCoordinationService;
 
-    public StudentEventOrchestrationServiceTests()
+    public StudentEventCoordinationServiceTests()
     {
-        _studentServiceMock = Substitute.For<IStudentService>();
-        _studentEventServiceMock = Substitute.For<IStudentEventService>();
-        _dateTimeBrokerMock = Substitute.For<IDateTimeBroker>();
+        _studentEventOrchestrationServiceMock = Substitute.For<IStudentEventOrchestrationService>();
+        _libraryAccountOrchestrationServiceMock = Substitute.For<ILibraryAccountOrchestrationService>();
 
-        _studentEventOrchestrationService = new StudentEventOrchestrationService(
-            studentService: _studentServiceMock,
-            studentEventService: _studentEventServiceMock,
-            dateTimeBroker: _dateTimeBrokerMock);
+        _studentEventCoordinationService = new StudentEventCoordinationService(
+            studentEventOrchestrationService: _studentEventOrchestrationServiceMock,
+            libraryAccountOrchestrationService: _libraryAccountOrchestrationServiceMock);
     }
 
+    private static Expression<Predicate<LibraryAccount>> SameLibraryAccountAs(
+        LibraryAccount expectedLibraryAccount) => 
+            actualLibraryAccount =>
+                actualLibraryAccount.StudentId == expectedLibraryAccount.StudentId
+                && actualLibraryAccount.Id != Guid.Empty;
+
     private static dynamic CreateRandomStudentProperties(
-       DateTimeOffset auditDates,
-       Guid auditIds)
+   DateTimeOffset auditDates,
+   Guid auditIds)
     {
         Gender randomStudentGender = GetRandomGender();
 
         return new
         {
+            Id= Guid.NewGuid(),
             UserId = Guid.NewGuid().ToString(),
             IdentityNumber = GetRandomString(),
             FirstName = GetRandomName(),
@@ -79,16 +84,4 @@ public partial class StudentEventOrchestrationServiceTests
 
     private static DateTimeOffset GetRandomDate() =>
         new DateTimeRange(earliestDate: DateTime.UtcNow).GetValue();
-
-    private static bool SameStudentAs(Student actualStudent, Student expectedStudent) =>
-       actualStudent.IdentityNumber == expectedStudent.IdentityNumber &&
-       actualStudent.FirstName == expectedStudent.FirstName &&
-       actualStudent.MiddleName == expectedStudent.MiddleName &&
-       actualStudent.LastName == expectedStudent.LastName &&
-       actualStudent.Gender == expectedStudent.Gender &&
-       actualStudent.BirthDate == expectedStudent.BirthDate &&
-       actualStudent.CreatedDate == expectedStudent.CreatedDate &&
-       actualStudent.UpdatedDate == expectedStudent.UpdatedDate &&
-       actualStudent.CreatedBy == expectedStudent.CreatedBy &&
-       actualStudent.UpdatedBy == expectedStudent.UpdatedBy;
 }

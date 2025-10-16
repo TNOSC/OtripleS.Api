@@ -33,8 +33,9 @@ public class StudentEventOrchestrationService : IStudentEventOrchestrationServic
     public async Task ListenToStudentEventsAsync(Func<Student, ValueTask> studentEventHandler) =>
         await _studentEventService.ListenToStudentEventAsync(async studentMessage =>
         {
-            Student student = MapToStudent(studentMessage);
-            await _studentService.RegisterStudentAsync(student);
+            Student student = MapToStudent(studentMessage: studentMessage);
+            await _studentService.RegisterStudentAsync(student: student);
+            await studentEventHandler(arg: student);
         });
 
     private Student MapToStudent(StudentMessage studentMessage)

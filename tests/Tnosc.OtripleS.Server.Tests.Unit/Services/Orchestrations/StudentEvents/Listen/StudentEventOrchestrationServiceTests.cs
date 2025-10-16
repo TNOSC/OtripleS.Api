@@ -59,7 +59,7 @@ public partial class StudentEventOrchestrationServiceTests
         };
         Student expectedInputStudent = randomStudent;
 
-        Func<Student, ValueTask> studentEventHandlerMock = 
+        Func<Student, ValueTask> studentEventHandlerMock =
             Substitute.For<Func<Student, ValueTask>>();
 
         _studentEventServiceMock.When(service =>
@@ -88,8 +88,16 @@ public partial class StudentEventOrchestrationServiceTests
 
         await studentEventHandlerMock
            .Received(requiredNumberOfCalls: 1)
-               .Invoke(expectedInputStudent);
+               .Invoke(arg: Arg.Any<Student>());
 
+        Received.InOrder(async () =>
+        {
+            await _studentServiceMock.RegisterStudentAsync(
+                student: Arg.Any<Student>());
+
+            await studentEventHandlerMock.Invoke(
+                arg: Arg.Any<Student>());
+        });
 
         _studentEventServiceMock
             .ReceivedCalls()

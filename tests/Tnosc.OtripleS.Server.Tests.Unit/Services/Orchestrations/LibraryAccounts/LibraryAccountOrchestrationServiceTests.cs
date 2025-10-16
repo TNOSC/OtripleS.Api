@@ -35,7 +35,8 @@ public partial class LibraryAccountOrchestrationServiceTests
     private static Expression<Predicate<LibraryCard>> SameLibraryCardAs(
         LibraryCard expectedLibraryCard) => 
             actualLibraryCard =>
-                actualLibraryCard.LibraryAccountId == expectedLibraryCard.LibraryAccountId;
+                actualLibraryCard.LibraryAccountId == expectedLibraryCard.LibraryAccountId
+                && actualLibraryCard.LibraryAccountId != Guid.Empty;
 
     private static LibraryAccount CreateRandomLibraryAccount() =>
         CreateLibraryAccountFiller().Create();

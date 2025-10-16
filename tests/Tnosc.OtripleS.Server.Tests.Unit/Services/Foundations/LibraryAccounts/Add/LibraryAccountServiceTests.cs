@@ -17,7 +17,7 @@ namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.LibraryAccounts;
 public partial class LibraryAccountServiceTests
 {
     [Fact]
-    public async Task ShouldAddLibraryAccount()
+    public async Task ShouldAddLibraryAccountAsync()
     {
         // given
         LibraryAccount randomLibraryAccount =

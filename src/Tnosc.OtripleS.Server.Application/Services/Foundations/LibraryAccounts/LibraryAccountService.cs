@@ -4,7 +4,6 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
-using System;
 using System.Threading.Tasks;
 using Tnosc.OtripleS.Server.Application.Brokers.Storages;
 using Tnosc.OtripleS.Server.Domain.LibraryAccounts;
@@ -18,6 +17,6 @@ public sealed class LibraryAccountService : ILibraryAccountService
     public LibraryAccountService(IStorageBroker storageBroker) =>
         _storageBroker = storageBroker;
 
-    public ValueTask<LibraryAccount> AddLibraryAccountAsync(LibraryAccount libraryAccount) =>
-        throw new NotImplementedException();
+    public async ValueTask<LibraryAccount> AddLibraryAccountAsync(LibraryAccount libraryAccount) =>
+       await _storageBroker.InsertLibraryAccountAsync(libraryAccount: libraryAccount);
 }

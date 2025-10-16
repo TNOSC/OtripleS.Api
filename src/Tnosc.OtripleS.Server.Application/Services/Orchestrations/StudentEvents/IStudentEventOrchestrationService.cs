@@ -6,11 +6,11 @@
 
 using System;
 using System.Threading.Tasks;
-using Tnosc.OtripleS.Server.Application.Brokers.Queues.Messages;
+using Tnosc.OtripleS.Server.Domain.Students;
 
 namespace Tnosc.OtripleS.Server.Application.Services.Orchestrations.StudentEvents;
 
 public interface IStudentEventOrchestrationService
 {
-    Task ListenToStudentEventsAsync(Func<StudentMessage, ValueTask> studentEventHandler);
+    Task ListenToStudentEventsAsync(Func<Student, ValueTask> studentEventHandler);
 }

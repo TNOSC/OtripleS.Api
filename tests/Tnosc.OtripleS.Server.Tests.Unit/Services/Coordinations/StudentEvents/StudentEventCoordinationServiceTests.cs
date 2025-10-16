@@ -39,49 +39,19 @@ public partial class StudentEventCoordinationServiceTests
                 actualLibraryAccount.StudentId == expectedLibraryAccount.StudentId
                 && actualLibraryAccount.Id != Guid.Empty;
 
-    private static dynamic CreateRandomStudentProperties(
-   DateTimeOffset auditDates,
-   Guid auditIds)
-    {
-        Gender randomStudentGender = GetRandomGender();
+    private static Student CreateRandomStudent() =>
+        CreateStudentFiller().Create();
 
-        return new
-        {
-            Id= Guid.NewGuid(),
-            UserId = Guid.NewGuid().ToString(),
-            IdentityNumber = GetRandomString(),
-            FirstName = GetRandomName(),
-            MiddleName = GetRandomName(),
-            LastName = GetRandomName(),
-            BirthDate = GetRandomDate(),
-            Gender = randomStudentGender,
-            GenderMessage = (StudentGenderMessage)randomStudentGender,
-            CreatedDate = auditDates,
-            UpdatedDate = auditDates,
-            CreatedBy = auditIds,
-            UpdatedBy = auditIds
-        };
+    private static Filler<Student> CreateStudentFiller()
+    {
+        var filler = new Filler<Student>();
+
+        filler.Setup()
+            .OnType<DateTimeOffset>().Use(GetRandomDateTime());
+
+        return filler;
     }
 
-    private static Gender GetRandomGender()
-    {
-        int studentGenderCount =
-            Enum.GetValues<Gender>().Length;
-
-        int randomStudentGenderValue =
-            new IntRange(
-                min: 0,
-                max: studentGenderCount).GetValue();
-
-        return (Gender)randomStudentGenderValue;
-    }
-
-    private static string GetRandomString() =>
-        new MnemonicString().GetValue();
-
-    private static string GetRandomName() =>
-        new RealNames(NameStyle.FirstName).GetValue();
-
-    private static DateTimeOffset GetRandomDate() =>
-        new DateTimeRange(earliestDate: DateTime.UtcNow).GetValue();
+    private static DateTimeOffset GetRandomDateTime() =>
+           new DateTimeRange(earliestDate: DateTime.UtcNow).GetValue();
 }

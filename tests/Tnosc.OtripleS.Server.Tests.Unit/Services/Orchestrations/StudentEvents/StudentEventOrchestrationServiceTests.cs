@@ -43,6 +43,7 @@ public partial class StudentEventOrchestrationServiceTests
 
         return new
         {
+            Id=Guid.NewGuid(),
             UserId = Guid.NewGuid().ToString(),
             IdentityNumber = GetRandomString(),
             FirstName = GetRandomName(),

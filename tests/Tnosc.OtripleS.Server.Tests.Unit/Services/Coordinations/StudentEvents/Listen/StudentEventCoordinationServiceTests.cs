@@ -22,43 +22,7 @@ public partial class StudentEventCoordinationServiceTests
     public async Task ShouldListenToStudentEventsAsync()
     {
         // given
-        var randomUserId = Guid.NewGuid();
-        DateTimeOffset randomDateTime = GetRandomDate();
-
-        dynamic randomStudentProperties =
-            CreateRandomStudentProperties(
-                auditDates: randomDateTime,
-                auditIds: randomUserId);
-
-        var randomStudentMessage = new StudentMessage
-        {
-            IdentityNumber = randomStudentProperties.IdentityNumber,
-            FirstName = randomStudentProperties.FirstName,
-            MiddleName = randomStudentProperties.MiddleName,
-            LastName = randomStudentProperties.LastName,
-            Gender = randomStudentProperties.GenderMessage,
-            BirthDate = randomStudentProperties.BirthDate,
-            CreatedBy = randomUserId,
-            UpdatedBy = randomUserId
-        };
-        StudentMessage incomingStudentMessage = randomStudentMessage;
-
-        var randomStudent = new Student
-        {
-            Id = randomStudentProperties.Id,
-            UserId = randomStudentProperties.UserId,
-            IdentityNumber = randomStudentProperties.IdentityNumber,
-            FirstName = randomStudentProperties.FirstName,
-            MiddleName = randomStudentProperties.MiddleName,
-            LastName = randomStudentProperties.LastName,
-            Gender = randomStudentProperties.Gender,
-            BirthDate = randomStudentProperties.BirthDate,
-            CreatedDate = randomDateTime,
-            UpdatedDate = randomDateTime,
-            CreatedBy = randomUserId,
-            UpdatedBy = randomUserId
-        };
-        Student expectedInputStudent = randomStudent;
+        Student expectedInputStudent = CreateRandomStudent();
 
         var expectedInputLibraryAccount = new LibraryAccount
         {
@@ -68,10 +32,10 @@ public partial class StudentEventCoordinationServiceTests
 
        _studentEventOrchestrationServiceMock.When(service =>
             service.ListenToStudentEventsAsync(
-                Arg.Any<Func<StudentMessage, ValueTask>>()))
+                Arg.Any<Func<Student, ValueTask>>()))
             .Do(async callback =>
-                await callback.Arg<Func<StudentMessage, ValueTask>>()(
-                    arg: incomingStudentMessage));
+                await callback.Arg<Func<Student, ValueTask>>()(
+                    arg: expectedInputStudent));
 
         // when
        await _studentEventCoordinationService.ListenToStudentEventsAsync();
@@ -80,7 +44,7 @@ public partial class StudentEventCoordinationServiceTests
         await _studentEventOrchestrationServiceMock
           .Received(requiredNumberOfCalls: 1)
               .ListenToStudentEventsAsync(
-                  Arg.Any<Func<StudentMessage, ValueTask>>());
+                  Arg.Any<Func<Student, ValueTask>>());
 
         await _libraryAccountOrchestrationServiceMock
                  .Received(requiredNumberOfCalls: 1)

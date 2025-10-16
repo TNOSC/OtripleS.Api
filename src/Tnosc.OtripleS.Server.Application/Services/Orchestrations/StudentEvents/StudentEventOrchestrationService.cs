@@ -12,7 +12,7 @@ using Tnosc.OtripleS.Server.Application.Services.Foundations.StudentEvents;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
 
-namespace Tnosc.OtripleS.Server.Application.Services.Orchestrations;
+namespace Tnosc.OtripleS.Server.Application.Services.Orchestrations.StudentEvents;
 
 public class StudentEventOrchestrationService : IStudentEventOrchestrationService
 {

@@ -6,7 +6,7 @@
 
 using System.Threading.Tasks;
 
-namespace Tnosc.OtripleS.Server.Application.Services.Orchestrations;
+namespace Tnosc.OtripleS.Server.Application.Services.Orchestrations.StudentEvents;
 
 public interface IStudentEventOrchestrationService
 {

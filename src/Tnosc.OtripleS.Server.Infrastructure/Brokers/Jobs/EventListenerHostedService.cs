@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Tnosc.OtripleS.Server.Application.Services.Orchestrations;
+using Tnosc.OtripleS.Server.Application.Services.Orchestrations.StudentEvents;
 
 namespace Tnosc.OtripleS.Server.Infrastructure.Brokers.Jobs;
 

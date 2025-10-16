@@ -10,7 +10,7 @@ using Microsoft.Extensions.Options;
 using Tnosc.Lib.Application.Configurations;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.StudentEvents;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
-using Tnosc.OtripleS.Server.Application.Services.Orchestrations;
+using Tnosc.OtripleS.Server.Application.Services.Orchestrations.StudentEvents;
 using Tnosc.OtripleS.Server.Application.Services.Processings.Students;
 
 namespace Tnosc.OtripleS.Server.Application;

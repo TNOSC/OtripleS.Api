@@ -6,7 +6,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Tnosc.OtripleS.Server.Domain.Libraries;
+using Tnosc.OtripleS.Server.Domain.LibraryAccounts;
 
 namespace Tnosc.OtripleS.Server.Infrastructure.Brokers.Storages.EntityConfigurations;
 

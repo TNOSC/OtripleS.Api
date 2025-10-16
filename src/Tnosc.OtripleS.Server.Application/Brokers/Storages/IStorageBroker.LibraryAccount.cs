@@ -5,11 +5,11 @@
 // ----------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
-using Tnosc.OtripleS.Server.Domain.Libraries;
+using Tnosc.OtripleS.Server.Domain.LibraryAccounts;
 
 namespace Tnosc.OtripleS.Server.Application.Brokers.Storages;
 
-public partial interface IStorage
+public partial interface IStorageBroker
 {
     ValueTask<LibraryAccount> InsertLibraryAccountAsync(LibraryAccount libraryAccount);
 }

@@ -9,7 +9,4 @@
     <ProjectReference Include="..\..\lib\Tnosc.Lib.Application\Tnosc.Lib.Application.csproj" />
     <ProjectReference Include="..\Tnosc.OtripleS.Server.Domain\Tnosc.OtripleS.Server.Domain.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\Foundations\LibraryAccounts\" />
-  </ItemGroup>
 </Project>

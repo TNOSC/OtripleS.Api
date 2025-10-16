@@ -6,7 +6,7 @@
 
 using System;
 using Tnosc.Lib.Domain;
-using Tnosc.OtripleS.Server.Domain.Libraries;
+using Tnosc.OtripleS.Server.Domain.LibraryAccounts;
 
 namespace Tnosc.OtripleS.Server.Domain.Students;
 

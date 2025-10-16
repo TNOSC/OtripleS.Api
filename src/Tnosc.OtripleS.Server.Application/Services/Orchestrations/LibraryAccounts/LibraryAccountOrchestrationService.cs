@@ -4,10 +4,12 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.LibraryAccounts;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.LibraryCards;
 using Tnosc.OtripleS.Server.Domain.LibraryAccounts;
+using Tnosc.OtripleS.Server.Domain.LibraryCards;
 
 namespace Tnosc.OtripleS.Server.Application.Services.Orchestrations.LibraryAccounts;
 
@@ -26,6 +28,29 @@ public class LibraryAccountOrchestrationService : ILibraryAccountOrchestrationSe
         _libraryCardService = libraryCardService;
     }
 
-    public ValueTask<LibraryAccount> CreateLibraryAccountAsync(LibraryAccount libraryAccount) =>
-        throw new System.NotImplementedException();
+    public async ValueTask<LibraryAccount> CreateLibraryAccountAsync(LibraryAccount libraryAccount)
+    {
+        LibraryAccount addedLibraryAccount = await _libraryAccountService
+            .AddLibraryAccountAsync(libraryAccount);
+
+        await CreateLibraryCardAsync(libraryAccount);
+
+        return addedLibraryAccount;
+    }
+
+    private async Task CreateLibraryCardAsync(LibraryAccount libraryAccount)
+    {
+        LibraryCard inputLibraryCard =
+            CreateLibraryCard(libraryAccount.Id);
+
+        await _libraryCardService
+            .AddLibraryCardAsync(inputLibraryCard);
+    }
+
+    private static LibraryCard CreateLibraryCard(Guid libraryAccountId) =>
+        new LibraryCard
+        {
+            Id = Guid.NewGuid(),
+            LibraryAccountId = libraryAccountId
+        };
 }

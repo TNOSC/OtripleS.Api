@@ -62,6 +62,15 @@ public partial class LibraryAccountOrchestrationServiceTests
           .Received(requiredNumberOfCalls: 1)
             .AddLibraryCardAsync(Arg.Is(SameLibraryCardAs(expectedInputLibraryCard)));
 
+        Received.InOrder(async() =>
+        {
+            await _libraryAccountServiceMock .AddLibraryAccountAsync(
+                  libraryAccount: inputLibraryAccount);
+
+            await _libraryCardServiceMock.AddLibraryCardAsync(
+                 Arg.Any<LibraryCard>());
+        });
+
         _libraryAccountServiceMock
            .ReceivedCalls()
                .Count()

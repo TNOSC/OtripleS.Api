@@ -59,6 +59,9 @@ public partial class StudentEventOrchestrationServiceTests
         };
         Student expectedInputStudent = randomStudent;
 
+        Func<Student, ValueTask> studentEventHandlerMock = 
+            Substitute.For<Func<Student, ValueTask>>();
+
         _studentEventServiceMock.When(service =>
             service.ListenToStudentEventAsync(
                 Arg.Any<Func<StudentMessage, ValueTask>>()))
@@ -70,18 +73,32 @@ public partial class StudentEventOrchestrationServiceTests
            .GetCurrentDateTime()
                .Returns(returnThis: randomDateTime);
         // when
-        await _studentEventOrchestrationService.ListenToStudentEventsAsync();
+        await _studentEventOrchestrationService.ListenToStudentEventsAsync(
+            studentEventHandler: studentEventHandlerMock);
 
         // then
         await _studentEventServiceMock
             .Received(requiredNumberOfCalls: 1)
-            .ListenToStudentEventAsync(Arg.Any<Func<StudentMessage, ValueTask>>());
+                .ListenToStudentEventAsync(
+                    Arg.Any<Func<StudentMessage, ValueTask>>());
 
         await _studentServiceMock.Received(requiredNumberOfCalls: 1)
                .RegisterStudentAsync(Arg.Is<Student>(student =>
                      SameStudentAs(student, expectedInputStudent)));
 
-        _studentEventServiceMock.ReceivedCalls().Count().ShouldBe(expected: 1);
-        _studentServiceMock.ReceivedCalls().Count().ShouldBe(expected: 1);
+        await studentEventHandlerMock
+           .Received(requiredNumberOfCalls: 1)
+               .Invoke(expectedInputStudent);
+
+
+        _studentEventServiceMock
+            .ReceivedCalls()
+                .Count()
+                    .ShouldBe(expected: 1);
+
+        _studentServiceMock
+            .ReceivedCalls()
+                .Count()
+                    .ShouldBe(expected: 1);
     }
 }

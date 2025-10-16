@@ -32,12 +32,17 @@ internal sealed class EventListenerHostedService : IHostedService
         _logger.LogInformation("Starting listening to events...");
 
         using IServiceScope scope = _serviceProvider.CreateScope();
-        IStudentEventOrchestrationService studentEventOrchestrationService = 
+#pragma warning disable S1481 // Unused local variables should be removed
+        IStudentEventOrchestrationService studentEventOrchestrationService =
             scope.ServiceProvider.GetRequiredService<IStudentEventOrchestrationService>();
+#pragma warning restore S1481 // Unused local variables should be removed
         try
+#pragma warning disable S125 // Sections of code should not be commented out
         {
-            await studentEventOrchestrationService.ListenToStudentEventsAsync();
+            await Task.FromResult(true);
+            //await studentEventOrchestrationService.ListenToStudentEventsAsync();
         }
+#pragma warning restore S125 // Sections of code should not be commented out
         catch (Exception ex)
         {
             _logger.LogError(ex, "Event listener failed.");

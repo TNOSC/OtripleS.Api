@@ -5,22 +5,16 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using Tnosc.OtripleS.Server.Domain.LibraryCards;
-using Tnosc.OtripleS.Server.Domain.Students;
+using Tnosc.OtripleS.Server.Domain.LibraryAccounts;
 
-namespace Tnosc.OtripleS.Server.Domain.LibraryAccounts;
+namespace Tnosc.OtripleS.Server.Domain.LibraryCards;
 
-public sealed class LibraryAccount
+public sealed class LibraryCard
 {
-    public LibraryAccount() => 
-        LibraryCards = new HashSet<LibraryCard>();
-
     public Guid Id { get; set; }
 
 
     // Navigations
-    public Guid StudentId { get; set; }
-    public Student Student { get; set; } = null!;
-    public ICollection<LibraryCard> LibraryCards { get; set; }
+    public Guid LibraryAccountId { get; set; }
+    public LibraryAccount LibraryAccount { get; set; } = null!;
 }

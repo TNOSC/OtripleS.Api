@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Tnosc.Lib.Application.Configurations;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.LibraryAccounts;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.LibraryCards;
+using Tnosc.OtripleS.Server.Application.Services.Foundations.LocalStudentEvents;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.StudentEvents;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 using Tnosc.OtripleS.Server.Application.Services.Orchestrations.LibraryAccounts;
@@ -28,6 +29,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IStudentService, StudentService>();
         services.AddScoped<ILibraryAccountService, LibraryAccountService>();
         services.AddScoped<ILibraryCardService, LibraryCardService>();
+        services.AddScoped<ILocalStudentEventService, LocalStudentEventService>();
         services.AddScoped<IStudentProcessingService, StudentProcessingService>();
         services.AddScoped<IStudentEventOrchestrationService, StudentEventOrchestrationService>();
         services.AddScoped<ILibraryAccountOrchestrationService, LibraryAccountOrchestrationService>();

@@ -30,6 +30,18 @@ public class LibraryAccountOrchestrationService : ILibraryAccountOrchestrationSe
         _localStudentEventService = localStudentEventService;
     }
 
+    public void ListenToLocalStudentEvent() =>
+        _localStudentEventService.ListenToStudentEvent(async (student) =>
+        {
+            var libraryAccount = new LibraryAccount
+            {
+                Id = Guid.NewGuid(),
+                StudentId = student.Id
+            };
+
+            await CreateLibraryAccountAsync(libraryAccount);
+        });
+
     public async ValueTask<LibraryAccount> CreateLibraryAccountAsync(LibraryAccount libraryAccount)
     {
         LibraryAccount addedLibraryAccount = await _libraryAccountService
@@ -48,9 +60,6 @@ public class LibraryAccountOrchestrationService : ILibraryAccountOrchestrationSe
         await _libraryCardService
             .AddLibraryCardAsync(libraryCard: inputLibraryCard);
     }
-
-    public void ListenToLocalStudentEvent() =>
-        throw new NotImplementedException();
 
     private static LibraryCard CreateLibraryCard(Guid libraryAccountId) =>
         new LibraryCard

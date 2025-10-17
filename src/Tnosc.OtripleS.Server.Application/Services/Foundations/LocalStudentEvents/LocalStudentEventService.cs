@@ -19,8 +19,8 @@ public sealed class LocalStudentEventService : ILocalStudentEventService
         _eventBroker = eventBroker;
 
     public void ListenToStudentEvent(Func<Student, ValueTask> studentEventHandler) =>
-        _eventBroker.ListenToStudentEvent(studentEventHandler);
+        _eventBroker.ListenToStudentEvent(studentEventHandler: studentEventHandler);
 
-    public ValueTask PublishStudentAsync(Student student) =>
-        throw new NotImplementedException();
+    public async ValueTask PublishStudentAsync(Student student) =>
+        await _eventBroker.PublishStudentEventAsync(student: student);
 }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Tnosc.OtripleS.Server.Application.Services.Orchestrations;
+using Tnosc.OtripleS.Server.Application.Services.Coordinations.StudentEvents;
 
 namespace Tnosc.OtripleS.Server.Infrastructure.Brokers.Jobs;
 
@@ -32,11 +32,11 @@ internal sealed class EventListenerHostedService : IHostedService
         _logger.LogInformation("Starting listening to events...");
 
         using IServiceScope scope = _serviceProvider.CreateScope();
-        IStudentEventOrchestrationService studentEventOrchestrationService = 
-            scope.ServiceProvider.GetRequiredService<IStudentEventOrchestrationService>();
+        IStudentEventCoordinationService studentEventCoordinationService =
+            scope.ServiceProvider.GetRequiredService<IStudentEventCoordinationService>();
         try
         {
-            await studentEventOrchestrationService.ListenToStudentEventsAsync();
+            await studentEventCoordinationService.ListenToStudentEventsAsync();
         }
         catch (Exception ex)
         {

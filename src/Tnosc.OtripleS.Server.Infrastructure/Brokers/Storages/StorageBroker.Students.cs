@@ -19,8 +19,8 @@ internal partial class StorageBroker
     public async ValueTask<Student> InsertStudentAsync(Student student) =>
          await TryCatch(async () => await InsertAsync(@object: student));
 
-    public IQueryable<Student> SelectAllStudents() =>
-         TryCatch(SelectAll<Student>);
+    public async ValueTask<IQueryable<Student>> SelectAllStudents() =>
+         await TryCatch(async () => await SelectAll<Student>());
 
     public async ValueTask<Student> SelectStudentByIdAsync(Guid studentId) =>
         await TryCatch(async () => await SelectAsync<Student>(objectIds: studentId));

@@ -78,7 +78,7 @@ public sealed partial class StudentService : IStudentService
     withRetryOn: GetRetryableExceptions());
 
     public async ValueTask<IQueryable<Student>> RetrieveAllStudentsAsync() =>
-    await TryCatch(() => ValueTask.FromResult(_storageBroker.SelectAllStudents()),
+    await TryCatch(_storageBroker.SelectAllStudents,
     withTracing: AddTraceOnGetAll(),
     withRetryOn: GetRetryableExceptions());
 

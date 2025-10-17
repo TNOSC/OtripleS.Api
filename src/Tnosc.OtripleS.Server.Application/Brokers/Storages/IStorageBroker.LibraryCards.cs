@@ -5,10 +5,11 @@
 // ----------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
+using Tnosc.OtripleS.Server.Domain.LibraryCards;
 
-namespace Tnosc.OtripleS.Server.Application.Services.Orchestrations;
+namespace Tnosc.OtripleS.Server.Application.Brokers.Storages;
 
-public interface IStudentEventOrchestrationService
+public partial interface IStorageBroker
 {
-    Task ListenToStudentEventsAsync();
+    ValueTask<LibraryCard> InsertLibraryCardAsync(LibraryCard libraryCard);
 }

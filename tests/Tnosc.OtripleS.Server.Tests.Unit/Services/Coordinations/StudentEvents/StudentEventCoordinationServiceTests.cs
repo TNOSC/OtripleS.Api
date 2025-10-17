@@ -1,0 +1,57 @@
+﻿// ----------------------------------------------------------------------------------
+// Copyright (c) Tunisian .NET Open Source Community (TNOSC). All rights reserved.
+// This code is provided by TNOSC and is freely available under the MIT License.
+// Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
+// ----------------------------------------------------------------------------------
+
+using System;
+using System.Linq.Expressions;
+using NSubstitute;
+using Tnosc.OtripleS.Server.Application.Brokers.Queues.Messages;
+using Tnosc.OtripleS.Server.Application.Services.Coordinations.StudentEvents;
+using Tnosc.OtripleS.Server.Application.Services.Orchestrations.LibraryAccounts;
+using Tnosc.OtripleS.Server.Application.Services.Orchestrations.StudentEvents;
+using Tnosc.OtripleS.Server.Domain.LibraryAccounts;
+using Tnosc.OtripleS.Server.Domain.Students;
+using Tynamix.ObjectFiller;
+
+namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Coordinations.StudentEvents;
+
+public partial class StudentEventCoordinationServiceTests
+{
+    private readonly IStudentEventOrchestrationService _studentEventOrchestrationServiceMock;
+    private readonly ILibraryAccountOrchestrationService _libraryAccountOrchestrationServiceMock;
+    private readonly IStudentEventCoordinationService _studentEventCoordinationService;
+
+    public StudentEventCoordinationServiceTests()
+    {
+        _studentEventOrchestrationServiceMock = Substitute.For<IStudentEventOrchestrationService>();
+        _libraryAccountOrchestrationServiceMock = Substitute.For<ILibraryAccountOrchestrationService>();
+
+        _studentEventCoordinationService = new StudentEventCoordinationService(
+            studentEventOrchestrationService: _studentEventOrchestrationServiceMock,
+            libraryAccountOrchestrationService: _libraryAccountOrchestrationServiceMock);
+    }
+
+    private static Expression<Predicate<LibraryAccount>> SameLibraryAccountAs(
+        LibraryAccount expectedLibraryAccount) => 
+            actualLibraryAccount =>
+                actualLibraryAccount.StudentId == expectedLibraryAccount.StudentId
+                && actualLibraryAccount.Id != Guid.Empty;
+
+    private static Student CreateRandomStudent() =>
+        CreateStudentFiller().Create();
+
+    private static Filler<Student> CreateStudentFiller()
+    {
+        var filler = new Filler<Student>();
+
+        filler.Setup()
+            .OnType<DateTimeOffset>().Use(GetRandomDateTime());
+
+        return filler;
+    }
+
+    private static DateTimeOffset GetRandomDateTime() =>
+           new DateTimeRange(earliestDate: DateTime.UtcNow).GetValue();
+}

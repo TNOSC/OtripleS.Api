@@ -36,7 +36,7 @@ public partial class StudentServiceTests
                 innerException: failedStudentStorageException);
 
         _storageBrokerMock.SelectAllStudents()
-            .Throws(ex: failedStudentStorageException);
+            .ThrowsAsync(ex: failedStudentStorageException);
 
         // when
         ValueTask<IQueryable<Student>> retrieveAllStudentsTask =
@@ -50,7 +50,7 @@ public partial class StudentServiceTests
             .LogCritical(Arg.Is<Xeption>(actualException =>
               actualException.SameExceptionAs(expectedStudentDependencyException)));
 
-        _storageBrokerMock
+        await _storageBrokerMock
             .Received(requiredNumberOfCalls: 1)
             .SelectAllStudents();
     }
@@ -72,7 +72,7 @@ public partial class StudentServiceTests
                 innerException: failedStudentServiceException);
 
         _storageBrokerMock.SelectAllStudents()
-            .Throws(ex: serviceException);
+            .ThrowsAsync(ex: serviceException);
 
         // when
         ValueTask<IQueryable<Student>> retrieveAllStudentsTask =
@@ -86,8 +86,8 @@ public partial class StudentServiceTests
             .LogError(Arg.Is<Xeption>(actualException =>
               actualException.SameExceptionAs(expectedStudentServiceException)));
 
-        _storageBrokerMock
-            .Received(requiredNumberOfCalls: 1)
-            .SelectAllStudents();
+        await _storageBrokerMock
+                .Received(requiredNumberOfCalls: 1)
+                    .SelectAllStudents();
     }
 }

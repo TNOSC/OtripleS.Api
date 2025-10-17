@@ -17,7 +17,7 @@ namespace Tnosc.OtripleS.Server.Infrastructure.Brokers.Storages;
 internal partial class StorageBroker
 {
     private delegate ValueTask<Student> ReturningStudentFunction();
-    private delegate IQueryable<Student> ReturningStudentsFunction();
+    private delegate ValueTask<IQueryable<Student>> ReturningStudentsFunction();
 
     private static async ValueTask<Student> TryCatch(ReturningStudentFunction returningStudentFunction)
     {
@@ -63,11 +63,11 @@ internal partial class StorageBroker
         }
     }
 
-    private static IQueryable<Student>TryCatch(ReturningStudentsFunction returningStudentsFunction)
+    private static async ValueTask<IQueryable<Student>> TryCatch(ReturningStudentsFunction returningStudentsFunction)
     {
         try
         {
-            return  returningStudentsFunction();
+            return await returningStudentsFunction();
         }
         catch (DbUpdateException dbUpdateException)
         {

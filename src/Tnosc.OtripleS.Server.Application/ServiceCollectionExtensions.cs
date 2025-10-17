@@ -8,9 +8,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Tnosc.Lib.Application.Configurations;
+using Tnosc.OtripleS.Server.Application.Services.Coordinations.StudentEvents;
+using Tnosc.OtripleS.Server.Application.Services.Foundations.LibraryAccounts;
+using Tnosc.OtripleS.Server.Application.Services.Foundations.LibraryCards;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.StudentEvents;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
-using Tnosc.OtripleS.Server.Application.Services.Orchestrations;
+using Tnosc.OtripleS.Server.Application.Services.Orchestrations.LibraryAccounts;
+using Tnosc.OtripleS.Server.Application.Services.Orchestrations.StudentEvents;
 using Tnosc.OtripleS.Server.Application.Services.Processings.Students;
 
 namespace Tnosc.OtripleS.Server.Application;
@@ -21,10 +25,14 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddScoped<IStudentService, StudentService>();
-        services.AddScoped<IStudentProcessingService, StudentProcessingService>();
         services.AddScoped<IStudentEventService, StudentEventService>();
+        services.AddScoped<IStudentService, StudentService>();
+        services.AddScoped<ILibraryAccountService, LibraryAccountService>();
+        services.AddScoped<ILibraryCardService, LibraryCardService>();
+        services.AddScoped<IStudentProcessingService, StudentProcessingService>();
         services.AddScoped<IStudentEventOrchestrationService, StudentEventOrchestrationService>();
+        services.AddScoped<ILibraryAccountOrchestrationService, LibraryAccountOrchestrationService>();
+        services.AddScoped<IStudentEventCoordinationService, StudentEventCoordinationService>();
 
         services.Configure<RetryConfig>(
             configuration.GetSection("RetryConfig"));

@@ -6,6 +6,7 @@
 
 using System;
 using Tnosc.Lib.Domain;
+using Tnosc.OtripleS.Server.Domain.LibraryAccounts;
 
 namespace Tnosc.OtripleS.Server.Domain.Students;
 
@@ -22,4 +23,7 @@ public sealed class Student : Entity<Guid>, IAuditable
     public DateTimeOffset UpdatedDate { get; set; }
     public Guid CreatedBy { get; set; }
     public Guid UpdatedBy { get; set; }
+
+    // Navigations
+    public LibraryAccount? LibraryAccount { get; set; } 
 }

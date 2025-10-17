@@ -49,6 +49,7 @@ public partial class StudentsApiTests
             .OnProperty(student => student.UpdatedBy).Use(userId)
             .OnProperty(student => student.CreatedDate).Use(now)
             .OnProperty(student => student.UpdatedDate).Use(now)
+            .OnProperty(student => student.LibraryAccount).IgnoreIt()
             .OnType<DateTimeOffset>().Use(GetRandomDateTime());
 
         return filler;

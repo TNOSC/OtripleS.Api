@@ -17,10 +17,41 @@ namespace Tnosc.OtripleS.Server.Infrastructure.Brokers.Storages.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Tnosc.OtripleS.Server.Domain.LibraryAccounts.LibraryAccount", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId")
+                        .IsUnique();
+
+                    b.ToTable("LibraryAccounts", (string)null);
+                });
+
+            modelBuilder.Entity("Tnosc.OtripleS.Server.Domain.LibraryCards.LibraryCard", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LibraryAccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LibraryAccountId");
+
+                    b.ToTable("LibraryCards", (string)null);
+                });
 
             modelBuilder.Entity("Tnosc.OtripleS.Server.Domain.Students.Student", b =>
                 {
@@ -74,6 +105,38 @@ namespace Tnosc.OtripleS.Server.Infrastructure.Brokers.Storages.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Students", (string)null);
+                });
+
+            modelBuilder.Entity("Tnosc.OtripleS.Server.Domain.LibraryAccounts.LibraryAccount", b =>
+                {
+                    b.HasOne("Tnosc.OtripleS.Server.Domain.Students.Student", "Student")
+                        .WithOne("LibraryAccount")
+                        .HasForeignKey("Tnosc.OtripleS.Server.Domain.LibraryAccounts.LibraryAccount", "StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("Tnosc.OtripleS.Server.Domain.LibraryCards.LibraryCard", b =>
+                {
+                    b.HasOne("Tnosc.OtripleS.Server.Domain.LibraryAccounts.LibraryAccount", "LibraryAccount")
+                        .WithMany("LibraryCards")
+                        .HasForeignKey("LibraryAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LibraryAccount");
+                });
+
+            modelBuilder.Entity("Tnosc.OtripleS.Server.Domain.LibraryAccounts.LibraryAccount", b =>
+                {
+                    b.Navigation("LibraryCards");
+                });
+
+            modelBuilder.Entity("Tnosc.OtripleS.Server.Domain.Students.Student", b =>
+                {
+                    b.Navigation("LibraryAccount");
                 });
 #pragma warning restore 612, 618
         }

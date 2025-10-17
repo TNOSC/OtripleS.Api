@@ -12,7 +12,7 @@ using Tnosc.OtripleS.Server.Application.Services.Foundations.StudentEvents;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
 
-namespace Tnosc.OtripleS.Server.Application.Services.Orchestrations;
+namespace Tnosc.OtripleS.Server.Application.Services.Orchestrations.StudentEvents;
 
 public class StudentEventOrchestrationService : IStudentEventOrchestrationService
 {
@@ -30,11 +30,12 @@ public class StudentEventOrchestrationService : IStudentEventOrchestrationServic
         _dateTimeBroker = dateTimeBroker;
     }
 
-    public async Task ListenToStudentEventsAsync() =>
+    public async Task ListenToStudentEventsAsync(Func<Student, ValueTask> studentEventHandler) =>
         await _studentEventService.ListenToStudentEventAsync(async studentMessage =>
         {
-            Student student = MapToStudent(studentMessage);
-            await _studentService.RegisterStudentAsync(student);
+            Student student = MapToStudent(studentMessage: studentMessage);
+            await _studentService.RegisterStudentAsync(student: student);
+            await studentEventHandler(arg: student);
         });
 
     private Student MapToStudent(StudentMessage studentMessage)

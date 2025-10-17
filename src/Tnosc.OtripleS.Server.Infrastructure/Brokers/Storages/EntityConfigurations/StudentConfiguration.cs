@@ -61,4 +61,3 @@ internal sealed class StudentConfiguration : IEntityTypeConfiguration<Student>
                .IsRequired();
     }
 }
-

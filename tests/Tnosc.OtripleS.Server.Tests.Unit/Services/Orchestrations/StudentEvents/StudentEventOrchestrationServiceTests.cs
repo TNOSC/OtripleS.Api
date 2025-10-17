@@ -10,7 +10,7 @@ using Tnosc.OtripleS.Server.Application.Brokers.DateTimes;
 using Tnosc.OtripleS.Server.Application.Brokers.Queues.Messages;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.StudentEvents;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
-using Tnosc.OtripleS.Server.Application.Services.Orchestrations;
+using Tnosc.OtripleS.Server.Application.Services.Orchestrations.StudentEvents;
 using Tnosc.OtripleS.Server.Domain.Students;
 using Tynamix.ObjectFiller;
 
@@ -34,6 +34,7 @@ public partial class StudentEventOrchestrationServiceTests
             studentEventService: _studentEventServiceMock,
             dateTimeBroker: _dateTimeBrokerMock);
     }
+
     private static dynamic CreateRandomStudentProperties(
        DateTimeOffset auditDates,
        Guid auditIds)
@@ -42,7 +43,7 @@ public partial class StudentEventOrchestrationServiceTests
 
         return new
         {
-            Id = Guid.NewGuid(),
+            Id=Guid.NewGuid(),
             UserId = Guid.NewGuid().ToString(),
             IdentityNumber = GetRandomString(),
             FirstName = GetRandomName(),

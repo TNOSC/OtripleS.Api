@@ -59,9 +59,6 @@ public partial class StudentEventOrchestrationServiceTests
         };
         Student expectedInputStudent = randomStudent;
 
-        Func<Student, ValueTask> studentEventHandlerMock =
-            Substitute.For<Func<Student, ValueTask>>();
-
         _studentEventServiceMock.When(service =>
             service.ListenToStudentEventAsync(
                 Arg.Any<Func<StudentMessage, ValueTask>>()))
@@ -73,8 +70,7 @@ public partial class StudentEventOrchestrationServiceTests
            .GetCurrentDateTime()
                .Returns(returnThis: randomDateTime);
         // when
-        await _studentEventOrchestrationService.ListenToStudentEventsAsync(
-            studentEventHandler: studentEventHandlerMock);
+        await _studentEventOrchestrationService.ListenToStudentEventsAsync();
 
         // then
         await _studentEventServiceMock
@@ -82,21 +78,19 @@ public partial class StudentEventOrchestrationServiceTests
                 .ListenToStudentEventAsync(
                     Arg.Any<Func<StudentMessage, ValueTask>>());
 
-        await _studentServiceMock.Received(requiredNumberOfCalls: 1)
-               .RegisterStudentAsync(Arg.Is<Student>(student =>
-                     SameStudentAs(student, expectedInputStudent)));
-
-        await studentEventHandlerMock
+        await _localStudentEventServiced
            .Received(requiredNumberOfCalls: 1)
-               .Invoke(arg: Arg.Any<Student>());
+               .PublishStudentAsync(
+                  Arg.Is<Student>(student =>
+                     SameStudentAs(student, expectedInputStudent)));
 
         Received.InOrder(async () =>
         {
             await _studentServiceMock.RegisterStudentAsync(
                 student: Arg.Any<Student>());
 
-            await studentEventHandlerMock.Invoke(
-                arg: Arg.Any<Student>());
+            await _localStudentEventServiced.PublishStudentAsync(
+                student: Arg.Any<Student>());
         });
 
         _studentEventServiceMock
@@ -104,7 +98,7 @@ public partial class StudentEventOrchestrationServiceTests
                 .Count()
                     .ShouldBe(expected: 1);
 
-        _studentServiceMock
+        _localStudentEventServiced
             .ReceivedCalls()
                 .Count()
                     .ShouldBe(expected: 1);

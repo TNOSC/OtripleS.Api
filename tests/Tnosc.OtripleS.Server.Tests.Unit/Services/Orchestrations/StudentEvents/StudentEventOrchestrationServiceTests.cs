@@ -8,6 +8,7 @@ using System;
 using NSubstitute;
 using Tnosc.OtripleS.Server.Application.Brokers.DateTimes;
 using Tnosc.OtripleS.Server.Application.Brokers.Queues.Messages;
+using Tnosc.OtripleS.Server.Application.Services.Foundations.LocalStudentEvents;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.StudentEvents;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 using Tnosc.OtripleS.Server.Application.Services.Orchestrations.StudentEvents;
@@ -20,6 +21,7 @@ public partial class StudentEventOrchestrationServiceTests
 {
     private readonly IStudentService _studentServiceMock;
     private readonly IStudentEventService _studentEventServiceMock;
+    private readonly ILocalStudentEventService _localStudentEventServiced;
     private readonly IDateTimeBroker _dateTimeBrokerMock;
     private readonly IStudentEventOrchestrationService _studentEventOrchestrationService;
 
@@ -27,12 +29,14 @@ public partial class StudentEventOrchestrationServiceTests
     {
         _studentServiceMock = Substitute.For<IStudentService>();
         _studentEventServiceMock = Substitute.For<IStudentEventService>();
+        _localStudentEventServiced = Substitute.For<ILocalStudentEventService>();
         _dateTimeBrokerMock = Substitute.For<IDateTimeBroker>();
 
         _studentEventOrchestrationService = new StudentEventOrchestrationService(
             studentService: _studentServiceMock,
             studentEventService: _studentEventServiceMock,
-            dateTimeBroker: _dateTimeBrokerMock);
+            dateTimeBroker: _dateTimeBrokerMock,
+            localStudentEventService: _localStudentEventServiced);
     }
 
     private static dynamic CreateRandomStudentProperties(

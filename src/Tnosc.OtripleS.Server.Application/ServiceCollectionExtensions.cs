@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Tnosc.Lib.Application.Configurations;
-using Tnosc.OtripleS.Server.Application.Services.Coordinations.StudentEvents;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.LibraryAccounts;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.LibraryCards;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.StudentEvents;
@@ -32,7 +31,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IStudentProcessingService, StudentProcessingService>();
         services.AddScoped<IStudentEventOrchestrationService, StudentEventOrchestrationService>();
         services.AddScoped<ILibraryAccountOrchestrationService, LibraryAccountOrchestrationService>();
-        services.AddScoped<IStudentEventCoordinationService, StudentEventCoordinationService>();
 
         services.Configure<RetryConfig>(
             configuration.GetSection("RetryConfig"));

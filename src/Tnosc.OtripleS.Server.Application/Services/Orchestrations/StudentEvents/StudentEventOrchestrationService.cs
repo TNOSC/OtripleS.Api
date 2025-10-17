@@ -8,6 +8,7 @@ using System;
 using System.Threading.Tasks;
 using Tnosc.OtripleS.Server.Application.Brokers.DateTimes;
 using Tnosc.OtripleS.Server.Application.Brokers.Queues.Messages;
+using Tnosc.OtripleS.Server.Application.Services.Foundations.LocalStudentEvents;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.StudentEvents;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.Students;
 using Tnosc.OtripleS.Server.Domain.Students;
@@ -19,23 +20,25 @@ public class StudentEventOrchestrationService : IStudentEventOrchestrationServic
     private readonly IStudentEventService _studentEventService;
     private readonly IStudentService _studentService;
     private readonly IDateTimeBroker _dateTimeBroker;
+    private readonly ILocalStudentEventService _localStudentEventService;
 
     public StudentEventOrchestrationService(
         IStudentEventService studentEventService,
         IStudentService studentService,
-        IDateTimeBroker dateTimeBroker)
+        IDateTimeBroker dateTimeBroker,
+        ILocalStudentEventService localStudentEventService)
     {
         _studentEventService = studentEventService;
         _studentService = studentService;
         _dateTimeBroker = dateTimeBroker;
+        _localStudentEventService = localStudentEventService;
     }
 
-    public async Task ListenToStudentEventsAsync(Func<Student, ValueTask> studentEventHandler) =>
+    public async Task ListenToStudentEventsAsync() =>
         await _studentEventService.ListenToStudentEventAsync(async studentMessage =>
         {
             Student student = MapToStudent(studentMessage: studentMessage);
             await _studentService.RegisterStudentAsync(student: student);
-            await studentEventHandler(arg: student);
         });
 
     private Student MapToStudent(StudentMessage studentMessage)

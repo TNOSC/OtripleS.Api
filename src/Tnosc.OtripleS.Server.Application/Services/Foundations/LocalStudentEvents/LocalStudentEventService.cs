@@ -19,7 +19,7 @@ public sealed class LocalStudentEventService : ILocalStudentEventService
         _eventBroker = eventBroker;
 
     public void ListenToStudentEvent(Func<Student, ValueTask> studentEventHandler) =>
-        throw new NotImplementedException();
+        _eventBroker.ListenToStudentEvent(studentEventHandler);
 
     public ValueTask PublishStudentAsync(Student student) =>
         throw new NotImplementedException();

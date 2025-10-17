@@ -29,4 +29,8 @@
     <ProjectReference Include="..\..\src\Tnosc.OtripleS.Server.Api\Tnosc.OtripleS.Server.Api.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Foundations\StudentEvents\Publish\" />
+  </ItemGroup>
+
 </Project>

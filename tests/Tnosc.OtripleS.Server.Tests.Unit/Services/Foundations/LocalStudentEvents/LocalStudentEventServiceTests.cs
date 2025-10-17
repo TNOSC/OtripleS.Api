@@ -4,9 +4,13 @@
 // Author: Ahmed HEDFI (ahmed.hedfi@gmail.com)
 // ----------------------------------------------------------------------------------
 
+using System;
 using NSubstitute;
 using Tnosc.OtripleS.Server.Application.Brokers.Events;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.LocalStudentEvents;
+using Tnosc.OtripleS.Server.Domain.LibraryCards;
+using Tnosc.OtripleS.Server.Domain.Students;
+using Tynamix.ObjectFiller;
 
 namespace Tnosc.OtripleS.Server.Tests.Unit.Services.Foundations.LocalStudentEvents;
 
@@ -22,4 +26,20 @@ public partial class LocalStudentEventServiceTests
         _localStudentEventService = new LocalStudentEventService(
             eventBroker: _eventBrokerMock);
     }
+
+    private static Student CreateRandomStudent() =>
+         CreateStudentFiller().Create();
+
+    private static Filler<Student> CreateStudentFiller()
+    {
+        var filler = new Filler<Student>();
+
+        filler.Setup()
+           .OnType<DateTimeOffset>().Use(GetRandomDateTime());
+
+        return filler;
+    }
+
+    private static DateTimeOffset GetRandomDateTime() =>
+          new DateTimeRange(earliestDate: DateTime.UtcNow).GetValue();
 }

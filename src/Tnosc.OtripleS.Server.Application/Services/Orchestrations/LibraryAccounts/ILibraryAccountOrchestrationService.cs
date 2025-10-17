@@ -12,4 +12,6 @@ namespace Tnosc.OtripleS.Server.Application.Services.Orchestrations.LibraryAccou
 public interface ILibraryAccountOrchestrationService
 {
     ValueTask<LibraryAccount> CreateLibraryAccountAsync(LibraryAccount libraryAccount);
+
+    void ListenToLocalStudentEvent();
 }

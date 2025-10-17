@@ -8,6 +8,7 @@ using System;
 using System.Threading.Tasks;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.LibraryAccounts;
 using Tnosc.OtripleS.Server.Application.Services.Foundations.LibraryCards;
+using Tnosc.OtripleS.Server.Application.Services.Foundations.LocalStudentEvents;
 using Tnosc.OtripleS.Server.Domain.LibraryAccounts;
 using Tnosc.OtripleS.Server.Domain.LibraryCards;
 
@@ -17,13 +18,16 @@ public class LibraryAccountOrchestrationService : ILibraryAccountOrchestrationSe
 {
     private readonly ILibraryAccountService _libraryAccountService;
     private readonly ILibraryCardService _libraryCardService;
+    private readonly ILocalStudentEventService _localStudentEventService;
 
     public LibraryAccountOrchestrationService(
         ILibraryAccountService libraryAccountService,
-        ILibraryCardService libraryCardService)
+        ILibraryCardService libraryCardService,
+        ILocalStudentEventService localStudentEventService)
     {
         _libraryAccountService = libraryAccountService;
         _libraryCardService = libraryCardService;
+        _localStudentEventService = localStudentEventService;
     }
 
     public async ValueTask<LibraryAccount> CreateLibraryAccountAsync(LibraryAccount libraryAccount)
@@ -39,11 +43,14 @@ public class LibraryAccountOrchestrationService : ILibraryAccountOrchestrationSe
     private async Task CreateLibraryCardAsync(LibraryAccount libraryAccount)
     {
         LibraryCard inputLibraryCard =
-            CreateLibraryCard(libraryAccount.Id);
+            CreateLibraryCard(libraryAccountId: libraryAccount.Id);
 
         await _libraryCardService
-            .AddLibraryCardAsync(inputLibraryCard);
+            .AddLibraryCardAsync(libraryCard: inputLibraryCard);
     }
+
+    public void ListenToLocalStudentEvent() =>
+        throw new NotImplementedException();
 
     private static LibraryCard CreateLibraryCard(Guid libraryAccountId) =>
         new LibraryCard

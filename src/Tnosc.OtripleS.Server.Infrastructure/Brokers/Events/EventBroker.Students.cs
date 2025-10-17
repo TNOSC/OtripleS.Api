@@ -17,6 +17,6 @@ internal partial class EventBroker
     public void ListenToStudentEvent(Func<Student, ValueTask> studentEventHandler) =>
         StudentEventClient.RegisterEventHandler(eventHandler: studentEventHandler);
 
-    public ValueTask PublishStudentEventAsync(Student student) =>
-        StudentEventClient.PublishEventAsync(@event: student);
+    public async ValueTask PublishStudentEventAsync(Student student) =>
+        await StudentEventClient.PublishEventAsync(@event: student);
 }

@@ -6,10 +6,12 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Tnosc.OtripleS.Server.Application.Brokers.DateTimes;
+using Tnosc.OtripleS.Server.Application.Brokers.Events;
 using Tnosc.OtripleS.Server.Application.Brokers.Loggings;
 using Tnosc.OtripleS.Server.Application.Brokers.Queues;
 using Tnosc.OtripleS.Server.Application.Brokers.Storages;
 using Tnosc.OtripleS.Server.Infrastructure.Brokers.DateTimes;
+using Tnosc.OtripleS.Server.Infrastructure.Brokers.Events;
 using Tnosc.OtripleS.Server.Infrastructure.Brokers.Jobs;
 using Tnosc.OtripleS.Server.Infrastructure.Brokers.Loggings;
 using Tnosc.OtripleS.Server.Infrastructure.Brokers.Queues;
@@ -26,6 +28,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IQueueBroker, QueueBroker>();
         services.AddTransient<IDateTimeBroker, DateTimeBroker>();
         services.AddTransient<ILoggingBroker, LoggingBroker>();
+        services.AddSingleton<IEventBroker, EventBroker>();
         services.AddHostedService<DbMigrationHostedService>();
         services.AddHostedService<EventListenerHostedService>();
     }

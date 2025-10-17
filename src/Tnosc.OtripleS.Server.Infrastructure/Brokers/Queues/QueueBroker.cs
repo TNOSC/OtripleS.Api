@@ -12,7 +12,7 @@ using Tnosc.OtripleS.Server.Application.Brokers.Queues;
 
 namespace Tnosc.OtripleS.Server.Infrastructure.Brokers.Queues;
 
-public partial class QueueBroker : IQueueBroker, IAsyncDisposable
+public sealed partial class QueueBroker : IQueueBroker, IAsyncDisposable
 {
     private readonly IConfiguration _configuration;
     private readonly ServiceBusClient _client;

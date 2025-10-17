@@ -24,43 +24,63 @@ internal sealed partial class StorageBroker : EFxceptionsContext, IStorageBroker
 
     private async ValueTask<T> InsertAsync<T>(T @object)
     {
+        using var broker = new StorageBroker(configuration: _configuration);
 #pragma warning disable CS8604 // Possible null reference argument.
-        Entry(@object).State = EntityState.Added;
+        broker.Entry(entity: @object).State = EntityState.Added;
 #pragma warning restore CS8604 // Possible null reference argument.
-        await SaveChangesAsync();
+        await broker.SaveChangesAsync();
+        broker.DetachEntity(@object: @object);
 
         return @object;
     }
 
 #pragma warning disable CS8603 // Possible null reference return.
     private async ValueTask<T> SelectAsync<T>(params object[] @objectIds)
-        where T : class =>
-        await FindAsync<T>(objectIds);
+        where T : class
+    {
+        using var broker = new StorageBroker(configuration: _configuration);
+
+        return await broker.FindAsync<T>(keyValues: objectIds);
+    }
 #pragma warning restore CS8603 // Possible null reference return.
 
 #pragma warning disable CA1859 // Use concrete types when possible for improved performance
-    private IQueryable<T> SelectAll<T>() where T : class => Set<T>();
+
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+    private async ValueTask<IQueryable<T>> SelectAll<T>() where T : class =>
+        Set<T>();
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+
 #pragma warning restore CA1859 // Use concrete types when possible for improved performance
 
     private async ValueTask<T> UpdateAsync<T>(T @object)
     {
+        using var broker = new StorageBroker(configuration: _configuration);
 #pragma warning disable CS8604 // Possible null reference argument.
-        Entry(@object).State = EntityState.Modified;
+        broker.Entry(entity: @object).State = EntityState.Modified;
 #pragma warning restore CS8604 // Possible null reference argument.
-        await SaveChangesAsync();
+        await broker.SaveChangesAsync();
+        broker.DetachEntity(@object: @object);
 
         return @object;
     }
 
     private async ValueTask<T> DeleteAsync<T>(T @object)
     {
+        using var broker = new StorageBroker(configuration: _configuration);
 #pragma warning disable CS8604 // Possible null reference argument.
-        Entry(@object).State = EntityState.Deleted;
+        broker.Entry(@object).State = EntityState.Deleted;
 #pragma warning restore CS8604 // Possible null reference argument.
-        await SaveChangesAsync();
+        await broker.SaveChangesAsync();
+        broker.DetachEntity(@object: @object);
 
         return @object;
     }
+
+#pragma warning disable CS8604 // Possible null reference argument.
+    private void DetachEntity<T>(T @object) => 
+        Entry(@object).State = EntityState.Detached;
+#pragma warning restore CS8604 // Possible null reference argument.
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

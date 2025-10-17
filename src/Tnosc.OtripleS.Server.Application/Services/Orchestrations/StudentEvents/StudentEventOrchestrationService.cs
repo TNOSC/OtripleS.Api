@@ -39,6 +39,7 @@ public class StudentEventOrchestrationService : IStudentEventOrchestrationServic
         {
             Student student = MapToStudent(studentMessage: studentMessage);
             await _studentService.RegisterStudentAsync(student: student);
+            await _localStudentEventService.PublishStudentAsync(student: student);
         });
 
     private Student MapToStudent(StudentMessage studentMessage)
